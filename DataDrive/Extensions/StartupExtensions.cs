@@ -18,6 +18,8 @@ namespace DataDrive.Extensions
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IDatabaseContext, ApplicationDbContext>();
+
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
