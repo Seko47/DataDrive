@@ -11,6 +11,9 @@ using DataDrive.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System;
 
 namespace DataDrive
 {
@@ -45,6 +48,27 @@ namespace DataDrive
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Data Drive API",
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Rafa³ Sekular",
+                        Email = "rafalsekular96@gmail.com",
+                        Url = new Uri("https://github.com/seko47")
+                    }
+                });
+
+                /*
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = ConfigurationPath.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+                */
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +92,12 @@ namespace DataDrive
             {
                 app.UseSpaStaticFiles();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Data Drive API v1");
+            });
 
             app.UseRouting();
 
