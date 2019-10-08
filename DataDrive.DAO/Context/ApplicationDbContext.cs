@@ -18,5 +18,11 @@ namespace DataDrive.DAO.Context
         public DbSet<FileAbstract> FileAbstracts { get; set; }
         public DbSet<Directory> Directories { get; set; }
         public DbSet<File> Files { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+        }
     }
 }

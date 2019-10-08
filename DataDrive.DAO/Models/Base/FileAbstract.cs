@@ -12,8 +12,8 @@ namespace DataDrive.DAO.Models.Base
         public DateTime LastModifiedDateTime { get; set; }
 
         public string Name { get; set; }
-        public Guid ParentDirectoryID { get; set; }
+        public Guid? ParentDirectoryID { get; set; }
 
-        public virtual FileAbstract ParentDirectory { get; set; }
+        public virtual Directory ParentDirectory { get; set; }
     }
 }
