@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace DataDrive.Data.Migrations
+namespace DataDrive.DAO.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
