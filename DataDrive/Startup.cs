@@ -1,14 +1,14 @@
+using DataDrive.DAO.Context;
+using DataDrive.Extensions;
+using DataDrive.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
-using DataDrive.DAO.Context;
-using DataDrive.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DataDrive.Extensions;
 
 namespace DataDrive
 {
