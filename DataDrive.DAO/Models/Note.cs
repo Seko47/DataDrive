@@ -5,10 +5,9 @@ using System.Text;
 
 namespace DataDrive.DAO.Models
 {
-    public class File : FileAbstract
+    public class Note : FileAbstract
     {
-        public string Name { get; set; }
-
-        public string Path { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
     }
 }
