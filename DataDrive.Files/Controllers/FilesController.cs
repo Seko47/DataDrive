@@ -1,4 +1,5 @@
-﻿using DataDrive.Files.Services;
+﻿using DataDrive.Files.Models.Out;
+using DataDrive.Files.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,9 +24,11 @@ namespace DataDrive.Files.Controllers
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(200)]
-        public Task<IActionResult> Get()
+        public async Task<IActionResult> Get()
         {
-            throw new NotImplementedException();
+            List<FileOut> files = await _fileService.GetAllFromRootByUser(User.Identity.Name);
+
+            return Ok(files);
         }
     }
 }

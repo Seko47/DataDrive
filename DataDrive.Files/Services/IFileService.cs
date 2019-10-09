@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataDrive.Files.Services
 {
     public interface IFileService
     {
-        List<FileOut> GetAllFromRootByUser(string username);
+        Task<List<FileOut>> GetAllFromRootByUser(string username);
     }
 }

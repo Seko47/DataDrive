@@ -21,7 +21,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             Mock<IFileService> fileService = new Mock<IFileService>();
 
             fileService.Setup(_ => _.GetAllFromRootByUser(It.IsAny<string>()))
-                .Returns(files.Object);
+                .Returns(Task.FromResult(files.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
             filesController.Authenticate("admin");
@@ -29,6 +29,38 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             IActionResult result = await filesController.Get();
 
             Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_FileOutList()
+        {
+            List<FileOut> files = new List<FileOut>()
+            {
+                new FileOut
+                {
+                    ID = Guid.NewGuid()
+                },
+                new FileOut
+                {
+                    ID = Guid.NewGuid()
+                }
+            };
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetAllFromRootByUser(It.IsAny<string>()))
+                .Returns(Task.FromResult(files));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Get();
+            OkObjectResult okObjectResult = result as OkObjectResult;
+
+            Assert.NotNull(okObjectResult);
+
+            List<FileOut> value = okObjectResult.Value as List<FileOut>;
+            Assert.IsType<List<FileOut>>(value);
+            Assert.True(value.Count == 2);
         }
     }
 }
