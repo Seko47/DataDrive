@@ -20,6 +20,8 @@ namespace DataDrive.DAO.Context
         public DbSet<File> Files { get; set; }
         public DbSet<Note> Notes { get; set; }
 
+        public DbSet<ShareAbstract> ShareAbstracts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
