@@ -21,6 +21,8 @@ namespace DataDrive.DAO.Context
         public DbSet<Note> Notes { get; set; }
 
         public DbSet<ShareAbstract> ShareAbstracts { get; set; }
+        public DbSet<ShareEveryone> ShareEveryones { get; set; }
+        public DbSet<ShareForUser> ShareForUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

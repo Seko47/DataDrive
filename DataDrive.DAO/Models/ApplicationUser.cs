@@ -8,5 +8,6 @@ namespace DataDrive.DAO.Models
     {
         public virtual List<FileAbstract> Files { get; set; }
         public virtual List<ShareAbstract> SharedOwn { get; set; }
+        public virtual List<ShareForUser> SharedForUser { get; set; }
     }
 }
