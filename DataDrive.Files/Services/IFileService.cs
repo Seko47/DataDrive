@@ -9,6 +9,8 @@ namespace DataDrive.Files.Services
     public interface IFileService
     {
         Task<List<FileOut>> GetAllFromRootByUser(string username);
-        Task<FileOut> GetByIdAndUser(Guid id, string name);
+        Task<FileOut> GetByIdAndUser(Guid id, string username);
+        Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username);
+        Task<FileOut> DeleteByIdAndUser(Guid id, string username);
     }
 }

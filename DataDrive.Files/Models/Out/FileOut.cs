@@ -10,7 +10,7 @@ namespace DataDrive.Files.Models.Out
 {
     public class FileOut
     {
-        public Guid ID { get; set; }
+        public Guid? ID { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
 

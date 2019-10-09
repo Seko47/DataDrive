@@ -58,8 +58,8 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
 
             Assert.NotNull(okObjectResult);
 
+            Assert.IsType<List<FileOut>>(okObjectResult.Value);
             List<FileOut> value = okObjectResult.Value as List<FileOut>;
-            Assert.IsType<List<FileOut>>(value);
             Assert.True(value.Count == 2);
         }
     }
@@ -118,6 +118,126 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
 
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
+
+    public class FilesControllerTest_DownloadById
+    {
+        [Fact]
+        public async void Returns_OkObjectResult200_when_FileExistAndBelongsToUser()
+        {
+            string contentType = "application/octet-stream";
+            byte[] content = Encoding.UTF8.GetBytes("File content ...");
+            string fileName = "file.txt";
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Download(Guid.NewGuid());
+
+            Assert.IsType<FileContentResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_DownloadingFile_when_FileExistAndBelongsToUser()
+        {
+            string contentType = "application/octet-stream";
+            byte[] content = Encoding.UTF8.GetBytes("File content ...");
+            string fileName = "file.txt";
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Download(Guid.NewGuid());
+
+            FileContentResult fileContentResult = result as FileContentResult;
+            Assert.NotNull(fileContentResult);
+
+            Assert.NotNull(fileContentResult.FileDownloadName);
+            Assert.NotNull(fileContentResult.FileContents);
+            Assert.NotNull(fileContentResult.ContentType);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUSer()
+        {
+            Tuple<string, byte[], string> tuple = null;
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(tuple));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Download(Guid.NewGuid());
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
+
+    public class FilesControllerTest_DeleteById
+    {
+        [Fact]
+        public async void Returns_OkObjectResult200_when_FileExistAndBelongsToUser()
+        {
+            Mock<FileOut> file = new Mock<FileOut>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Delete(Guid.NewGuid());
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_ParentDirectoryFileOutOfDeletingFile_when_FileExistAndBelongsToUser()
+        {
+            Guid parentId = Guid.NewGuid();
+            FileOut file = new FileOut
+            {
+                ID = parentId
+            };
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Delete(Guid.NewGuid());
+            OkObjectResult okObjectResult = result as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+
+            FileOut parentDirectory = okObjectResult.Value as FileOut;
+            Assert.NotNull(parentDirectory);
+            Assert.Equal(parentId, parentDirectory.ID);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUser()
+        {
+            FileOut file = null;
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Delete(Guid.NewGuid());
             Assert.IsType<NotFoundObjectResult>(result);
         }
     }

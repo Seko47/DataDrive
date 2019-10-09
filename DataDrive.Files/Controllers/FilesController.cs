@@ -46,5 +46,41 @@ namespace DataDrive.Files.Controllers
 
             return Ok(file);
         }
+
+        [HttpGet("download/{id}")]
+        [Produces("application/octet-stream")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Download(Guid id)
+        {
+            Tuple<string, byte[], string> tuple = await _fileService.DownloadByIdAndUser(id, User.Identity.Name);
+
+            if (tuple == null)
+            {
+                return NotFound($"File {id} not found");
+            }
+
+            string fileName = tuple.Item1;
+            byte[] content = tuple.Item2;
+            string contentType = tuple.Item3;//"application/octet-stream";
+
+            return File(content, contentType, fileName);
+        }
+
+        [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            FileOut parentDirectory = await _fileService.DeleteByIdAndUser(id, User.Identity.Name);
+
+            if (parentDirectory == null)
+            {
+                return NotFound($"Directory {id} not found");
+            }
+
+            return Ok(parentDirectory);
+        }
     }
 }
