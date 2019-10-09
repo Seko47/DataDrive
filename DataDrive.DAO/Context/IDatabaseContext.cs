@@ -10,5 +10,9 @@ namespace DataDrive.DAO.Context
         DbSet<Directory> Directories { get; set; }
         DbSet<File> Files { get; set; }
         DbSet<Note> Notes { get; set; }
+
+        DbSet<ShareAbstract> ShareAbstracts { get; set; }
+        DbSet<ShareEveryone> ShareEveryones { get; set; }
+        DbSet<ShareForUser> ShareForUsers { get; set; }
     }
 }
