@@ -9,7 +9,7 @@ namespace DataDrive.DAO.Models.Base
         public DateTime LastModifiedDateTime { get; set; }
 
         public Guid FileID { get; set; }
-        public Guid OwnerID { get; set; }
+        public string OwnerID { get; set; }
 
         public virtual FileAbstract File { get; set; }
         public ApplicationUser Owner { get; set; }

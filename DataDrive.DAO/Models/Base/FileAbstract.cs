@@ -8,7 +8,7 @@ namespace DataDrive.DAO.Models.Base
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
 
-        public Guid OwnerID { get; set; }
+        public string OwnerID { get; set; }
         public Guid? ParentDirectoryID { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
