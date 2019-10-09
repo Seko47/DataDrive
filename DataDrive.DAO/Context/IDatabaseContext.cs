@@ -1,9 +1,6 @@
 ﻿using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataDrive.DAO.Context
 {

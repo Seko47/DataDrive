@@ -1,7 +1,4 @@
-﻿using DataDrive.DAO.Models.Base;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace DataDrive.DAO.Models.Base
 {
@@ -11,8 +8,10 @@ namespace DataDrive.DAO.Models.Base
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
 
+        public Guid OwnerID { get; set; }
         public Guid? ParentDirectoryID { get; set; }
 
+        public virtual ApplicationUser Owner { get; set; }
         public virtual Directory ParentDirectory { get; set; }
     }
 }
