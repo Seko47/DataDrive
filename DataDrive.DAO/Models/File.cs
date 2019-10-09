@@ -7,8 +7,6 @@ namespace DataDrive.DAO.Models
 {
     public class File : FileAbstract
     {
-        public string Name { get; set; }
-
         public string Path { get; set; }
     }
 }
