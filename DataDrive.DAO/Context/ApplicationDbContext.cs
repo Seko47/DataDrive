@@ -2,8 +2,10 @@
 using DataDrive.DAO.Models.Base;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace DataDrive.DAO.Context
 {
@@ -28,6 +30,47 @@ namespace DataDrive.DAO.Context
         {
             base.OnModelCreating(builder);
 
+            Seed(builder);
+        }
+
+        private void Seed(ModelBuilder builder)
+        {
+            string adminRoleID = Guid.NewGuid().ToString();
+
+            builder.Entity<IdentityRole>()
+                .HasData(
+                    new IdentityRole
+                    {
+                        Id = adminRoleID,
+                        Name = "admin",
+                        NormalizedName = "ADMIN"
+                    }
+                );
+
+            string adminID = Guid.NewGuid().ToString();
+            PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
+
+            builder.Entity<ApplicationUser>()
+                .HasData(
+                new ApplicationUser
+                {
+                    Id = adminID,
+                    Email = "admin@admin.com",
+                    NormalizedEmail = "ADMIN@ADMIN.COM",
+                    UserName = "admin@admin.com",
+                    NormalizedUserName = "ADMIN@ADMIN.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = passwordHasher.HashPassword(null, "zaq1@WSX")
+                });
+
+            builder.Entity<IdentityUserRole<string>>()
+                .HasData(
+                    new IdentityUserRole<string>
+                    {
+                        RoleId = adminRoleID,
+                        UserId = adminID
+                    }
+                );
         }
     }
 }
