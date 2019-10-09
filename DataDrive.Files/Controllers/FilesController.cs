@@ -30,5 +30,21 @@ namespace DataDrive.Files.Controllers
 
             return Ok(files);
         }
+
+        [HttpGet("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            FileOut file = await _fileService.GetByIdAndUser(id, User.Identity.Name);
+
+            if (file == null)
+            {
+                return NotFound($"File {id} not found");
+            }
+
+            return Ok(file);
+        }
     }
 }

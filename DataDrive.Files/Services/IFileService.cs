@@ -9,5 +9,6 @@ namespace DataDrive.Files.Services
     public interface IFileService
     {
         Task<List<FileOut>> GetAllFromRootByUser(string username);
+        Task<FileOut> GetByIdAndUser(Guid id, string name);
     }
 }

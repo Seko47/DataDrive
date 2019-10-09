@@ -63,4 +63,62 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             Assert.True(value.Count == 2);
         }
     }
+
+    public class FilesControllerTest_GetById
+    {
+        [Fact]
+        public async void Returns_OkObjectResult200_when_FileExistAndBelongsToUser()
+        {
+            Mock<FileOut> file = new Mock<FileOut>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Get(Guid.NewGuid());
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_FileOut_when_FileExistAndBelongsToUser()
+        {
+            FileOut file = new FileOut
+            {
+                ID = Guid.NewGuid(),
+                Name = Guid.NewGuid().ToString()
+            };
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Get(Guid.NewGuid());
+            OkObjectResult okObjectResult = result as OkObjectResult;
+
+            Assert.NotNull(okObjectResult);
+            Assert.IsType<FileOut>(okObjectResult.Value);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUser()
+        {
+            FileOut file = null;
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Get(Guid.NewGuid());
+
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
 }
