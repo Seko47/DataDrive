@@ -1,14 +1,12 @@
-using DataDrive.DAO.Context;
 using DataDrive.Extensions;
-using DataDrive.DAO.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using AutoMapper;
 
 namespace DataDrive
 {
@@ -25,6 +23,8 @@ namespace DataDrive
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDatabaseContext(Configuration);
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllersWithViews();
             services.AddRazorPages();
