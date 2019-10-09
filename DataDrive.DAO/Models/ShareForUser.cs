@@ -7,7 +7,7 @@ namespace DataDrive.DAO.Models
 {
     public class ShareForUser : ShareAbstract, ITimeExpiration
     {
-        public Guid SharedForUserID { get; set; }
+        public string SharedForUserID { get; set; }
 
         public DateTime ExpirationDateTime { get; set; }
 
