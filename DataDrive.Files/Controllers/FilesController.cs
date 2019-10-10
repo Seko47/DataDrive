@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -101,6 +102,42 @@ namespace DataDrive.Files.Controllers
             }
 
             return Ok(file);
+        }
+
+        [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Post([FromBody] FilePost filePost)
+        {
+            if (filePost.Files == null || filePost.Files.Count < 1)
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            List<FileUploadResult> fileUploadResults = await _fileService.PostByUser(filePost, User.Identity.Name);
+
+            return Ok(fileUploadResults);
+            /*
+            try
+            {
+                var result = new List<FileUploadResult>();
+                foreach (var file in filePost.Files)
+                {
+                    var path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot/uploads", Guid.NewGuid().ToString());
+                    var stream = new FileStream(path, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length });
+                }
+
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest("Something went wrong");
+            }
+            */
         }
     }
 }

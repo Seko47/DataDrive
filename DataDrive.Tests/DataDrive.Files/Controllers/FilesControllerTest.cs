@@ -3,11 +3,13 @@ using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -294,6 +296,104 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
+
+    public class FilesControllerTest_Post
+    {
+        [Fact]
+        public async void Returns_OkObjectResult200()
+        {
+            Mock<List<FileUploadResult>> fileUploadResults = new Mock<List<FileUploadResult>>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(fileUploadResults.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = null,
+                Files = new List<IFormFile>
+                {
+                    new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("Some content")), 0,12, "file","file.txt")
+                }
+            };
+
+            IActionResult result = await filesController.Post(filePost);
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_ListFileUploadResult()
+        {
+            List<FileUploadResult> fileUploadResults = new List<FileUploadResult>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(fileUploadResults));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = null,
+                Files = new List<IFormFile>
+                {
+                    new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("Some content")), 0,12, "file","file.txt")
+                }
+            };
+
+            IActionResult result = await filesController.Post(filePost);
+            OkObjectResult okObjectResult = result as OkObjectResult;
+
+            Assert.NotNull(okObjectResult);
+
+            Assert.IsType<List<FileUploadResult>>(okObjectResult.Value);
+        }
+
+        [Fact]
+        public async void Returns_BadRequestObjectResult_when_FilePostFilesEqualNull()
+        {
+            Mock<List<FileUploadResult>> fileUploadResults = new Mock<List<FileUploadResult>>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(fileUploadResults.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = Guid.NewGuid(),
+                Files = null
+            };
+            IActionResult result = await filesController.Post(filePost);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_BadRequestObjectResult_when_FilePostFilesEmpty()
+        {
+            Mock<List<FileUploadResult>> fileUploadResults = new Mock<List<FileUploadResult>>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(fileUploadResults.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = Guid.NewGuid(),
+                Files = new List<IFormFile>()
+            };
+            IActionResult result = await filesController.Post(filePost);
+
+            Assert.IsType<BadRequestObjectResult>(result);
         }
     }
 }
