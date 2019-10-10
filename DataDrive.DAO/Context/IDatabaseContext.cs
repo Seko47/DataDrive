@@ -6,6 +6,9 @@ namespace DataDrive.DAO.Context
 {
     public interface IDatabaseContext
     {
+        DbSet<ApplicationUser> Users { get; set; }
+
+
         DbSet<FileAbstract> FileAbstracts { get; set; }
         DbSet<Directory> Directories { get; set; }
         DbSet<File> Files { get; set; }
