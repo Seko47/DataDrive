@@ -1,6 +1,9 @@
-﻿using DataDrive.Files.Models.Out;
+﻿using DataDrive.DAO.Models;
+using DataDrive.Files.Models.In;
+using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -81,6 +84,23 @@ namespace DataDrive.Files.Controllers
             }
 
             return Ok(parentDirectory);
+        }
+
+        [HttpPatch("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<FilePatch> jsonPatch)
+        {
+            FileOut file = await _fileService.PatchByIdAndFilePatchAndUser(id, jsonPatch, User.Identity.Name);
+
+            if (file == null)
+            {
+                return NotFound($"File {id} not found");
+            }
+
+            return Ok(file);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using DataDrive.Files.Models.Out;
+﻿using DataDrive.Files.Models.In;
+using DataDrive.Files.Models.Out;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +14,6 @@ namespace DataDrive.Files.Services
         Task<FileOut> GetByIdAndUser(Guid id, string username);
         Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username);
         Task<FileOut> DeleteByIdAndUser(Guid id, string username);
+        Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username);
     }
 }

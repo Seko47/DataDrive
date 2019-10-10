@@ -1,7 +1,9 @@
 ﻿using DataDrive.Files.Controllers;
+using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -238,6 +240,59 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             filesController.Authenticate("admin");
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
+
+    public class FilesControllerTest_PatchById
+    {
+        [Fact]
+        public async void Returns_OkObjectResult200()
+        {
+            Mock<FileOut> file = new Mock<FileOut>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<FilePatch>>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_PatchedFileOut()
+        {
+            FileOut file = new FileOut
+            {
+                ID = Guid.NewGuid()
+            };
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<FilePatch>>(), It.IsAny<string>()))
+                    .Returns(Task.FromResult(file));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
+            OkObjectResult okObjectResult = result as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+            Assert.IsType<FileOut>(okObjectResult.Value);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUser()
+        {
+            FileOut file = null;
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<FilePatch>>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(file));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             Assert.IsType<NotFoundObjectResult>(result);
         }
     }
