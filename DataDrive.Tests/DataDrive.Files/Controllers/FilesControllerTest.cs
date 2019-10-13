@@ -16,58 +16,6 @@ using Xunit;
 
 namespace DataDrive.Tests.DataDrive.Files.Controllers
 {
-    public class FilesControllerTest_Get
-    {
-        [Fact]
-        public async void Returns_OkObjectResult200()
-        {
-            Mock<List<FileOut>> files = new Mock<List<FileOut>>();
-            Mock<IFileService> fileService = new Mock<IFileService>();
-
-            fileService.Setup(_ => _.GetAllFromRootByUser(It.IsAny<string>()))
-                .Returns(Task.FromResult(files.Object));
-
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
-
-            IActionResult result = await filesController.Get();
-
-            Assert.IsType<OkObjectResult>(result);
-        }
-
-        [Fact]
-        public async void Returns_FileOutList()
-        {
-            List<FileOut> files = new List<FileOut>()
-            {
-                new FileOut
-                {
-                    ID = Guid.NewGuid()
-                },
-                new FileOut
-                {
-                    ID = Guid.NewGuid()
-                }
-            };
-
-            Mock<IFileService> fileService = new Mock<IFileService>();
-            fileService.Setup(_ => _.GetAllFromRootByUser(It.IsAny<string>()))
-                .Returns(Task.FromResult(files));
-
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
-
-            IActionResult result = await filesController.Get();
-            OkObjectResult okObjectResult = result as OkObjectResult;
-
-            Assert.NotNull(okObjectResult);
-
-            Assert.IsType<List<FileOut>>(okObjectResult.Value);
-            List<FileOut> value = okObjectResult.Value as List<FileOut>;
-            Assert.True(value.Count == 2);
-        }
-    }
-
     public class FilesControllerTest_GetById
     {
         [Fact]

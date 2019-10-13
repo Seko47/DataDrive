@@ -25,16 +25,6 @@ namespace DataDrive.Files.Controllers
             _fileService = fileService;
         }
 
-        [HttpGet]
-        [Produces("application/json")]
-        [ProducesResponseType(200)]
-        public async Task<IActionResult> Get()
-        {
-            List<FileOut> files = await _fileService.GetAllFromRootByUser(User.Identity.Name);
-
-            return Ok(files);
-        }
-
         [HttpGet("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
