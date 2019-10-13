@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataDrive.DAO.Context;
 using DataDrive.DAO.Models;
+using DataDrive.DAO.Models.Base;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using Microsoft.AspNetCore.JsonPatch;
@@ -28,12 +29,9 @@ namespace DataDrive.Files.Services
         {
             ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
 
-            if (user == null)
-            {
-                return null;
-            }
-
-            if (directoryPost.ParentDirectoryID != null && !_databaseContext.Directories.AnyAsync(_ => _.OwnerID == user.Id && _.ID == directoryPost.ParentDirectoryID).Result)
+            if (user == null
+                || (directoryPost.ParentDirectoryID != null && !_databaseContext.Directories.AnyAsync(_ => _.OwnerID == user.Id && _.ID == directoryPost.ParentDirectoryID).Result)
+               )
             {
                 return null;
             }
@@ -63,9 +61,66 @@ namespace DataDrive.Files.Services
 
         }
 
-        public Task<FileOut> DeleteByIdAndUser(Guid id, string username)
+        public async Task<DirectoryOut> DeleteByIdAndUser(Guid id, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+            FileAbstract fileAbstractToDelete = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
+            if (fileAbstractToDelete == null)
+            {
+                return null;
+            }
+
+            Guid? parentDirectoryId = fileAbstractToDelete.ParentDirectoryID;
+
+            if (fileAbstractToDelete is File)
+            {
+                File fileToDelete = fileAbstractToDelete as File;
+                System.IO.File.Delete(fileToDelete.Path);
+
+                if (System.IO.File.Exists(fileToDelete.Path))
+                {
+                    return null;
+                }
+
+                _databaseContext.Files.Remove(fileToDelete);
+                await _databaseContext.SaveChangesAsync();
+            }
+            else if (fileAbstractToDelete is Directory)
+            {
+                //TODO
+            }
+
+            DirectoryOut parentDirectoryOutResult = null;
+
+            if (parentDirectoryId != null)
+            {
+                Directory directoryToReturn = await _databaseContext.Directories
+                    .Include(_ => _.Files)
+                    .Include(_ => _.ParentDirectory)
+                    .FirstOrDefaultAsync(_ => _.ID == parentDirectoryId);
+
+                parentDirectoryOutResult = _mapper.Map<DirectoryOut>(directoryToReturn);
+            }
+            else
+            {
+                List<FileAbstract> files = await _databaseContext.FileAbstracts
+                    .Include(_ => _.ParentDirectory)
+                    .Where(_ => _.ParentDirectoryID == null)
+                    .ToListAsync();
+
+                parentDirectoryOutResult = new DirectoryOut
+                {
+                    ID = null,
+                    Files = _mapper.Map<List<FileOut>>(files),
+                    FileType = FileType.DIRECTORY,
+                    Name = "root",
+                    ParentDirectoryID = null,
+                    ParentDirectoryName = null
+                };
+            }
+
+            return parentDirectoryOutResult;
         }
 
         public Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username)
