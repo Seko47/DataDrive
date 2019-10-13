@@ -41,6 +41,38 @@ namespace DataDrive.Files.Controllers
             return Ok(file);
         }
 
+        [HttpGet("fromDirectory/{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetFromDirectory(Guid id)
+        {
+            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(id, User.Identity.Name);
+
+            if (directory == null)
+            {
+                return NotFound($"Directory {id} not found");
+            }
+
+            return Ok(directory);
+        }
+
+        [HttpPost("createDirectory")]
+        [Produces("application/json")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> CreateDirectory([FromBody] DirectoryPost directoryPost)
+        {
+            DirectoryOut directory = await _fileService.CreateDirectoryByUser(directoryPost, User.Identity.Name);
+
+            if (directory == null)
+            {
+                return NotFound($"Directory {directoryPost.ParentDirectoryID} not exist");
+            }
+
+            return CreatedAtAction(nameof(GetFromDirectory), directory.ID);
+        }
+
         [HttpGet("download/{id}")]
         [Produces("application/octet-stream")]
         [ProducesResponseType(200)]
@@ -80,7 +112,6 @@ namespace DataDrive.Files.Controllers
         [HttpPatch("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<FilePatch> jsonPatch)
         {
@@ -96,7 +127,7 @@ namespace DataDrive.Files.Controllers
 
         [HttpPost]
         [Produces("application/json")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Post([FromBody] FilePost filePost)
@@ -107,6 +138,11 @@ namespace DataDrive.Files.Controllers
             }
 
             List<FileUploadResult> fileUploadResults = await _fileService.PostByUser(filePost, User.Identity.Name);
+
+            if (fileUploadResults == null)
+            {
+                return NotFound($"Directory {filePost.ParentDirectoryID} not found");
+            }
 
             return Ok(fileUploadResults);
             /*

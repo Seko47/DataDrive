@@ -74,6 +74,72 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         }
     }
 
+    public class FilesControllerTest_GetFromDirectoryById
+    {
+        [Fact]
+        public async void Returns_OkObjectResult200_when_DirectoryExistAndBelongsToUser()
+        {
+            Mock<DirectoryOut> directory = new Mock<DirectoryOut>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetDirectoryByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(directory.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_DirectoryOut_when_DirectoryExistAndBelongsToUser()
+        {
+            DirectoryOut directory = new DirectoryOut
+            {
+                ID = Guid.NewGuid(),
+                Name = Guid.NewGuid().ToString(),
+                Files = new List<FileOut>()
+                {
+                    new FileOut()
+                    {
+                        ID = Guid.NewGuid(),
+                        Name = Guid.NewGuid().ToString()
+                    }
+                }
+            };
+
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetDirectoryByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(directory));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
+            OkObjectResult okObjectResult = result as OkObjectResult;
+
+            Assert.NotNull(okObjectResult);
+            Assert.IsType<DirectoryOut>(okObjectResult.Value);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult404_when_DirectoryNotExistOrNotBelongsToUser()
+        {
+            DirectoryOut directory = null;
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.GetDirectoryByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(directory));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
+
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
+
     public class FilesControllerTest_DownloadById
     {
         [Fact]
@@ -342,6 +408,64 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             IActionResult result = await filesController.Post(filePost);
 
             Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult_when_ParentDirectoryNotExistsOrNotBelongsToUser()
+        {
+            List<FileUploadResult> fileUploadResults = null;
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(fileUploadResults));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = Guid.NewGuid(),
+                Files = new List<IFormFile>()
+                {
+                    new FormFile(null, 0, 0, "", "")
+                }
+            };
+            IActionResult result = await filesController.Post(filePost);
+
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+    }
+
+    public class FilesControllerTest_CreateDirectory
+    {
+        [Fact]
+        public async void Returns_CreatedAtActionResult201()
+        {
+            Mock<DirectoryOut> directoryOut = new Mock<DirectoryOut>();
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.CreateDirectoryByUser(It.IsAny<DirectoryPost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(directoryOut.Object));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.CreateDirectory(new DirectoryPost());
+
+            Assert.IsType<CreatedAtActionResult>(result);
+        }
+        [Fact]
+        public async void Returns_NotFoundObjectResult_when_ParentDirectoryNotExistsOrNotBelongsToUser()
+        {
+            DirectoryOut directoryOut = null;
+            Mock<IFileService> fileService = new Mock<IFileService>();
+            fileService.Setup(_ => _.CreateDirectoryByUser(It.IsAny<DirectoryPost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(directoryOut));
+
+            FilesController filesController = new FilesController(fileService.Object);
+            filesController.Authenticate("admin");
+
+            IActionResult result = await filesController.CreateDirectory(new DirectoryPost());
+
+            Assert.IsType<NotFoundObjectResult>(result);
         }
     }
 }
