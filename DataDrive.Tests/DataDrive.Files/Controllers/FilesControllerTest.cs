@@ -27,7 +27,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
 
@@ -48,7 +48,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -66,7 +66,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
 
@@ -85,7 +85,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(directory.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
 
@@ -114,7 +114,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(directory));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -132,7 +132,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(directory));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
 
@@ -154,7 +154,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Download(Guid.NewGuid());
 
@@ -173,7 +173,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Download(Guid.NewGuid());
 
@@ -195,7 +195,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(tuple));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Download(Guid.NewGuid());
             Assert.IsType<NotFoundObjectResult>(result);
@@ -213,7 +213,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
             Assert.IsType<OkObjectResult>(result);
@@ -233,7 +233,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -253,7 +253,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
             Assert.IsType<NotFoundObjectResult>(result);
@@ -271,7 +271,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             Assert.IsType<OkObjectResult>(result);
@@ -289,7 +289,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                     .Returns(Task.FromResult(file));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -306,7 +306,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(file));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             Assert.IsType<NotFoundObjectResult>(result);
@@ -324,7 +324,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(fileUploadResults.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             FilePost filePost = new FilePost
             {
@@ -349,7 +349,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(fileUploadResults));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             FilePost filePost = new FilePost
             {
@@ -377,7 +377,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(fileUploadResults.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             FilePost filePost = new FilePost
             {
@@ -398,7 +398,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(fileUploadResults.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             FilePost filePost = new FilePost
             {
@@ -419,7 +419,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(fileUploadResults));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             FilePost filePost = new FilePost
             {
@@ -446,7 +446,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(directoryOut.Object));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.CreateDirectory(new DirectoryPost());
 
@@ -461,7 +461,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 .Returns(Task.FromResult(directoryOut));
 
             FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin");
+            filesController.Authenticate("admin@admin.com");
 
             IActionResult result = await filesController.CreateDirectory(new DirectoryPost());
 

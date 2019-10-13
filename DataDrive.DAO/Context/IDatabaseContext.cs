@@ -1,4 +1,6 @@
-﻿using DataDrive.DAO.Models;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,5 +19,7 @@ namespace DataDrive.DAO.Context
         DbSet<ShareAbstract> ShareAbstracts { get; set; }
         DbSet<ShareEveryone> ShareEveryones { get; set; }
         DbSet<ShareForUser> ShareForUsers { get; set; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

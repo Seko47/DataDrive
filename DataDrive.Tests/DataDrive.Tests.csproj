@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataDrive.Files\Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DataDrive.Files\DataDrive.Files.csproj" />
   </ItemGroup>
 
