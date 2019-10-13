@@ -6,7 +6,7 @@ namespace DataDrive.DAO.Models.Base
     {
         public Guid ID { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public DateTime LastModifiedDateTime { get; set; }
+        public DateTime? LastModifiedDateTime { get; set; }
 
         public Guid FileID { get; set; }
         public string OwnerID { get; set; }

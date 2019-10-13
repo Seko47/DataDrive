@@ -12,7 +12,7 @@ namespace DataDrive.Files.Models.Out
     {
         public Guid? ID { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public DateTime LastModifiedDateTime { get; set; }
+        public DateTime? LastModifiedDateTime { get; set; }
 
         public Guid? ParentDirectoryID { get; set; }
         public string ParentDirectoryName { get; set; }
