@@ -64,7 +64,8 @@ namespace DataDrive.Files.Services
         public async Task<DirectoryOut> DeleteByIdAndUser(Guid id, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
-            FileAbstract fileAbstractToDelete = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+            FileAbstract fileAbstractToDelete = await _databaseContext.FileAbstracts
+                .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
 
             if (fileAbstractToDelete == null)
             {
@@ -88,7 +89,17 @@ namespace DataDrive.Files.Services
             }
             else if (fileAbstractToDelete is Directory)
             {
-                //TODO
+                Directory directoryToDelete = await _databaseContext.Directories
+                    .Include(_ => _.Files)
+                    .FirstOrDefaultAsync(_ => _.ID == fileAbstractToDelete.ID);
+
+                foreach (FileAbstract fileAbstract in directoryToDelete.Files.ToList())
+                {
+                    await DeleteByIdAndUser(fileAbstract.ID, username);
+                }
+
+                _databaseContext.Directories.Remove(directoryToDelete);
+                await _databaseContext.SaveChangesAsync();
             }
 
             DirectoryOut parentDirectoryOutResult = null;
