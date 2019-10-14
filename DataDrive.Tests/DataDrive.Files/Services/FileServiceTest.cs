@@ -5,6 +5,7 @@ using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -318,6 +319,126 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Assert.Null(parentDirectoryResult);
             Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDelete.ID));
             Assert.True(System.IO.File.Exists(pathToFile));
+        }
+    }
+
+    public class FileServiceTest_DownloadByIdAndUser
+    {
+        private readonly string _pathToUpload;
+
+        public FileServiceTest_DownloadByIdAndUser()
+        {
+            _pathToUpload = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestUpload");
+
+            if (!System.IO.Directory.Exists(_pathToUpload))
+            {
+                System.IO.Directory.CreateDirectory(_pathToUpload);
+            }
+        }
+
+        [Fact]
+        public async void Returns_TupleFileNameContentArrayContentType()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            IFileService fileService = new FileService(databaseContext, null);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            string pathToFile = System.IO.Path.Combine(_pathToUpload, Guid.NewGuid().ToString());
+            System.IO.MemoryStream memoryStream = new System.IO.MemoryStream(Encoding.UTF8.GetBytes("Test file"));
+            System.IO.FileStream fileStream = new System.IO.FileStream(pathToFile, System.IO.FileMode.Create);
+            await memoryStream.CopyToAsync(fileStream);
+            fileStream.Close();
+
+            Assert.True(System.IO.File.Exists(pathToFile));
+
+            File fileToDownload = new File
+            {
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "ToDownload.txt",
+                OwnerID = userId,
+                ParentDirectoryID = null,
+                Path = pathToFile,
+                CreatedDateTime = DateTime.Now
+            };
+
+            await databaseContext.Files.AddAsync(fileToDownload);
+            await databaseContext.SaveChangesAsync();
+
+            Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDownload.ID));
+
+            //Get MIME type
+            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileToDownload.Name, out string contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            byte[] fileContent = System.IO.File.ReadAllBytes(pathToFile);
+            //return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
+
+            Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(fileToDownload.ID, "admin@admin.com");
+
+            Assert.Equal(fileToDownload.Name, result.Item1);
+            Assert.Equal(fileContent, result.Item2);
+            Assert.Equal(contentType, result.Item3);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_FileNotBelongsToUser()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            IFileService fileService = new FileService(databaseContext, null);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            string pathToFile = System.IO.Path.Combine(_pathToUpload, Guid.NewGuid().ToString());
+            System.IO.MemoryStream memoryStream = new System.IO.MemoryStream(Encoding.UTF8.GetBytes("Test file"));
+            System.IO.FileStream fileStream = new System.IO.FileStream(pathToFile, System.IO.FileMode.Create);
+            await memoryStream.CopyToAsync(fileStream);
+            fileStream.Close();
+
+            Assert.True(System.IO.File.Exists(pathToFile));
+
+            File fileToDownload = new File
+            {
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "ToDownload.txt",
+                OwnerID = userId,
+                ParentDirectoryID = null,
+                Path = pathToFile,
+                CreatedDateTime = DateTime.Now
+            };
+
+            await databaseContext.Files.AddAsync(fileToDownload);
+            await databaseContext.SaveChangesAsync();
+
+            Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDownload.ID));
+
+            //Get MIME type
+            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileToDownload.Name, out string contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            byte[] fileContent = System.IO.File.ReadAllBytes(pathToFile);
+            //return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
+
+            Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(fileToDownload.ID, "user@user.com");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_FileNotExist()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            IFileService fileService = new FileService(databaseContext, null);
+
+            Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+
+            Assert.Null(result);
         }
     }
 }

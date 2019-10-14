@@ -10,6 +10,7 @@ using DataDrive.DAO.Models.Base;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataDrive.Files.Services
@@ -134,9 +135,26 @@ namespace DataDrive.Files.Services
             return parentDirectoryOutResult;
         }
 
-        public Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username)
+        public async Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+            File fileToDownload = await _databaseContext.Files.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
+            if (fileToDownload == null)
+            {
+                return null;
+            }
+
+            //Get MIME type
+            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileToDownload.Name, out string contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);
+
+            return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
         }
 
         public Task<FileOut> GetByIdAndUser(Guid id, string username)
