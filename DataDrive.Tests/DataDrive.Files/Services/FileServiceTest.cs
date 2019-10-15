@@ -661,6 +661,64 @@ namespace DataDrive.Tests.DataDrive.Files.Services
         }
 
         [Fact]
+        public async void Returns_DirectoryWithFileList_when_ParentDirectoryIsNull()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new Directory_to_DirectoryOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileSerivce = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            File file1 = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File1.exe",
+                OwnerID = userId
+            };
+
+            File file2 = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File2.rar",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddRangeAsync(file1, file2);
+
+            Directory directory1 = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "Directory1.d",
+                OwnerID = userId
+            };
+
+            await databaseContext.Directories.AddAsync(directory1);
+
+            await databaseContext.SaveChangesAsync();
+
+            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(null, "admin@admin.com");
+
+            Assert.NotNull(result);
+
+            List<FileAbstract> filesFromRoot = await databaseContext.FileAbstracts
+                .Where(_ => _.ParentDirectoryID == null && _.OwnerID == userId)
+                .ToListAsync();
+
+            Assert.Equal(filesFromRoot.Count, result.Files.Count);
+            Assert.Equal(FileType.DIRECTORY, result.FileType);
+            Assert.Null(result.ID);
+            Assert.Null(result.ParentDirectoryID);
+        }
+
+        [Fact]
         public async void Returns_Null_when_DirectoryNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();

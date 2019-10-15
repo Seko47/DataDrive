@@ -45,7 +45,7 @@ namespace DataDrive.Files.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetFromDirectory(Guid id)
+        public async Task<IActionResult> GetFromDirectory(Guid? id)
         {
             DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(id, User.Identity.Name);
 

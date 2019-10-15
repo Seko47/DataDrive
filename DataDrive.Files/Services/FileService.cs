@@ -175,20 +175,40 @@ namespace DataDrive.Files.Services
             return fileResult;
         }
 
-        public async Task<DirectoryOut> GetDirectoryByIdAndUser(Guid id, string username)
+        public async Task<DirectoryOut> GetDirectoryByIdAndUser(Guid? id, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
-            Directory directory = await _databaseContext.Directories
-                .Include(_ => _.Files)
-                .Include(_ => _.ParentDirectory)
-                .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
 
-            if (directory == null)
+            DirectoryOut result;
+
+            if (id != null)
             {
-                return null;
+                Directory directory = await _databaseContext.Directories
+                    .Include(_ => _.Files)
+                    .Include(_ => _.ParentDirectory)
+                    .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
+                if (directory == null)
+                {
+                    return null;
+                }
+
+                result = _mapper.Map<DirectoryOut>(directory);
+            }
+            else
+            {
+                List<FileAbstract> files = await _databaseContext.FileAbstracts
+                    .Where(_ => _.ParentDirectoryID == id).ToListAsync();
+
+                result = new DirectoryOut
+                {
+                    CreatedDateTime = DateTime.Now,
+                    Files = _mapper.Map<List<FileOut>>(files),
+                    FileType = FileType.DIRECTORY,
+                    LastModifiedDateTime = DateTime.Now,
+                };
             }
 
-            DirectoryOut result = _mapper.Map<DirectoryOut>(directory);
             return result;
         }
 
