@@ -145,25 +145,6 @@ namespace DataDrive.Files.Controllers
             }
 
             return Ok(fileUploadResults);
-            /*
-            try
-            {
-                var result = new List<FileUploadResult>();
-                foreach (var file in filePost.Files)
-                {
-                    var path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot/uploads", Guid.NewGuid().ToString());
-                    var stream = new FileStream(path, FileMode.Create);
-                    file.CopyToAsync(stream);
-                    result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length });
-                }
-
-                return Ok(result);
-            }
-            catch
-            {
-                return BadRequest("Something went wrong");
-            }
-            */
         }
     }
 }
