@@ -52,11 +52,7 @@ namespace DataDrive.Files.Services
 
             await _databaseContext.SaveChangesAsync();
 
-            Directory directory = await _databaseContext.Directories
-                .Include(_ => _.Files)
-                .FirstOrDefaultAsync(_ => _.ID == newDirectory.ID);
-
-            DirectoryOut result = _mapper.Map<DirectoryOut>(directory);
+            DirectoryOut result = _mapper.Map<DirectoryOut>(newDirectory);
 
             return result;
 
