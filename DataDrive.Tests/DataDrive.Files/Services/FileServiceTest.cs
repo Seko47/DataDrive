@@ -5,6 +5,8 @@ using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -437,6 +439,527 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             IFileService fileService = new FileService(databaseContext, null);
 
             Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+
+            Assert.Null(result);
+        }
+    }
+
+    public class FileServiceTest_GetByIdAndUser
+    {
+        [Fact]
+        public async void Returns_FileInfo_when_Success()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            File file = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "TestFile.pdf",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(file);
+            await databaseContext.SaveChangesAsync();
+
+            FileOut result = await fileService.GetByIdAndUser(file.ID, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(file.ID, result.ID);
+            Assert.Equal(file.FileType, result.FileType);
+            Assert.Equal(file.CreatedDateTime, result.CreatedDateTime);
+            Assert.Equal(file.Name, result.Name);
+            Assert.Equal(file.ParentDirectoryID, result.ParentDirectoryID);
+        }
+
+        [Fact]
+        public async void Returns_DirectoryInfo_when_Success()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory directoryToCheck = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "Directory",
+                OwnerID = userId
+            };
+
+            await databaseContext.Directories.AddAsync(directoryToCheck);
+            await databaseContext.SaveChangesAsync();
+
+            File file = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "TestFile.pdf",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            await databaseContext.Files.AddAsync(file);
+            await databaseContext.SaveChangesAsync();
+
+            FileOut result = await fileService.GetByIdAndUser(directoryToCheck.ID, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(directoryToCheck.ID, result.ID);
+            Assert.Equal(directoryToCheck.FileType, result.FileType);
+            Assert.Equal(directoryToCheck.CreatedDateTime, result.CreatedDateTime);
+            Assert.Equal(directoryToCheck.Name, result.Name);
+            Assert.Equal(directoryToCheck.ParentDirectoryID, result.ParentDirectoryID);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_FileNotBelongsToUser()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            File file = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "TestFile.pdf",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(file);
+            await databaseContext.SaveChangesAsync();
+
+            FileOut result = await fileService.GetByIdAndUser(file.ID, "user@user.com");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_FileNotExist()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            FileOut result = await fileService.GetByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+
+            Assert.Null(result);
+        }
+    }
+
+    public class FileServiceTest_GetDirectoryByIdAndUser
+    {
+        [Fact]
+        public async void Returns_DirectoryWithFileList_when_Success()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new Directory_to_DirectoryOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileSerivce = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory rootDirectory = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "root",
+                OwnerID = userId
+            };
+
+            await databaseContext.Directories.AddAsync(rootDirectory);
+
+            Directory directoryToCheck = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "DirectoryToCheck",
+                OwnerID = userId,
+                ParentDirectoryID = rootDirectory.ID
+            };
+
+            await databaseContext.Directories.AddAsync(directoryToCheck);
+
+            File file1 = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File1.exe",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            File file2 = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File2.rar",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            await databaseContext.Files.AddRangeAsync(file1, file2);
+
+            Directory directory1 = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "Directory1.d",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            await databaseContext.Directories.AddAsync(directory1);
+
+            await databaseContext.SaveChangesAsync();
+
+            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(directoryToCheck.ID, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(directoryToCheck.CreatedDateTime, result.CreatedDateTime);
+            Assert.Equal(directoryToCheck.Files.Count, result.Files.Count);
+            Assert.Equal(directoryToCheck.FileType, result.FileType);
+            Assert.Equal(directoryToCheck.ID, result.ID);
+            Assert.Equal(directoryToCheck.Name, result.Name);
+            Assert.Equal(directoryToCheck.ParentDirectoryID, result.ParentDirectoryID);
+            Assert.Equal(directoryToCheck.ParentDirectory.Name, result.ParentDirectoryName);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_DirectoryNotExist()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new Directory_to_DirectoryOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileSerivce = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_DirectoryNotBelongsToUser()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new Directory_to_DirectoryOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileSerivce = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory rootDirectory = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "root",
+                OwnerID = userId
+            };
+
+            await databaseContext.Directories.AddAsync(rootDirectory);
+
+            Directory directoryToCheck = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "DirectoryToCheck",
+                OwnerID = userId,
+                ParentDirectoryID = rootDirectory.ID
+            };
+
+            await databaseContext.Directories.AddAsync(directoryToCheck);
+
+            File file1 = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File1.exe",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            File file2 = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File2.rar",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            await databaseContext.Files.AddRangeAsync(file1, file2);
+
+            Directory directory1 = new Directory
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "Directory1.d",
+                OwnerID = userId,
+                ParentDirectoryID = directoryToCheck.ID
+            };
+
+            await databaseContext.Directories.AddAsync(directory1);
+
+            await databaseContext.SaveChangesAsync();
+
+            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(directoryToCheck.ID, "user@user.com");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_DirectoryIsNotADirectory()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration config = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new Directory_to_DirectoryOut());
+            });
+            IMapper mapper = config.CreateMapper();
+
+            IFileService fileSerivce = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            File fileToCheck = new File
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "DirectoryToCheck",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(fileToCheck);
+
+            await databaseContext.SaveChangesAsync();
+
+            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(fileToCheck.ID, "admin@admin.com");
+
+            Assert.Null(result);
+        }
+    }
+
+    public class FileServiceTest_PatchByIdAndFilePatchAndUser
+    {
+        [Fact]
+        public async void Returns_PatchedFileOut_when_ChangedParentDirectory()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+                conf.AddProfile(new JsonPatchDocument_Mapper());
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory directory = new Directory
+            {
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "Directory",
+                OwnerID = userId,
+            };
+
+            await databaseContext.Directories.AddAsync(directory);
+
+            File fileToMove = new File
+            {
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File.txt",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(fileToMove);
+            await databaseContext.SaveChangesAsync();
+
+            JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
+            jsonPatchDocument.Add(_ => _.ParentDirectoryID, directory.ID);
+
+            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToMove.ID, jsonPatchDocument, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(directory.ID, result.ParentDirectoryID);
+            Assert.Equal(fileToMove.Name, result.Name);
+        }
+
+        [Fact]
+        public async void Returns_PatchedFileOut_when_ChangedName()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+                conf.AddProfile(new JsonPatchDocument_Mapper());
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            File fileToChange = new File
+            {
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File.txt",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(fileToChange);
+            await databaseContext.SaveChangesAsync();
+
+            string newFileName = "newName.pdf";
+
+            JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
+            jsonPatchDocument.Add(_ => _.Name, newFileName);
+
+            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(fileToChange.ParentDirectoryID, result.ParentDirectoryID);
+            Assert.Equal(newFileName, result.Name);
+        }
+
+        [Fact]
+        public async void Returns_PatchedFileOut_when_ChangedNameAndParentDirectory()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+                conf.AddProfile(new JsonPatchDocument_Mapper());
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory directory = new Directory
+            {
+                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                Name = "Directory",
+                OwnerID = userId,
+            };
+
+            await databaseContext.Directories.AddAsync(directory);
+
+            File fileToChange = new File
+            {
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File.txt",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(fileToChange);
+            await databaseContext.SaveChangesAsync();
+
+            string newFileName = "newName.pdf";
+
+            JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
+            jsonPatchDocument.Add(_ => _.ParentDirectoryID, directory.ID);
+            jsonPatchDocument.Add(_ => _.Name, newFileName);
+
+            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(directory.ID, result.ParentDirectoryID);
+            Assert.Equal(newFileName, result.Name);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_FileNotBelongsToUser()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            File fileToChange = new File
+            {
+                FileType = DAO.Models.Base.FileType.FILE,
+                Name = "File.txt",
+                OwnerID = userId
+            };
+
+            await databaseContext.Files.AddAsync(fileToChange);
+            await databaseContext.SaveChangesAsync();
+
+            JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
+            jsonPatchDocument.Add(_ => _.Name, "newName");
+
+            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "user@user.com");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_FileNotExist()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new FileAbstract_to_FileOut());
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
+            jsonPatchDocument.Add(_ => _.Name, "newName");
+
+            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(Guid.NewGuid(), jsonPatchDocument, "admin@admin.com");
 
             Assert.Null(result);
         }

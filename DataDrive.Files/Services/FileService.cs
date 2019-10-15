@@ -42,7 +42,7 @@ namespace DataDrive.Files.Services
             Directory newDirectory = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = nameForNewDirectory,
                 OwnerID = user.Id,
                 ParentDirectoryID = directoryPost.ParentDirectoryID
@@ -157,19 +157,61 @@ namespace DataDrive.Files.Services
             return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
         }
 
-        public Task<FileOut> GetByIdAndUser(Guid id, string username)
+        public async Task<FileOut> GetByIdAndUser(Guid id, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+
+            FileAbstract fileAbstract = await _databaseContext.FileAbstracts
+                .Include(_ => _.ParentDirectory)
+                .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
+            if (fileAbstract == null)
+            {
+                return null;
+            }
+
+            FileOut fileResult = _mapper.Map<FileOut>(fileAbstract);
+            return fileResult;
         }
 
-        public Task<DirectoryOut> GetDirectoryByIdAndUser(Guid id, string username)
+        public async Task<DirectoryOut> GetDirectoryByIdAndUser(Guid id, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+            Directory directory = await _databaseContext.Directories
+                .Include(_ => _.Files)
+                .Include(_ => _.ParentDirectory)
+                .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
+            if (directory == null)
+            {
+                return null;
+            }
+
+            DirectoryOut result = _mapper.Map<DirectoryOut>(directory);
+            return result;
         }
 
-        public Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username)
+        public async Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+
+            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
+            if (fileAbstract == null)
+            {
+                return null;
+            }
+
+            JsonPatchDocument<FileAbstract> fileAbstractPatch = _mapper.Map<JsonPatchDocument<FileAbstract>>(jsonPatchDocument);
+
+            fileAbstractPatch.ApplyTo(fileAbstract);
+
+            await _databaseContext.SaveChangesAsync();
+
+            FileOut result = _mapper.Map<FileOut>(await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id));
+
+            return result;
         }
 
         public Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username)

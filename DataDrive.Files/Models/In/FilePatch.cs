@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataDrive.DAO.Models.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using System;
@@ -17,8 +18,8 @@ namespace DataDrive.Files.Models.In
     {
         public JsonPatchDocument_Mapper()
         {
-            CreateMap(typeof(JsonPatchDocument<>), typeof(JsonPatchDocument<>));
-            CreateMap(typeof(Operation<>), typeof(Operation<>));
+            CreateMap(typeof(JsonPatchDocument<FilePatch>), typeof(JsonPatchDocument<FileAbstract>));
+            CreateMap(typeof(Operation<FilePatch>), typeof(Operation<FileAbstract>));
         }
     }
 }
