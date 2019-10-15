@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DataDrive.DAO.Context;
 using DataDrive.DAO.Models;
+using DataDrive.DAO.Models.Base;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.StaticFiles;
@@ -960,6 +962,202 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             jsonPatchDocument.Add(_ => _.Name, "newName");
 
             FileOut result = await fileService.PatchByIdAndFilePatchAndUser(Guid.NewGuid(), jsonPatchDocument, "admin@admin.com");
+
+            Assert.Null(result);
+        }
+    }
+
+    public class FileServiceTest_PostByUser
+    {
+        [Fact]
+        public async void Returns_ListOfFileUploadResult_when_UploadedMultipleFile()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory directory = new Directory
+            {
+                FileType = FileType.DIRECTORY,
+                OwnerID = userId,
+                Name = "Directory"
+            };
+
+            await databaseContext.Directories.AddAsync(directory);
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = directory.ID,
+                Files = new List<IFormFile>
+                {
+                    new FormFile(
+                        new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
+                        0, 4, "Data", "file1.txt"),
+                    new FormFile(
+                        new System.IO.MemoryStream(Encoding.UTF8.GetBytes("Loooong text")),
+                        0, 12, "Data", "file2.txt")
+                }
+            };
+
+            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(filePost.Files.Count(), result.Count());
+
+            Assert.True(databaseContext.Files
+                .Any(_ => _.ParentDirectoryID == directory.ID && _.Name == "file1.txt"));
+            Assert.True(databaseContext.Files
+                .Any(_ => _.ParentDirectoryID == directory.ID && _.Name == "file2.txt"));
+        }
+
+        [Fact]
+        public async void Returns_ListOfFileUploadResult_when_UploadedSingleFile()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory directory = new Directory
+            {
+                FileType = FileType.DIRECTORY,
+                OwnerID = userId,
+                Name = "Directory"
+            };
+
+            await databaseContext.Directories.AddAsync(directory);
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = directory.ID,
+                Files = new List<IFormFile>
+                {
+                    new FormFile(
+                        new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
+                        0, 4, "Data", "file1.txt")
+                }
+            };
+
+            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(filePost.Files.Count(), result.Count());
+
+            Assert.True(databaseContext.Files
+                .Any(_ => _.ParentDirectoryID == directory.ID && _.Name == "file1.txt"));
+        }
+
+        [Fact]
+        public async void Returns_ListOfFileUploadResult_when_ParentDirectoryIsNull()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            FilePost filePost = new FilePost
+            {
+                Files = new List<IFormFile>
+                {
+                    new FormFile(
+                        new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
+                        0, 4, "Data", "file1.txt")
+                }
+            };
+
+            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+
+            Assert.NotNull(result);
+            Assert.Equal(filePost.Files.Count(), result.Count());
+
+            Assert.True(databaseContext.Files
+                .Any(_ => _.ParentDirectoryID == null && _.Name == "file1.txt"));
+        }
+
+        [Fact]
+        public async void Returns_Null_when_ParentDirectoryNotExist()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = Guid.NewGuid(),
+                Files = new List<IFormFile>
+                {
+                    new FormFile(
+                        new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
+                        0, 4, "Data", "file1.txt")
+                }
+            };
+
+            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void Returns_Null_when_ParentDirectoryNotBelongsToUser()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration configuration = new MapperConfiguration(conf =>
+            {
+
+            });
+            IMapper mapper = configuration.CreateMapper();
+
+            IFileService fileService = new FileService(databaseContext, mapper);
+
+            string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
+
+            Directory directory = new Directory
+            {
+                FileType = FileType.DIRECTORY,
+                OwnerID = userId,
+                Name = "Directory"
+            };
+
+            await databaseContext.Directories.AddAsync(directory);
+
+            FilePost filePost = new FilePost
+            {
+                ParentDirectoryID = directory.ID,
+                Files = new List<IFormFile>
+                {
+                    new FormFile(
+                        new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
+                        0, 4, "Data", "file1.txt")
+                }
+            };
+
+            List<FileUploadResult> result = await fileService.PostByUser(filePost, "user@user.com");
 
             Assert.Null(result);
         }

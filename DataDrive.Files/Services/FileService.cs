@@ -214,7 +214,7 @@ namespace DataDrive.Files.Services
             return result;
         }
 
-        public Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username)
+        public async Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username)
         {
             throw new NotImplementedException();
         }
