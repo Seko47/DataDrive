@@ -1049,6 +1049,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             };
 
             await databaseContext.Directories.AddAsync(directory);
+            await databaseContext.SaveChangesAsync();
 
             FilePost filePost = new FilePost
             {
@@ -1097,6 +1098,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             };
 
             await databaseContext.Directories.AddAsync(directory);
+            await databaseContext.SaveChangesAsync();
 
             FilePost filePost = new FilePost
             {

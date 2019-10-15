@@ -9,6 +9,7 @@ using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -232,7 +233,68 @@ namespace DataDrive.Files.Services
 
         public async Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))?
+                .Id;
+
+            Directory directory = await _databaseContext.Directories
+                .FirstOrDefaultAsync(_ => _.ID == filePost.ParentDirectoryID && _.OwnerID == userId);
+
+            if (directory == null && filePost.ParentDirectoryID != null)
+            {
+                return null;
+            }
+
+            try
+            {
+                List<FileUploadResult> result = new List<FileUploadResult>();
+
+                string pathToWwwroot = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot");
+                if (!System.IO.Directory.Exists(pathToWwwroot))
+                {
+                    System.IO.Directory.CreateDirectory(pathToWwwroot);
+                }
+
+                string pathToUploadDirectory = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!System.IO.Directory.Exists(pathToUploadDirectory))
+                {
+                    System.IO.Directory.CreateDirectory(pathToUploadDirectory);
+                }
+
+                foreach (IFormFile file in filePost.Files)
+                {
+                    DateTime actualTime = DateTime.Now;
+                    string fileName = actualTime.Year + actualTime.Month + actualTime.Day + "_" + actualTime.Hour + actualTime.Minute + actualTime.Second + "_" + Guid.NewGuid().ToString();
+                    string pathToNewFile = System.IO.Path.Combine(pathToUploadDirectory, fileName);
+
+                    System.IO.FileStream fileStream = new System.IO.FileStream(pathToNewFile, System.IO.FileMode.Create);
+                    Task fileUploadInProgres = file.CopyToAsync(fileStream);
+
+                    File newFile = new File
+                    {
+                        CreatedDateTime = DateTime.Now,
+                        FileType = FileType.FILE,
+                        Name = file.FileName,
+                        OwnerID = userId,
+                        ParentDirectoryID = filePost.ParentDirectoryID,
+                        Path = pathToNewFile
+                    };
+
+                    await _databaseContext.Files.AddAsync(newFile);
+                    await _databaseContext.SaveChangesAsync();
+
+                    result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length });
+
+                    fileStream.Close();
+                }
+
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
     }
 }
