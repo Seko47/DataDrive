@@ -44,10 +44,10 @@
         {{ 'NAVBAR.FILES' | translate }}
       </a>
 
-      <a mat-list-item (click)="sidenav.toggle()" href="#">
+      <button mat-button (click)="sidenav.toggle()">
         <mat-icon>close</mat-icon>
         {{ 'NAVBAR.CLOSE' | translate }}
-      </a>
+      </button>
 
     </mat-nav-list>
   </mat-sidenav>

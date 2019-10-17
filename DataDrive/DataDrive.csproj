@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\files\models\" />
     <Folder Include="wwwroot\uploads\files\" />
   </ItemGroup>
 
