@@ -17,31 +17,49 @@
 -->
 
 
-<ul fxLayout fxLayoutGap="20px" style="list-style-type:none">
+<ul fxLayout fxLayoutGap="20px" style="list-style-type:none" *ngIf="isAuthenticated | async">
 
   <li fxHide.xs>
-    <button mat-icon-button>
+    <a mat-icon-button
+       [routerLink]='["/authentication/profile"]'>
       <mat-icon>settings</mat-icon>
-    </button>
-  </li>
-
-  <li fxHide.xs>
-    <button mat-icon-button>
-      <mat-icon>help_outline</mat-icon>
-    </button>
+    </a>
   </li>
 
   <li>
     <button mat-icon-button [matMenuTriggerFor]="auth">
-      <mat-icon>person_outline</mat-icon>
+      <mat-icon>person</mat-icon>
     </button>
     <mat-menu #auth="matMenu">
-      <button mat-menu-item (click)="logout()">
+      <a mat-menu-item
+         [routerLink]='["/authentication/profile"]'>
+        Hello {{ userName | async }}
+      </a>
+      <a mat-menu-item
+         [routerLink]='["/authentication/logout"]'
+         [state]='{ local: true }'>
         <mat-icon>exit_to_app</mat-icon>
         <span>Sign out</span>
-      </button>
+      </a>
     </mat-menu>
   </li>
 
 </ul>
 
+<ul fxLayout fxLayoutGap="20px" style="list-style-type:none" *ngIf="!(isAuthenticated | async)">
+
+  <li fxHide.xs>
+    <a mat-icon-button
+       [routerLink]='["/authentication/register"]'>
+      <mat-icon>person_add</mat-icon>
+    </a>
+  </li>
+
+  <li fxHide.xs>
+    <a mat-icon-button
+       [routerLink]='["/authentication/login"]'>
+      <mat-icon>person</mat-icon>
+    </a>
+  </li>
+
+</ul>
