@@ -8,8 +8,10 @@
 	},
 	"NAVBAR": {
 		"CLOSE": "Close",
+		"FILES": "Files",
 		"HELLO_USERNAME": "Hello {{ name }}",
 		"HOME": "Home",
+		"MYDRIVE": "My Drive",
 		"SIGN_OUT": "Sign out"
 	}
 }

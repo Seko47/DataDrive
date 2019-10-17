@@ -10,7 +10,8 @@
     <span class="menu-spacer"></span>
     <div fxHide.xs>
 
-      <a mat-button [routerLink]="'/'"> {{ 'NAVBAR.HOME' | translate }} </a>
+      <a mat-button [routerLink]="['/']"> {{ 'NAVBAR.HOME' | translate }} </a>
+      <a mat-button [routerLink]="['/drive']">{{ 'NAVBAR.MYDRIVE' | translate }}</a>
 
     </div>
 
@@ -27,10 +28,16 @@
   <mat-sidenav #sidenav>
     <mat-nav-list>
 
-      <a mat-button [routerLink]="'/'">
+      <a mat-list-item [routerLink]="'/'">
         <mat-icon>home</mat-icon>
         {{ 'NAVBAR.HOME' | translate }}
       </a>
+
+      <a mat-list-item [routerLink]="'/drive/files'">
+        <mat-icon>folder</mat-icon>
+        {{ 'NAVBAR.FILES' | translate }}
+      </a>
+
       <a mat-list-item (click)="sidenav.toggle()" href="#">
         <mat-icon>close</mat-icon>
         {{ 'NAVBAR.CLOSE' | translate }}

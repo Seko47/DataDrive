@@ -8,8 +8,10 @@
 	},
 	"NAVBAR": {
 		"CLOSE": "Zamknij",
+		"FILES": "Pliki",
 		"HELLO_USERNAME": "Witaj {{ name }}",
 		"HOME": "Strona główna",
+		"MYDRIVE": "Mój Dysk",
 		"SIGN_OUT": "Wyloguj"
 	}
 }
