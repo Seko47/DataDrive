@@ -86,17 +86,17 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "182cde76-87c6-48ec-91df-36f7f17b9dce",
+                            Id = "3420aa37-72ad-4305-b59b-95ce51815ddc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9c52dedf-4582-467f-88e4-b6501fc5caae",
+                            ConcurrencyStamp = "65185923-2e82-40d4-8a1d-32395b5932f3",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGt4IxO5SXzHq/8uVHUUibg0vI+nBgEcwIvSlP1vaBo5OTyNG8NAlIyJGF9AqrsIiA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGcNkeb5d8cX92f+9h2JVRUFb/HENB43TGo/+tT3Cl6NJB5T/EKsrdOTE512jDMQCw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0ee26a11-2c78-424e-b26d-7d5e9bc14c61",
+                            SecurityStamp = "a8b5d54d-e4c3-4d61-9786-1ba43c52ad29",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
@@ -115,8 +115,14 @@ namespace DataDrive.DAO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastModifiedDateTime")
+                    b.Property<int>("FileType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedDateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerID")
                         .HasColumnType("nvarchar(450)");
@@ -151,7 +157,7 @@ namespace DataDrive.DAO.Migrations
                     b.Property<Guid>("FileID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("LastModifiedDateTime")
+                    b.Property<DateTime?>("LastModifiedDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OwnerID")
@@ -279,8 +285,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cd2301ca-082d-4dec-b818-1a10d717b9cc",
-                            ConcurrencyStamp = "1e1c3d32-0654-412f-a2f9-187f6a1b3d4c",
+                            Id = "7f38fa11-d81b-4cf9-94a8-e586659e6ce6",
+                            ConcurrencyStamp = "8d91ea64-5b66-4454-9ede-fa2cf27199cf",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -375,8 +381,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "182cde76-87c6-48ec-91df-36f7f17b9dce",
-                            RoleId = "cd2301ca-082d-4dec-b818-1a10d717b9cc"
+                            UserId = "3420aa37-72ad-4305-b59b-95ce51815ddc",
+                            RoleId = "7f38fa11-d81b-4cf9-94a8-e586659e6ce6"
                         });
                 });
 
@@ -405,19 +411,12 @@ namespace DataDrive.DAO.Migrations
                 {
                     b.HasBaseType("DataDrive.DAO.Models.Base.FileAbstract");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("Directory");
                 });
 
             modelBuilder.Entity("DataDrive.DAO.Models.File", b =>
                 {
                     b.HasBaseType("DataDrive.DAO.Models.Base.FileAbstract");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("File_Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");

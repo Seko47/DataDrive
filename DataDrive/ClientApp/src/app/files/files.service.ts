@@ -16,6 +16,11 @@ export class FilesService {
     }
 
     public getFilesFromDirectory(directoryID: string) {
-        return this.httpClient.get<DirectoryOut>(this.baseUrl + "/api/Files/fromDirectory/" + directoryID);
+        if (directoryID == null || directoryID.length == 0) {
+            return this.httpClient.get<DirectoryOut>(this.baseUrl + "api/Files/fromRoot");
+        }
+        else {
+            return this.httpClient.get<DirectoryOut>(this.baseUrl + 'api/Files/fromDirectory/' + directoryID);
+        }
     }
 }

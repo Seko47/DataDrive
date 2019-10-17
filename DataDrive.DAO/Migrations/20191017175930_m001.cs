@@ -13,12 +13,12 @@ namespace DataDrive.DAO.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(nullable: false),
-                    LastModifiedDateTime = table.Column<DateTime>(nullable: false),
+                    LastModifiedDateTime = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     OwnerID = table.Column<string>(nullable: true),
                     ParentDirectoryID = table.Column<Guid>(nullable: true),
+                    FileType = table.Column<int>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    File_Name = table.Column<string>(nullable: true),
                     Path = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true)
@@ -46,7 +46,7 @@ namespace DataDrive.DAO.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(nullable: false),
-                    LastModifiedDateTime = table.Column<DateTime>(nullable: false),
+                    LastModifiedDateTime = table.Column<DateTime>(nullable: true),
                     FileID = table.Column<Guid>(nullable: false),
                     OwnerID = table.Column<string>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
@@ -79,6 +79,21 @@ namespace DataDrive.DAO.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "7f38fa11-d81b-4cf9-94a8-e586659e6ce6", "8d91ea64-5b66-4454-9ede-fa2cf27199cf", "admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "3420aa37-72ad-4305-b59b-95ce51815ddc", 0, "65185923-2e82-40d4-8a1d-32395b5932f3", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEGcNkeb5d8cX92f+9h2JVRUFb/HENB43TGo/+tT3Cl6NJB5T/EKsrdOTE512jDMQCw==", null, false, "a8b5d54d-e4c3-4d61-9786-1ba43c52ad29", false, "admin@admin.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "3420aa37-72ad-4305-b59b-95ce51815ddc", "7f38fa11-d81b-4cf9-94a8-e586659e6ce6" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FileAbstracts_OwnerID",
@@ -113,6 +128,21 @@ namespace DataDrive.DAO.Migrations
 
             migrationBuilder.DropTable(
                 name: "FileAbstracts");
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUserRoles",
+                keyColumns: new[] { "UserId", "RoleId" },
+                keyValues: new object[] { "3420aa37-72ad-4305-b59b-95ce51815ddc", "7f38fa11-d81b-4cf9-94a8-e586659e6ce6" });
+
+            migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: "7f38fa11-d81b-4cf9-94a8-e586659e6ce6");
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUsers",
+                keyColumn: "Id",
+                keyValue: "3420aa37-72ad-4305-b59b-95ce51815ddc");
         }
     }
 }

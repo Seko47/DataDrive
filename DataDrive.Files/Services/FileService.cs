@@ -203,6 +203,7 @@ namespace DataDrive.Files.Services
                     Files = _mapper.Map<List<FileOut>>(files),
                     FileType = FileType.DIRECTORY,
                     LastModifiedDateTime = DateTime.Now,
+                    Name = "Root"
                 };
             }
 

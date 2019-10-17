@@ -20,7 +20,7 @@ export class FilesComponent implements OnInit {
             .getFilesFromDirectory(this.actualDirectory != null ? this.actualDirectory.ID : null)
             .subscribe(result => {
                 this.actualDirectory = result;
-            });
+            }, error => alert(error.error));
     }
 
 }

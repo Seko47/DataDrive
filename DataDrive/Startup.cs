@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using AutoMapper;
+using DataDrive.Files.Services;
 
 namespace DataDrive
 {
@@ -25,6 +26,8 @@ namespace DataDrive
             services.AddDatabaseContext(Configuration);
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddScoped<IFileService, FileService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

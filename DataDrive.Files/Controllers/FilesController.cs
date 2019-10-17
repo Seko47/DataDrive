@@ -42,7 +42,6 @@ namespace DataDrive.Files.Controllers
         }
 
         [HttpGet("fromDirectory/{id}")]
-        [HttpGet("fromDirectory")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -53,6 +52,22 @@ namespace DataDrive.Files.Controllers
             if (directory == null)
             {
                 return NotFound($"Directory {id} not found");
+            }
+
+            return Ok(directory);
+        }
+
+        [HttpGet("fromRoot")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetFromRoot()
+        {
+            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(null, User.Identity.Name);
+
+            if (directory == null)
+            {
+                return NotFound($"Root directory not found");
             }
 
             return Ok(directory);
