@@ -1,9 +1,8 @@
 <body>
   <app-nav-menu></app-nav-menu>
   <div class="container">
-    {{'demo.title' | translate}}
-    <button (click)="useLanguage('en')">en</button>
-    <button (click)="useLanguage('de')">de</button>
     <router-outlet></router-outlet>
+    <button (click)="useLanguage('en')">{{ 'LANGUAGE.ENGLISH_SHORT' | translate }}</button>
+    <button (click)="useLanguage('pl')">{{ 'LANGUAGE.POLISH_SHORT' | translate }}</button>
   </div>
 </body>
