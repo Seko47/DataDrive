@@ -2,6 +2,9 @@
 	"APP": {
 		"NAME": "DataDrive"
 	},
+	"DRIVE": {
+		"SELECT_THE_DATA_TO_SHOW": "Wybierz dane do pokazania"
+	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",
 		"POLISH_SHORT": "pl"

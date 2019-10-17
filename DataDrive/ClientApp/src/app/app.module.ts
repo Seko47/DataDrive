@@ -20,6 +20,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DriveComponent } from './drive/drive.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         NavMenuComponent,
         HomeComponent,
         CounterComponent,
-        FetchDataComponent
+        FetchDataComponent,
+        DriveComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,6 +38,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         ApiAuthorizationModule,
         RouterModule.forRoot([
             { path: '', component: HomeComponent, pathMatch: 'full' },
+            { path: 'drive', component: DriveComponent, pathMatch: 'full', canActivate: [AuthorizeGuard] },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
         ]),
