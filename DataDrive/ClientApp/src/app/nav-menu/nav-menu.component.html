@@ -10,7 +10,7 @@
     <span class="menu-spacer"></span>
     <div fxHide.xs>
 
-      <a mat-button [routerLink]="'/'"> Home </a>
+      <a mat-button [routerLink]="'/'"> {{ 'NAVBAR.HOME' | translate }} </a>
 
     </div>
 
@@ -29,7 +29,7 @@
 
       <a mat-button [routerLink]="'/'">
         <mat-icon>home</mat-icon>
-        Home
+        {{ 'NAVBAR.HOME' | translate }}
       </a>
       <a mat-list-item (click)="sidenav.toggle()" href="#">
         <mat-icon>close</mat-icon>
@@ -39,8 +39,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div style="height: 88vh;">
-
+    <div class="container">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

@@ -14,13 +14,13 @@
     <mat-menu #auth="matMenu">
       <a mat-menu-item
          [routerLink]='["/authentication/profile"]'>
-        Hello {{ userName | async }}
+        {{ 'NAVBAR.HELLO_USERNAME' | translate:{'name':(userName | async)} }}
       </a>
       <a mat-menu-item
          [routerLink]='["/authentication/logout"]'
          [state]='{ local: true }'>
         <mat-icon>exit_to_app</mat-icon>
-        <span>Sign out</span>
+        <span>{{ 'NAVBAR.SIGN_OUT' | translate }}</span>
       </a>
     </mat-menu>
   </li>

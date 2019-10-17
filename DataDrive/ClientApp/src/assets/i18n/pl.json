@@ -5,5 +5,10 @@
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",
 		"POLISH_SHORT": "pl"
+	},
+	"NAVBAR": {
+		"HELLO_USERNAME": "Witaj {{ name }}",
+		"HOME": "Strona główna",
+		"SIGN_OUT": "Wyloguj"
 	}
 }
