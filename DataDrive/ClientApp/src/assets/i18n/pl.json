@@ -1,4 +1,7 @@
 {
+	"APP": {
+		"NAME": "DataDrive"
+	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",
 		"POLISH_SHORT": "pl"

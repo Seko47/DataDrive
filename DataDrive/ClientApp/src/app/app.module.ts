@@ -19,6 +19,8 @@ import { MaterialModule } from '../material-module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -45,7 +47,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
                 useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
-        })
+        }),
+        FlexLayoutModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
