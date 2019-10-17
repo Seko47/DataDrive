@@ -29,14 +29,14 @@
 
 <ul fxLayout fxLayoutGap="20px" style="list-style-type:none" *ngIf="!(isAuthenticated | async)">
 
-  <li fxHide.xs>
+  <li>
     <a mat-icon-button
        [routerLink]='["/authentication/register"]'>
       <mat-icon>person_add</mat-icon>
     </a>
   </li>
 
-  <li fxHide.xs>
+  <li>
     <a mat-icon-button
        [routerLink]='["/authentication/login"]'>
       <mat-icon>person</mat-icon>
