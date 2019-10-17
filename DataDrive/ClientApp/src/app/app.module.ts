@@ -21,6 +21,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DriveComponent } from './drive/drive.component';
+import { FilesComponent } from './files/files.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { DriveComponent } from './drive/drive.component';
         HomeComponent,
         CounterComponent,
         FetchDataComponent,
-        DriveComponent
+        DriveComponent,
+        FilesComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -39,6 +41,7 @@ import { DriveComponent } from './drive/drive.component';
         RouterModule.forRoot([
             { path: '', component: HomeComponent, pathMatch: 'full' },
             { path: 'drive', component: DriveComponent, pathMatch: 'full', canActivate: [AuthorizeGuard] },
+            { path: 'drive/files', component: FilesComponent, canActivate: [AuthorizeGuard] },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
         ]),
