@@ -7,6 +7,7 @@
 		"POLISH_SHORT": "pl"
 	},
 	"NAVBAR": {
+		"CLOSE": "Close",
 		"HELLO_USERNAME": "Hello {{ name }}",
 		"HOME": "Home",
 		"SIGN_OUT": "Sign out"
