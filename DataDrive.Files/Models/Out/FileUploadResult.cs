@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataDrive.Files.Models.Out
+﻿namespace DataDrive.Files.Models.Out
 {
     public class FileUploadResult
     {

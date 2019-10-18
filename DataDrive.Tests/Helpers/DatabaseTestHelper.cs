@@ -3,9 +3,6 @@ using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
 
 namespace DataDrive.Tests.Helpers
 {

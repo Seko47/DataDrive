@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DataDrive.Files.Models.Out
 {

@@ -1,10 +1,7 @@
 ﻿using DataDrive.DAO.Models;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 
 namespace DataDrive.Tests.Helpers
 {
@@ -21,15 +18,6 @@ namespace DataDrive.Tests.Helpers
                 .Returns(username);
 
             return userManager.Object;
-
-
-
-
-            /*Mock<UserManager<ApplicationUser>> userManager = new Mock<UserManager<ApplicationUser>>();
-            userManager.Setup(_ => _.GetUserName(It.IsAny<ClaimsPrincipal>()))
-                .Returns(username);
-
-            return userManager.O;*/
         }
     }
 }

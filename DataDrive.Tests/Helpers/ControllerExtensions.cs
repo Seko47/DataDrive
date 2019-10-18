@@ -1,10 +1,6 @@
-﻿using DataDrive.Files.Controllers;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 
 namespace DataDrive.Tests.Helpers
 {

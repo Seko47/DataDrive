@@ -1,5 +1,4 @@
-﻿using DataDrive.DAO.Context;
-using DataDrive.DAO.Models;
+﻿using DataDrive.DAO.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
@@ -7,13 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataDrive.Files.Controllers

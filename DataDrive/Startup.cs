@@ -1,4 +1,6 @@
+using AutoMapper;
 using DataDrive.Extensions;
+using DataDrive.Files.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -6,8 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using AutoMapper;
-using DataDrive.Files.Services;
 
 namespace DataDrive
 {

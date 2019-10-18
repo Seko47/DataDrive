@@ -1,11 +1,9 @@
-﻿using DataDrive.DAO.Models;
-using DataDrive.Files.Controllers;
+﻿using DataDrive.Files.Controllers;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

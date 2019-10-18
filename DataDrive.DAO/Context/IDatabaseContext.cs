@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using DataDrive.DAO.Models;
+﻿using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataDrive.DAO.Context
 {
