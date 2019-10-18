@@ -1,5 +1,6 @@
 ﻿using DataDrive.DAO.Context;
 using DataDrive.DAO.Models;
+using DataDrive.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,8 @@ namespace DataDrive.Extensions
             services.AddScoped<IDatabaseContext, ApplicationDbContext>();
 
             services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<CustomUserManager>();
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();

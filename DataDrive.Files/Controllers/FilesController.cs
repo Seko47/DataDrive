@@ -1,13 +1,18 @@
-﻿using DataDrive.DAO.Models;
+﻿using DataDrive.DAO.Context;
+using DataDrive.DAO.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,10 +24,12 @@ namespace DataDrive.Files.Controllers
     public class FilesController : Controller
     {
         private readonly IFileService _fileService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public FilesController(IFileService fileService)
+        public FilesController(IFileService fileService, UserManager<ApplicationUser> userManager)
         {
             _fileService = fileService;
+            _userManager = userManager;
         }
 
         [HttpGet("{id}")]
@@ -31,7 +38,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get(Guid id)
         {
-            FileOut file = await _fileService.GetByIdAndUser(id, User.Identity.Name);
+            FileOut file = await _fileService.GetByIdAndUser(id, _userManager.GetUserName(User));
 
             if (file == null)
             {
@@ -47,7 +54,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetFromDirectory(Guid? id)
         {
-            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(id, User.Identity.Name);
+            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(id, _userManager.GetUserName(User));
 
             if (directory == null)
             {
@@ -63,7 +70,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetFromRoot()
         {
-            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(null, User.Identity.Name);
+            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(null, _userManager.GetUserName(User));
 
             if (directory == null)
             {
@@ -79,7 +86,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> CreateDirectory([FromBody] DirectoryPost directoryPost)
         {
-            DirectoryOut directory = await _fileService.CreateDirectoryByUser(directoryPost, User.Identity.Name);
+            DirectoryOut directory = await _fileService.CreateDirectoryByUser(directoryPost, _userManager.GetUserName(User));
 
             if (directory == null)
             {
@@ -95,7 +102,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Download(Guid id)
         {
-            Tuple<string, byte[], string> tuple = await _fileService.DownloadByIdAndUser(id, User.Identity.Name);
+            Tuple<string, byte[], string> tuple = await _fileService.DownloadByIdAndUser(id, _userManager.GetUserName(User));
 
             if (tuple == null)
             {
@@ -115,7 +122,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            FileOut parentDirectory = await _fileService.DeleteByIdAndUser(id, User.Identity.Name);
+            FileOut parentDirectory = await _fileService.DeleteByIdAndUser(id, _userManager.GetUserName(User));
 
             if (parentDirectory == null)
             {
@@ -131,7 +138,7 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<FilePatch> jsonPatch)
         {
-            FileOut file = await _fileService.PatchByIdAndFilePatchAndUser(id, jsonPatch, User.Identity.Name);
+            FileOut file = await _fileService.PatchByIdAndFilePatchAndUser(id, jsonPatch, _userManager.GetUserName(User));
 
             if (file == null)
             {
@@ -153,7 +160,7 @@ namespace DataDrive.Files.Controllers
                 return BadRequest("Something went wrong");
             }
 
-            List<FileUploadResult> fileUploadResults = await _fileService.PostByUser(filePost, User.Identity.Name);
+            List<FileUploadResult> fileUploadResults = await _fileService.PostByUser(filePost, _userManager.GetUserName(User));
 
             if (fileUploadResults == null)
             {

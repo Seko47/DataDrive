@@ -1,9 +1,11 @@
-﻿using DataDrive.Files.Controllers;
+﻿using DataDrive.DAO.Models;
+using DataDrive.Files.Controllers;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using DataDrive.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -26,8 +28,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(file.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
 
@@ -47,8 +51,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(file));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -65,8 +71,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(file));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Get(Guid.NewGuid());
 
@@ -84,8 +92,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.GetDirectoryByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(directory.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
 
@@ -113,8 +123,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.GetDirectoryByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(directory));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -131,8 +143,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.GetDirectoryByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(directory));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.GetFromDirectory(Guid.NewGuid());
 
@@ -153,8 +167,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Download(Guid.NewGuid());
 
@@ -172,8 +188,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Download(Guid.NewGuid());
 
@@ -194,8 +212,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(tuple));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Download(Guid.NewGuid());
             Assert.IsType<NotFoundObjectResult>(result);
@@ -212,8 +232,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(parentDirectoryMock.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
             Assert.IsType<OkObjectResult>(result);
@@ -232,8 +254,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(parentDirectoryMock));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -252,8 +276,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(parentDirectory));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Delete(Guid.NewGuid());
             Assert.IsType<NotFoundObjectResult>(result);
@@ -270,8 +296,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<FilePatch>>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(file.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             Assert.IsType<OkObjectResult>(result);
@@ -288,8 +316,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<FilePatch>>(), It.IsAny<string>()))
                     .Returns(Task.FromResult(file));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             OkObjectResult okObjectResult = result as OkObjectResult;
@@ -305,8 +335,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<FilePatch>>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(file));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.Patch(Guid.NewGuid(), new JsonPatchDocument<FilePatch>());
             Assert.IsType<NotFoundObjectResult>(result);
@@ -323,8 +355,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(fileUploadResults.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             FilePost filePost = new FilePost
             {
@@ -348,8 +382,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(fileUploadResults));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             FilePost filePost = new FilePost
             {
@@ -376,8 +412,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(fileUploadResults.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             FilePost filePost = new FilePost
             {
@@ -397,8 +435,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(fileUploadResults.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             FilePost filePost = new FilePost
             {
@@ -418,8 +458,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(fileUploadResults));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             FilePost filePost = new FilePost
             {
@@ -445,8 +487,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.CreateDirectoryByUser(It.IsAny<DirectoryPost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(directoryOut.Object));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.CreateDirectory(new DirectoryPost());
 
@@ -460,8 +504,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             fileService.Setup(_ => _.CreateDirectoryByUser(It.IsAny<DirectoryPost>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(directoryOut));
 
-            FilesController filesController = new FilesController(fileService.Object);
-            filesController.Authenticate("admin@admin.com");
+            string username = "admin@admin.com";
+
+            FilesController filesController = new FilesController(fileService.Object, UserManagerHelper.GetUserManager(username));
+            filesController.Authenticate(username);
 
             IActionResult result = await filesController.CreateDirectory(new DirectoryPost());
 
