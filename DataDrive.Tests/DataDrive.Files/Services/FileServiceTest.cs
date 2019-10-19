@@ -1053,7 +1053,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = directory.ID,
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(
                         new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
@@ -1102,7 +1102,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = directory.ID,
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(
                         new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
@@ -1135,7 +1135,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             FilePost filePost = new FilePost
             {
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(
                         new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
@@ -1169,7 +1169,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = Guid.NewGuid(),
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(
                         new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),
@@ -1208,7 +1208,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = directory.ID,
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(
                         new System.IO.MemoryStream(Encoding.UTF8.GetBytes("text")),

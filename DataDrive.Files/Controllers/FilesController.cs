@@ -150,9 +150,12 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Post([FromForm] FilePost filePost)
         {
-            IFormFileCollection files = Request.Form.Files;
+            if (filePost.Files == null && Request.HasFormContentType)
+            {
+                IFormFileCollection files = Request.Form.Files;
 
-            filePost.Files = files;
+                filePost.Files = files;
+            }
 
             if (filePost.Files == null || filePost.Files.Count < 1)
             {

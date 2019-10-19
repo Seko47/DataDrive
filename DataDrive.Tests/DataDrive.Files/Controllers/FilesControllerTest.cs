@@ -361,7 +361,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = null,
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("Some content")), 0,12, "file","file.txt")
                 }
@@ -388,7 +388,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = null,
-                Files = new List<IFormFile>
+                Files = new FormFileCollection
                 {
                     new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("Some content")), 0,12, "file","file.txt")
                 }
@@ -420,6 +420,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
                 ParentDirectoryID = Guid.NewGuid(),
                 Files = null
             };
+
             IActionResult result = await filesController.Post(filePost);
 
             Assert.IsType<BadRequestObjectResult>(result);
@@ -441,8 +442,9 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = Guid.NewGuid(),
-                Files = new List<IFormFile>()
+                Files = new FormFileCollection()
             };
+
             IActionResult result = await filesController.Post(filePost);
 
             Assert.IsType<BadRequestObjectResult>(result);
@@ -464,7 +466,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             FilePost filePost = new FilePost
             {
                 ParentDirectoryID = Guid.NewGuid(),
-                Files = new List<IFormFile>()
+                Files = new FormFileCollection
                 {
                     new FormFile(null, 0, 0, "", "")
                 }
