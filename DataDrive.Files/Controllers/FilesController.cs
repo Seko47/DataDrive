@@ -142,12 +142,12 @@ namespace DataDrive.Files.Controllers
             return Ok(file);
         }
 
-        [HttpPost]
+        [HttpPost, DisableRequestSizeLimit]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Post([FromBody] FilePost filePost)
+        public async Task<IActionResult> Post([FromForm] FilePost filePost)
         {
             if (filePost.Files == null || filePost.Files.Count < 1)
             {

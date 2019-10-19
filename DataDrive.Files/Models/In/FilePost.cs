@@ -7,6 +7,6 @@ namespace DataDrive.Files.Models.In
     public class FilePost
     {
         public Guid? ParentDirectoryID { get; set; }
-        public List<IFormFile> Files { get; set; }
+        public IFormFileCollection Files { get; set; }
     }
 }

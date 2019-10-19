@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { getBaseUrl } from '../../main';
 import { DirectoryOut } from './models/directory-out';
 import { CreateDirectoryPost } from './models/create-directory-post';
+import { FilePost } from './models/file-post';
+import { FileUploadResult } from './models/file-upload-result';
 
 @Injectable({
     providedIn: 'root'
@@ -29,5 +31,9 @@ export class FilesService {
 
     public createDirectory(directory: CreateDirectoryPost) {
         return this.httpClient.post<string>(this.baseUrl + 'api/Files/createDirectory', directory);
+    }
+
+    public uploadFiles(formData: FormData) {
+        return this.httpClient.post<FileUploadResult[]>(this.baseUrl + 'api/Files', formData);
     }
 }

@@ -16,11 +16,18 @@
       <ul fxLayout fxLayoutGap="20px" style="list-style-type:none">
         <li>
           <label>
-            <input type="file" style="display: none;" multiple>
+            <input #file type="file" style="display: none;" multiple (change)="upload(file.files)">
             <a mat-icon-button>
               <mat-icon>cloud_upload</mat-icon>
             </a>
           </label>
+          <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+            {{progress}}%
+          </span>
+
+          <span style="font-weight:bold;color:green;" *ngIf="message">
+            {{message}}
+          </span>
         </li>
 
         <li>
