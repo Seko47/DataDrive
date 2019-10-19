@@ -3,6 +3,7 @@ using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -149,6 +150,10 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Post([FromForm] FilePost filePost)
         {
+            IFormFileCollection files = Request.Form.Files;
+
+            filePost.Files = files;
+
             if (filePost.Files == null || filePost.Files.Count < 1)
             {
                 return BadRequest("Something went wrong");

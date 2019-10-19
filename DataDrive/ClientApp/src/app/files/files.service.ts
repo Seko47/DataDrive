@@ -34,6 +34,11 @@ export class FilesService {
     }
 
     public uploadFiles(formData: FormData) {
-        return this.httpClient.post<FileUploadResult[]>(this.baseUrl + 'api/Files', formData);
+        return this.httpClient.post<FileUploadResult[]>(this.baseUrl + 'api/Files', formData,
+            {
+                reportProgress: true,
+                observe: 'events',
+                withCredentials: true
+            });
     }
 }

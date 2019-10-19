@@ -66,37 +66,29 @@ export class FilesComponent implements OnInit {
             return;
         }
 
+        let filesToUpload = <File[]>files;
+
         const formData = new FormData();
-        
-        formData.append("parentDirectoryID", this.actualDirectory.id);
-
-        formData.append("files", files);
-
-        console.log("files.component.ts:upload(files) | files="+files);
-        console.log("files.component.ts:upload(files) | files.length="+files.length);
-
-        this.filesService.uploadFiles(formData)
-            .subscribe(result => {
-                result.forEach(r => alert("suc"+r.name));
-                this.getFromDirectory(this.actualDirectory.id);
-            }, err => alert(err.error));
-
-        /*const formData = new FormData();
-
-        for (let file of files) {
-            formData.append(file.name, file);
+        if (this.actualDirectory && this.actualDirectory.id) {
+            formData.append("parentDirectoryId", this.actualDirectory.id);
         }
 
-        const uploadReq = new HttpRequest('POST', `api/upload`, formData, {
-            reportProgress: true,
-        });
+        if (filesToUpload.length) {
+            for (let i = 0; i < filesToUpload.length; i++)
+                formData.append('files[]', filesToUpload[i], filesToUpload[i].name);
+        }
 
-        this.http.request(uploadReq).subscribe(event => {
-            if (event.type === HttpEventType.UploadProgress)
-                this.progress = Math.round(100 * event.loaded / event.total);
-            else if (event.type === HttpEventType.Response)
-                this.message = event.body.toString();
-        });*/
+        let loading = true;
+
+        this.filesService.uploadFiles(formData).
+            subscribe(result => {
+                alert("res: " + result);
+                loading = false;
+            },
+                err => {
+                    alert("err: " + err.error);
+                    loading = false;
+                });
     }
 
     stopPropagation(event) {
