@@ -23,19 +23,15 @@ export class FilesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getFromDirectory();
+        this.getFromDirectory(null);
     }
 
-    public getFromDirectory() {
-        let getFromDirectoryId: string = null;
-        if (this.actualDirectory != null) {
-            getFromDirectoryId = this.actualDirectory.id;
-        }
+    public getFromDirectory(id: string) {
 
-        console.log("files.component.ts: getFromDirectoryId == " + getFromDirectoryId)
+        console.log("files.component.ts: getFromDirectoryId == " + id)
 
         this.filesService
-            .getFilesFromDirectory(getFromDirectoryId)
+            .getFilesFromDirectory(id)
             .subscribe(result => {
                 console.log("files.component.ts: dirName == " + result.name);
                 console.log("files.component.ts: filesInDir == " + result.files.length);

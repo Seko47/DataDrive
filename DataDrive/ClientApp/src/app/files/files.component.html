@@ -1,31 +1,36 @@
 <mat-toolbar color="secondary">
   <mat-toolbar-row>
-    <button mat-button (click)="getBack()" *ngIf="actualDirectory && actualDirectory.id">
+    <button mat-button (click)="getFromDirectory(actualDirectory.parentDirectoryId)" *ngIf="actualDirectory && actualDirectory.id">
       <mat-icon>arrow_back</mat-icon>
-      {{ actualDirectory.name }}
+      {{ actualDirectory.parentDirectoryName }}
     </button>
+    <mat-icon *ngIf="actualDirectory && actualDirectory.id">keyboard_arrow_right</mat-icon>
+    <h1 *ngIf="actualDirectory && actualDirectory.id">{{ actualDirectory.name }}</h1>
 
     <h1 *ngIf="!actualDirectory || !actualDirectory.id">{{ actualDirectory.name }}</h1>
 
     <span class="menu-spacer"></span>
-    <div fxHide.xs>
-
-      <a mat-button [routerLink]="['/']"> {{ 'NAVBAR.HOME' | translate }} </a>
-      <a mat-button
-         *ngIf="isAuthenticated | async"
-         [routerLink]="['/drive']">{{ 'NAVBAR.MYDRIVE' | translate }}</a>
-
-    </div>
-
-    <div fxFlex fxLayout fxLayoutAlign="flex-end">
-
-      <app-login-menu></app-login-menu>
-
-    </div>
 
   </mat-toolbar-row>
 </mat-toolbar>
 
+<mat-grid-list cols="5" rowHeight="1:1.5" *ngIf="actualDirectory && actualDirectory.files && actualDirectory.files.length > 0">
+  <mat-grid-tile mat-button *ngFor="let file of actualDirectory.files"
+                 title="{{ file.name }}"
+                 (click)="getFromDirectory(file.id)">
+    <mat-icon class="main-file-icon"
+              *ngIf="file.fileType == 1">folder</mat-icon>
+    <mat-icon class="main-file-icon"
+              *ngIf="file.fileType == 0">insert_drive_file</mat-icon>
+    <mat-grid-tile-footer>
+      <p>{{ file.name }}</p>
+    </mat-grid-tile-footer>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<p *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
+  {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
+</p>
 
 
 <form (ngSubmit)="createDirectory()">
