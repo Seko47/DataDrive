@@ -82,8 +82,8 @@ export class FilesComponent implements OnInit {
 
         this.filesService.uploadFiles(formData).
             subscribe(result => {
-                alert("res: " + result);
                 loading = false;
+                this.getFromDirectory(this.actualDirectory.id);
             },
                 err => {
                     alert("err: " + err.error);
