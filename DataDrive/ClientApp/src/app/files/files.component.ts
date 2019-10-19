@@ -16,7 +16,8 @@ export class FilesComponent implements OnInit {
     public newDirectory: CreateDirectoryPost;
 
     constructor(private filesService: FilesService) {
-        this.actualDirectory = null;
+        this.actualDirectory = new DirectoryOut();
+        this.actualDirectory.name = "Root";
 
         this.newDirectory = new CreateDirectoryPost();
     }

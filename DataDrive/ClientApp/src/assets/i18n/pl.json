@@ -5,6 +5,9 @@
 	"DRIVE": {
 		"SELECT_THE_DATA_TO_SHOW": "Wybierz dane do pokazania"
 	},
+	"FILES": {
+		"NEW_DIRECTORY_NAME": "Nazwa nowego folderu"
+	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",
 		"POLISH_SHORT": "pl"

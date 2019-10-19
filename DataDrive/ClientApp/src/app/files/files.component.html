@@ -1,11 +1,11 @@
 <mat-toolbar color="secondary">
   <mat-toolbar-row>
-    <button mat-button (click)="getBack()" *ngIf="actualDirectory">
+    <button mat-button (click)="getBack()" *ngIf="actualDirectory && actualDirectory.id">
       <mat-icon>arrow_back</mat-icon>
-      {{ 'APP.NAME' | translate }}
+      {{ actualDirectory.name }}
     </button>
 
-    <h1 *ngIf="!actualDirectory">{{ 'APP.NAME' | translate }}</h1>
+    <h1 *ngIf="!actualDirectory || !actualDirectory.id">{{ actualDirectory.name }}</h1>
 
     <span class="menu-spacer"></span>
     <div fxHide.xs>
