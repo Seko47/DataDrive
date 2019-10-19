@@ -1,5 +1,35 @@
-<p>files works!</p>
-<div *ngIf="!(actualDirectory === null)">
-  {{ actualDirectory.Name }}
+<mat-toolbar color="secondary">
+  <mat-toolbar-row>
+    <button mat-button (click)="getBack()" *ngIf="actualDirectory">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'APP.NAME' | translate }}
+    </button>
 
-</div>
+    <h1 *ngIf="!actualDirectory">{{ 'APP.NAME' | translate }}</h1>
+
+    <span class="menu-spacer"></span>
+    <div fxHide.xs>
+
+      <a mat-button [routerLink]="['/']"> {{ 'NAVBAR.HOME' | translate }} </a>
+      <a mat-button
+         *ngIf="isAuthenticated | async"
+         [routerLink]="['/drive']">{{ 'NAVBAR.MYDRIVE' | translate }}</a>
+
+    </div>
+
+    <div fxFlex fxLayout fxLayoutAlign="flex-end">
+
+      <app-login-menu></app-login-menu>
+
+    </div>
+
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+
+<form (ngSubmit)="createDirectory()">
+  <mat-form-field>
+    <input name="name" type="text" required [(ngModel)]="newDirectory.Name" matInput placeholder="{{ 'FILES.NEW_DIRECTORY_NAME' | translate }}">
+  </mat-form-field>
+</form>

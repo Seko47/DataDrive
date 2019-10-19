@@ -20,8 +20,12 @@ namespace DataDrive.Helpers
 
             if (username == null)
             {
-                var nameIdentifier = user.FindFirst(ClaimTypes.NameIdentifier).Value;
-                username = FindByIdAsync(nameIdentifier).Result?.UserName;
+                Claim claim = user.FindFirst(ClaimTypes.NameIdentifier);
+                if (claim != null)
+                {
+                    string nameIdentifier = claim.Value;
+                    username = FindByIdAsync(nameIdentifier).Result?.UserName;
+                }
             }
 
             return username;

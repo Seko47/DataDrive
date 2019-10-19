@@ -1,11 +1,11 @@
 export class FileOut {
-    public ID: string;
-    public CreatedDateTime: string;
-    public LastModifiedDateTime: string;
-    public ParentDirectoryID: string;
-    public ParentDirectoryName: string;
-    public Name: string;
-    public FileType: FileType;
+    public id: string;
+    public createdDateTime: string;
+    public lastModifiedDateTime: string;
+    public parentDirectoryID: string;
+    public parentDirectoryName: string;
+    public name: string;
+    public fileType: FileType;
 }
 
 export enum FileType {
