@@ -8,9 +8,9 @@
   </li>
 
   <li>
-    <button mat-icon-button [matMenuTriggerFor]="auth">
+    <a mat-icon-button [matMenuTriggerFor]="auth">
       <mat-icon>person</mat-icon>
-    </button>
+    </a>
     <mat-menu #auth="matMenu">
       <a mat-menu-item
          [routerLink]='["/authentication/profile"]'>

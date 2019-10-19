@@ -6,6 +6,7 @@
 		"SELECT_THE_DATA_TO_SHOW": "Select the data to show"
 	},
 	"FILES": {
+		"DIRECTORY_IS_EMPTY": "Directory is empty",
 		"NEW_DIRECTORY_NAME": "New directory name"
 	},
 	"LANGUAGE": {

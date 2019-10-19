@@ -17,6 +17,7 @@ export class FilesComponent implements OnInit {
 
     constructor(private filesService: FilesService) {
         this.actualDirectory = new DirectoryOut();
+        this.actualDirectory.id = null;
         this.actualDirectory.name = "Root";
 
         this.newDirectory = new CreateDirectoryPost();
@@ -39,12 +40,24 @@ export class FilesComponent implements OnInit {
             }, err => alert(err.error));
     }
 
+    public getBack() {
+
+        console.log("files.component.ts: getBackTo " + this.actualDirectory.parentDirectoryName);
+
+        this.getFromDirectory(this.actualDirectory.parentDirectoryID);
+    }
+
     public createDirectory() {
+        this.newDirectory.parentDirectoryID = this.actualDirectory.id
         this.filesService.createDirectory(this.newDirectory)
             .subscribe(result => {
                 console.log("files.component.ts: new directory created")
-
                 this.newDirectory = new CreateDirectoryPost();
+                this.getFromDirectory(result);
             }, err => alert(err.error));
+    }
+
+    stopPropagation(event) {
+        event.stopPropagation();
     }
 }

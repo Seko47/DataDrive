@@ -189,6 +189,17 @@ namespace DataDrive.Files.Services
                     return null;
                 }
 
+                if (directory.ParentDirectory == null)
+                {
+                    directory.ParentDirectory = new Directory
+                    {
+                        CreatedDateTime = DateTime.Now,
+                        FileType = FileType.DIRECTORY,
+                        LastModifiedDateTime = DateTime.Now,
+                        Name = "Root"
+                    };
+                }
+
                 result = _mapper.Map<DirectoryOut>(directory);
             }
             else

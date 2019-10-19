@@ -28,6 +28,6 @@ export class FilesService {
     }
 
     public createDirectory(directory: CreateDirectoryPost) {
-        return this.httpClient.post<DirectoryOut>(this.baseUrl + 'api/Files/createDirectory', directory);
+        return this.httpClient.post<string>(this.baseUrl + 'api/Files/createDirectory', directory);
     }
 }
