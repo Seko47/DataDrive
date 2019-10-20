@@ -52,8 +52,6 @@ export class FilesComponent implements OnInit {
         else if (clickedFile.fileType == FileType.FILE) {
             console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked file")
             this.getFileInfo(clickedFile.id);
-
-            this.fileinfosidenav.toggle();
         }
     }
 
