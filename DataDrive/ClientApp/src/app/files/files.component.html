@@ -1,6 +1,6 @@
 <mat-toolbar color="secondary">
   <mat-toolbar-row>
-    <button mat-button (click)="getBack()" *ngIf="actualDirectory && actualDirectory.id">
+    <button mat-button (click)="getBack();" *ngIf="actualDirectory && actualDirectory.id">
       <mat-icon>arrow_back</mat-icon>
       {{ actualDirectory.parentDirectoryName }}
     </button>&nbsp;
@@ -57,6 +57,10 @@
 
   </mat-toolbar-row>
 </mat-toolbar>
+
+<p *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
+  {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
+</p>
 
 <mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
   <mat-sidenav-content style="height: 76vh">
@@ -123,9 +127,3 @@
 
   </mat-sidenav>
 </mat-sidenav-container>
-
-
-
-<p *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
-  {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
-</p>

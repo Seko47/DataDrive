@@ -92,7 +92,7 @@ export class FilesComponent implements OnInit {
     public getBack() {
 
         console.log("files.component.ts: getBackTo " + this.actualDirectory.parentDirectoryName);
-
+        this.fileinfosidenav.close();
         this.getFromDirectory(this.actualDirectory.parentDirectoryID);
     }
 

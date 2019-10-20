@@ -88,7 +88,7 @@ namespace DataDrive.Files.Services
             {
                 Directory directoryToDelete = await _databaseContext.Directories
                     .Include(_ => _.Files)
-                    .FirstOrDefaultAsync(_ => _.ID == fileAbstractToDelete.ID);
+                    .FirstOrDefaultAsync(_ => _.ID == fileAbstractToDelete.ID && _.OwnerID == userId);
 
                 foreach (FileAbstract fileAbstract in directoryToDelete.Files.ToList())
                 {
@@ -106,7 +106,7 @@ namespace DataDrive.Files.Services
                 Directory directoryToReturn = await _databaseContext.Directories
                     .Include(_ => _.Files)
                     .Include(_ => _.ParentDirectory)
-                    .FirstOrDefaultAsync(_ => _.ID == parentDirectoryId);
+                    .FirstOrDefaultAsync(_ => _.ID == parentDirectoryId && _.OwnerID == userId);
 
                 parentDirectoryOutResult = _mapper.Map<DirectoryOut>(directoryToReturn);
             }
@@ -114,7 +114,7 @@ namespace DataDrive.Files.Services
             {
                 List<FileAbstract> files = await _databaseContext.FileAbstracts
                     .Include(_ => _.ParentDirectory)
-                    .Where(_ => _.ParentDirectoryID == null)
+                    .Where(_ => _.ParentDirectoryID == null && _.OwnerID == userId)
                     .ToListAsync();
 
                 parentDirectoryOutResult = new DirectoryOut
@@ -205,7 +205,7 @@ namespace DataDrive.Files.Services
             else
             {
                 List<FileAbstract> files = await _databaseContext.FileAbstracts
-                    .Where(_ => _.ParentDirectoryID == id).ToListAsync();
+                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId).ToListAsync();
 
                 result = new DirectoryOut
                 {
