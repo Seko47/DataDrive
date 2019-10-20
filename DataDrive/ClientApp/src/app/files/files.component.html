@@ -54,7 +54,7 @@
 <mat-grid-list cols="5" rowHeight="1:1.5" *ngIf="actualDirectory && actualDirectory.files && actualDirectory.files.length > 0">
   <mat-grid-tile mat-button *ngFor="let file of actualDirectory.files"
                  title="{{ file.name }}"
-                 (click)="getFromDirectory(file.id)">
+                 (click)="onFileClick(file)">
     <mat-icon class="main-file-icon"
               *ngIf="file.fileType == 1">folder</mat-icon>
     <mat-icon class="main-file-icon"
@@ -69,3 +69,6 @@
   {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
 </p>
 
+<div *ngIf="actualFile">
+  <h2 mat-dialog-title>{{ actualFile.name }}</h2>
+</div>

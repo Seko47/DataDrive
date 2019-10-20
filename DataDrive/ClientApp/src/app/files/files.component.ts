@@ -3,7 +3,7 @@ import { DirectoryOut } from './models/directory-out';
 import { FilesService } from './files.service';
 import { CreateDirectoryPost } from './models/create-directory-post';
 import { Observable } from 'rxjs';
-import { FileType } from './models/file-out';
+import { FileType, FileOut } from './models/file-out';
 import { FilePost } from './models/file-post';
 
 @Component({
@@ -14,6 +14,7 @@ import { FilePost } from './models/file-post';
 export class FilesComponent implements OnInit {
 
     public actualDirectory: DirectoryOut;
+    public actualFile: FileOut;
     public newDirectory: CreateDirectoryPost;
 
     public progress: number;
@@ -24,11 +25,33 @@ export class FilesComponent implements OnInit {
         this.actualDirectory.id = null;
         this.actualDirectory.name = "Root";
 
+        this.actualFile = null;
+
         this.newDirectory = new CreateDirectoryPost();
     }
 
     ngOnInit() {
         this.getFromDirectory(null);
+    }
+
+    public onFileClick(clickedFile: FileOut) {
+        if (clickedFile.fileType == FileType.DIRECTORY) {
+            console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked directory")
+            this.getFromDirectory(clickedFile.id);
+        }
+        else if (clickedFile.fileType == FileType.FILE) {
+            console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked file")
+            this.getFileInfo(clickedFile.id);
+        }
+    }
+
+    public getFileInfo(id: string) {
+        this.filesService.getFileInfo(id)
+            .subscribe(result => {
+                alert(result.name);
+            }, err => {
+                alert(err.error);
+            });
     }
 
     public getFromDirectory(id: string) {

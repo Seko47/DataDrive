@@ -18,6 +18,10 @@ export class FilesService {
         this.baseUrl = baseUrl;
     }
 
+    public getFileInfo(fileId: string) {
+        return this.httpClient.get<FileOut>(this.baseUrl + 'api/Files/' + fileId);
+    }
+
     public getFilesFromDirectory(directoryID: string): Observable<DirectoryOut> {
         if (directoryID == null || directoryID.length == 0) {
             console.log("files.service.ts: directoryID == null or empty");
