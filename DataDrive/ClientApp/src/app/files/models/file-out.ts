@@ -1,7 +1,7 @@
 export class FileOut {
     public id: string;
-    public createdDateTime: string;
-    public lastModifiedDateTime: string;
+    public createdDateTime: Date;
+    public lastModifiedDateTime: Date;
     public parentDirectoryID: string;
     public parentDirectoryName: string;
     public name: string;

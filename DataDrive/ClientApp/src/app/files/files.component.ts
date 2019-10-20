@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DirectoryOut } from './models/directory-out';
 import { FilesService } from './files.service';
 import { CreateDirectoryPost } from './models/create-directory-post';
@@ -20,18 +20,28 @@ export class FilesComponent implements OnInit {
     public progress: number;
     public message: string;
 
+    @ViewChild('fileinfosidenav', null) fileinfosidenav;
+
+
     constructor(private filesService: FilesService) {
         this.actualDirectory = new DirectoryOut();
         this.actualDirectory.id = null;
         this.actualDirectory.name = "Root";
 
-        this.actualFile = null;
+        this.actualFile = new FileOut();
 
         this.newDirectory = new CreateDirectoryPost();
     }
 
     ngOnInit() {
         this.getFromDirectory(null);
+    }
+
+    public deleteFile() {
+        this.filesService.deleteFile(this.actualFile.id)
+            .subscribe(result => {
+                this.onFileClick(result);
+            }, err => alert(err.error));
     }
 
     public onFileClick(clickedFile: FileOut) {
@@ -42,16 +52,30 @@ export class FilesComponent implements OnInit {
         else if (clickedFile.fileType == FileType.FILE) {
             console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked file")
             this.getFileInfo(clickedFile.id);
+
+            this.fileinfosidenav.toggle();
         }
     }
 
     public getFileInfo(id: string) {
-        this.filesService.getFileInfo(id)
-            .subscribe(result => {
-                alert(result.name);
-            }, err => {
-                alert(err.error);
-            });
+        if (id == null) {
+            this.actualFile = new FileOut();
+            this.actualFile.name = "Root";
+            this.actualFile.createdDateTime = new Date();
+            this.actualFile.lastModifiedDateTime = new Date();
+            this.actualFile.fileType = FileType.DIRECTORY;
+
+            this.fileinfosidenav.toggle();
+        }
+        else {
+            this.filesService.getFileInfo(id)
+                .subscribe(result => {
+                    this.actualFile = result;
+                    this.fileinfosidenav.toggle();
+                }, err => {
+                    alert(err.error);
+                });
+        }
     }
 
     public getFromDirectory(id: string) {

@@ -44,6 +44,13 @@
             </form>
           </mat-menu>
         </li>
+
+        <li>
+          <a mat-icon-button
+             (click)="getFileInfo(actualDirectory.id);">
+            <mat-icon>info</mat-icon>
+          </a>
+        </li>
       </ul>
 
     </div>
@@ -51,24 +58,74 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<mat-grid-list cols="5" rowHeight="1:1.5" *ngIf="actualDirectory && actualDirectory.files && actualDirectory.files.length > 0">
-  <mat-grid-tile mat-button *ngFor="let file of actualDirectory.files"
-                 title="{{ file.name }}"
-                 (click)="onFileClick(file)">
-    <mat-icon class="main-file-icon"
-              *ngIf="file.fileType == 1">folder</mat-icon>
-    <mat-icon class="main-file-icon"
-              *ngIf="file.fileType == 0">insert_drive_file</mat-icon>
-    <mat-grid-tile-footer>
-      <p class="text-truncate">{{ file.name }}</p>
-    </mat-grid-tile-footer>
-  </mat-grid-tile>
-</mat-grid-list>
+<mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
+  <mat-sidenav-content style="height: 76vh">
+    <mat-grid-list cols="5" rowHeight="1:1.2">
+      <mat-grid-tile mat-button
+                     *ngFor="let file of actualDirectory.files"
+                     title="{{ file.name }}"
+                     (click)="onFileClick(file);">
+        <mat-icon class="main-file-icon"
+                  *ngIf="file.fileType == 1">folder</mat-icon>
+        <mat-icon class="main-file-icon"
+                  *ngIf="file.fileType == 0">insert_drive_file</mat-icon>
+        <mat-grid-tile-footer>
+          <p class="text-truncate">{{ file.name }}</p>
+        </mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-sidenav-content>
+
+  <mat-sidenav #fileinfosidenav
+               position="end">
+    <mat-toolbar style="padding: 0em 1em;">
+      <mat-toolbar-row>
+        <mat-icon *ngIf="actualFile.fileType == 1"
+                  style="margin-right: 0.5em;">folder</mat-icon>
+        <mat-icon *ngIf="actualFile.fileType == 0"
+                  style="margin-right: 0.5em;">insert_drive_file</mat-icon>
+        <h3 class="text-wrap">
+          {{ actualFile.name }}
+        </h3>
+        <div>
+          <a mat-icon-button
+             (click)="fileinfosidenav.toggle()">
+            <mat-icon>close</mat-icon>
+          </a>
+        </div>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row>
+        <p style="margin-right: 0.5em;">
+          {{ 'FILES.CREATED' | translate }}
+        </p>
+        <p fxFlex fxLayout fxLayoutAlign="flex-end">
+          {{ (actualFile.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}
+        </p>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row>
+        <p style="margin-right: 0.5em;">{{ 'FILES.MODIFIED' | translate }}</p>
+        <p fxFlex fxLayout fxLayoutAlign="flex-end">
+          {{ (actualFile.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}
+        </p>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row>
+
+        <a mat-icon-button
+           (click)="deleteFile(); fileinfosidenav.toggle();">
+          <mat-icon>delete</mat-icon>
+        </a>
+
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+  </mat-sidenav>
+</mat-sidenav-container>
+
+
 
 <p *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
   {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
 </p>
-
-<div *ngIf="actualFile">
-  <h2 mat-dialog-title>{{ actualFile.name }}</h2>
-</div>

@@ -18,6 +18,10 @@ export class FilesService {
         this.baseUrl = baseUrl;
     }
 
+    deleteFile(id: string) {
+        return this.httpClient.delete<FileOut>(this.baseUrl + 'api/Files/' + id);
+    }
+
     public getFileInfo(fileId: string) {
         return this.httpClient.get<FileOut>(this.baseUrl + 'api/Files/' + fileId);
     }

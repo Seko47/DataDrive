@@ -6,7 +6,9 @@
 		"SELECT_THE_DATA_TO_SHOW": "Wybierz dane do pokazania"
 	},
 	"FILES": {
+		"CREATED": "Utworzono",
 		"DIRECTORY_IS_EMPTY": "Folder jest pusty",
+		"MODIFIED": "Zmodyfikowano",
 		"NEW_DIRECTORY_NAME": "Nazwa nowego folderu"
 	},
 	"LANGUAGE": {
