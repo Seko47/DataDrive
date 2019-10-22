@@ -1,12 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FileOut } from './models/file-out';
+import { FileOut } from '../models/file-out';
 import { Observable } from 'rxjs';
-import { getBaseUrl } from '../../main';
-import { DirectoryOut } from './models/directory-out';
-import { CreateDirectoryPost } from './models/create-directory-post';
-import { FilePost } from './models/file-post';
-import { FileUploadResult } from './models/file-upload-result';
+import { DirectoryOut } from '../models/directory-out';
+import { CreateDirectoryPost } from '../models/create-directory-post';
+import { FileUploadResult } from '../models/file-upload-result';
+
 
 @Injectable({
     providedIn: 'root'

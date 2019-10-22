@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DirectoryOut } from '../../app/files/models/directory-out';
-import { FileOut, FileType } from '../../app/files/models/file-out';
-import { CreateDirectoryPost } from '../../app/files/models/create-directory-post';
-import { FilesService } from '../../app/files/files.service';
+import { DirectoryOut } from './models/directory-out';
+import { FileOut, FileType } from './models/file-out';
+import { CreateDirectoryPost } from './models/create-directory-post';
+import { FilesService } from './services/files.service';
 
 @Component({
     selector: 'drive-files',
