@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
 import { DirectoryOut } from './models/directory-out';
 import { FilesService } from './files.service';
 import { CreateDirectoryPost } from './models/create-directory-post';
-import { Observable } from 'rxjs';
 import { FileType, FileOut } from './models/file-out';
-import { FilePost } from './models/file-post';
+
 
 @Component({
     selector: 'app-files',
