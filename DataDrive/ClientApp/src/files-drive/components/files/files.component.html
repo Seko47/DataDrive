@@ -1,6 +1,8 @@
 <drive-files-toolbar [actualDirectory]="actualDirectory"
-                     (onGetParentDirectory)="onGetParentDirectory($event)"
-                     (onFilesUpload)="onFilesUpload($event)"></drive-files-toolbar>
+                     (onGetParentDirectory)="getFromDirectory($event)"
+                     (onFilesUpload)="uploadFiles($event)"
+                     (onDirectoryCreated)="createDirectory($event)"
+                     (onGetFileInfo)="getFileInfo($event)"></drive-files-toolbar>
 
 <p *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
 

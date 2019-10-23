@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { FilesService } from '../../services/files.service';
+import { CreateDirectoryPost } from '../../models/create-directory-post';
 
 @Component({
     selector: 'drive-files',
@@ -28,11 +29,6 @@ export class FilesComponent implements OnInit {
         this.getFromDirectory(null);
     }
 
-    public onGetParentDirectory(parentDirectoryId: string) {
-        this.getFromDirectory(parentDirectoryId);
-    }
-
-
     public getFromDirectory(id: string) {
 
         console.log("files.component.ts: getFromDirectoryId == " + id)
@@ -46,7 +42,7 @@ export class FilesComponent implements OnInit {
             }, err => alert(err.error));
     }
 
-    public onFilesUpload(files: File[]) {
+    public uploadFiles(files: File[]) {
         if (files.length === 0) {
             return;
         }
@@ -74,6 +70,34 @@ export class FilesComponent implements OnInit {
                 });
     }
 
+    public createDirectory(newDirectory: CreateDirectoryPost) {
+        this.filesService.createDirectory(newDirectory)
+            .subscribe(result => {
+                console.log("files.component.ts: new directory created")
+                this.getFromDirectory(result);
+            }, err => alert(err.error));
+    }
+
+    public getFileInfo(id: string) {
+        if (id == null) {
+            this.actualFile = new FileOut();
+            this.actualFile.name = "Root";
+            this.actualFile.createdDateTime = new Date();
+            this.actualFile.lastModifiedDateTime = new Date();
+            this.actualFile.fileType = FileType.DIRECTORY;
+
+            this.fileinfosidenav.toggle();
+        }
+        else {
+            this.filesService.getFileInfo(id)
+                .subscribe(result => {
+                    this.actualFile = result;
+                    this.fileinfosidenav.toggle();
+                }, err => {
+                    alert(err.error);
+                });
+        }
+    }
 
 
 
@@ -104,60 +128,5 @@ export class FilesComponent implements OnInit {
             console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked file")
             this.getFileInfo(clickedFile.id);
         }
-    }
-
-    public getFileInfo(id: string) {
-        if (id == null) {
-            this.actualFile = new FileOut();
-            this.actualFile.name = "Root";
-            this.actualFile.createdDateTime = new Date();
-            this.actualFile.lastModifiedDateTime = new Date();
-            this.actualFile.fileType = FileType.DIRECTORY;
-
-            this.fileinfosidenav.toggle();
-        }
-        else {
-            this.filesService.getFileInfo(id)
-                .subscribe(result => {
-                    this.actualFile = result;
-                    this.fileinfosidenav.toggle();
-                }, err => {
-                    alert(err.error);
-                });
-        }
-    }
-
-    public upload(files) {
-        if (files.length === 0) {
-            return;
-        }
-
-        let filesToUpload = <File[]>files;
-
-        const formData = new FormData();
-        if (this.actualDirectory && this.actualDirectory.id) {
-            formData.append("parentDirectoryId", this.actualDirectory.id);
-        }
-
-        if (filesToUpload.length) {
-            for (let i = 0; i < filesToUpload.length; i++)
-                formData.append('files[]', filesToUpload[i], filesToUpload[i].name);
-        }
-
-        let loading = true;
-
-        this.filesService.uploadFiles(formData).
-            subscribe(result => {
-                loading = false;
-                this.getFromDirectory(this.actualDirectory.id);
-            },
-                err => {
-                    alert("err: " + err.error);
-                    loading = false;
-                });
-    }
-
-    stopPropagation(event) {
-        event.stopPropagation();
     }
 }

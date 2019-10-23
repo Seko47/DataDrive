@@ -3,6 +3,8 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { DirectoryOut } from '../../models/directory-out';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { FilesService } from '../../services/files.service';
+import { Form } from '@angular/forms';
+import { MatMenu } from '@angular/material/menu';
 
 @Component({
     selector: 'drive-files-toolbar',
@@ -15,6 +17,10 @@ export class ToolbarComponent implements OnInit {
 
     @Output() onGetParentDirectory = new EventEmitter<string>();
     @Output() onFilesUpload = new EventEmitter<File[]>();
+    @Output() onDirectoryCreated = new EventEmitter<CreateDirectoryPost>();
+    @Output() onGetFileInfo = new EventEmitter<string>();
+
+    @ViewChild("createDirectoryMenu", null) createDirectoryMenu: MatMenu;
 
     public newDirectory: CreateDirectoryPost;
 
@@ -33,14 +39,40 @@ export class ToolbarComponent implements OnInit {
         this.onGetParentDirectory.emit(this.actualDirectory.parentDirectoryID);
     }
 
-    public uploadFiles(files) {
+    public uploadFiles(files: File[]) {
 
         if (files.length === 0) {
             return;
         }
 
-        let filesToUpload = <File[]>files;
+        this.onFilesUpload.emit(files);
+    }
 
-        this.onFilesUpload.emit(filesToUpload);
+    public createDirectory() {
+
+        if (this.newDirectory && this.newDirectory.name) {
+
+            this.newDirectory.name = this.newDirectory.name.trim();
+
+            if (this.newDirectory.name.length < 1) {
+
+                console.log("3");
+                return;
+            }
+
+            this.newDirectory.parentDirectoryID = this.actualDirectory.id
+            this.onDirectoryCreated.emit(this.newDirectory);
+            this.newDirectory = new CreateDirectoryPost();
+        }
+    }
+
+    public getFileInfo() {
+        this.onGetFileInfo.emit(this.actualDirectory.id);
+    }
+
+
+
+    stopPropagation(event) {
+        event.stopPropagation();
     }
 }
