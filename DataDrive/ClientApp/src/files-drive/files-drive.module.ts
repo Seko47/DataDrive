@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FilesComponent } from './files/files.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
+import { FilesComponent } from './components/files/files.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
 
 
 @NgModule({
-    declarations: [FilesComponent],
+    declarations: [FilesComponent, ToolbarComponent],
     imports: [
         CommonModule,
         SharedModule,
