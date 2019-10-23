@@ -5,10 +5,11 @@ import { SharedModule } from '../shared/shared.module';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { FilesComponent } from './components/files/files.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { FilesListContentComponent } from './components/files-list-content/files-list-content.component';
 
 
 @NgModule({
-    declarations: [FilesComponent, ToolbarComponent],
+    declarations: [FilesComponent, ToolbarComponent, FilesListContentComponent],
     imports: [
         CommonModule,
         SharedModule,

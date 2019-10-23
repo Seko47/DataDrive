@@ -11,29 +11,8 @@
 
 <mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
 
-  <mat-sidenav-content style="height: 76vh">
-
-    <mat-grid-list cols="5"
-                   rowHeight="1:1.2">
-
-      <mat-grid-tile mat-button
-                     *ngFor="let file of actualDirectory.files"
-                     title="{{ file.name }}"
-                     (click)="onFileClick(file);">
-
-        <mat-icon class="main-file-icon"
-                  *ngIf="file.fileType == 1">folder</mat-icon>
-
-        <mat-icon class="main-file-icon"
-                  *ngIf="file.fileType == 0">insert_drive_file</mat-icon>
-
-        <mat-grid-tile-footer>
-
-          <p class="text-truncate">{{ file.name }}</p>
-        </mat-grid-tile-footer>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-sidenav-content>
+  <drive-files-list-content [actualDirectory]="actualDirectory"
+                            (onFileClick)="onFileClick($event)"></drive-files-list-content>
 
   <mat-sidenav #fileinfosidenav
                position="end">

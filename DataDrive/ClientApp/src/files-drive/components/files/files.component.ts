@@ -3,6 +3,7 @@ import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { FilesService } from '../../services/files.service';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
     selector: 'drive-files',
@@ -14,7 +15,7 @@ export class FilesComponent implements OnInit {
     public actualDirectory: DirectoryOut;
     public actualFile: FileOut;
 
-    @ViewChild('fileinfosidenav', null) fileinfosidenav;
+    @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
 
     constructor(private filesService: FilesService) {
@@ -38,6 +39,9 @@ export class FilesComponent implements OnInit {
             .subscribe(result => {
                 console.log("files.component.ts: dirName == " + result.name);
                 console.log("files.component.ts: filesInDir == " + result.files.length);
+                if (this.fileinfosidenav) {
+                    this.fileinfosidenav.close();
+                }
                 this.actualDirectory = result;
             }, err => alert(err.error));
     }
