@@ -107,7 +107,7 @@ export class FilesComponent implements OnInit {
     public deleteFile(id: string) {
         this.filesService.deleteFile(id)
             .subscribe(result => {
-                this.onFileClick(result);
+                this.getFromDirectory(result.id);
             }, err => alert(err.error));
     }
 
@@ -117,22 +117,6 @@ export class FilesComponent implements OnInit {
                 this.getFromDirectory(this.actualDirectory.id);
             }, err => alert(err.error));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public onFileClick(clickedFile: FileOut) {
         if (clickedFile.fileType == FileType.DIRECTORY) {
