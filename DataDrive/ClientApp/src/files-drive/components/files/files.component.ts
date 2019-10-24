@@ -4,6 +4,7 @@ import { FileOut, FileType } from '../../models/file-out';
 import { FilesService } from '../../services/files.service';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Operation } from 'fast-json-patch';
 
 @Component({
     selector: 'drive-files',
@@ -109,6 +110,14 @@ export class FilesComponent implements OnInit {
                 this.onFileClick(result);
             }, err => alert(err.error));
     }
+
+    public changeFileName(patch: Operation[]) {
+        this.filesService.updateFile(this.actualFile.id, patch)
+            .subscribe(result => {
+                this.onFileClick(result);
+            });
+    }
+
 
 
 

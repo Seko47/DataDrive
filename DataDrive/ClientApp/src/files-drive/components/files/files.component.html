@@ -21,6 +21,7 @@
                position="end">
 
     <drive-files-list-sidenav [actualFile]="actualFile"
-                              (onFileDelete)="deleteFile($event)"></drive-files-list-sidenav>
+                              (onFileDelete)="deleteFile($event)"
+                              (onFileNameChanged)="changeFileName($event)"></drive-files-list-sidenav>
   </mat-sidenav>
 </mat-sidenav-container>

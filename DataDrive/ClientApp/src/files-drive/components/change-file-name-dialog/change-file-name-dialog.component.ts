@@ -19,8 +19,9 @@ export class ChangeFileNameDialogComponent implements OnInit, AfterViewInit {
         @Inject(MAT_DIALOG_DATA) private data) { }
 
     ngOnInit() {
+
         this.form = this.formBuilder.group({
-            directoryName: this.data.filename
+            fileName: this.data.filename
         });
     }
 
@@ -31,9 +32,11 @@ export class ChangeFileNameDialogComponent implements OnInit, AfterViewInit {
 
     public onSubmit(form: FormGroup) {
 
-        if (form.value.directoryName.length < 1) {
+        form.value.fileName = form.value.fileName.trim();
+
+        if (form.value.fileName.length < 1) {
             return;
         }
-        this.dialogRef.close(`${form.value.directoryName}`);
+        this.dialogRef.close(`${form.value.fileName}`);
     }
 }

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { DirectoryOut } from '../models/directory-out';
 import { CreateDirectoryPost } from '../models/create-directory-post';
 import { FileUploadResult } from '../models/file-upload-result';
+import { Operation } from 'fast-json-patch';
 
 
 @Injectable({
@@ -47,5 +48,9 @@ export class FilesService {
                 observe: 'events',
                 withCredentials: true
             });
+    }
+
+    public updateFile(fileId: string, patch: Operation[]) {
+        return this.httpClient.patch<FileOut>(this.baseUrl + 'api/Files/' + fileId, patch);
     }
 }

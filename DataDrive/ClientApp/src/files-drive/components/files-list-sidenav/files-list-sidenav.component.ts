@@ -3,7 +3,7 @@ import { FileOut } from '../../models/file-out';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
-import { compare } from 'fast-json-patch';
+import { compare, Operation } from 'fast-json-patch';
 
 
 @Component({
@@ -16,11 +16,9 @@ export class FilesListSidenavComponent implements OnInit {
     @Input() actualFile: FileOut;
 
     @Output() onFileDelete = new EventEmitter<string>();
-    @Output() onFileNameChanged = new EventEmitter<string>();
+    @Output() onFileNameChanged = new EventEmitter<Operation[]>();
 
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
-    public modifiedFile: FileOut;
-
 
     constructor(private createDirectoryDialog: MatDialog) {
     }
@@ -50,13 +48,11 @@ export class FilesListSidenavComponent implements OnInit {
     }
 
     public changeFileName(name: string) {
-        this.modifiedFile = this.actualFile;
-        this.modifiedFile.name = name;
-        const patch = compare(this.actualFile, this.modifiedFile);
 
-        for (let p of patch) {
-            alert(p.op + " | " + p.path);
-        }
-        //this.onFileNameChanged.emit(name);
+        const modifiedFile: FileOut = JSON.parse(JSON.stringify(this.actualFile));
+        modifiedFile.name = name;
+        const patch: Operation[] = compare(this.actualFile, modifiedFile);
+
+        this.onFileNameChanged.emit(patch);
     }
 }
