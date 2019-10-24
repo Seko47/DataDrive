@@ -114,8 +114,8 @@ export class FilesComponent implements OnInit {
     public changeFileName(patch: Operation[]) {
         this.filesService.updateFile(this.actualFile.id, patch)
             .subscribe(result => {
-                this.onFileClick(result);
-            });
+                this.getFromDirectory(this.actualDirectory.id);
+            }, err => alert(err.error));
     }
 
 
