@@ -91,7 +91,7 @@ export class FilesComponent implements OnInit {
             this.actualFile.lastModifiedDateTime = new Date();
             this.actualFile.fileType = FileType.DIRECTORY;
 
-            this.fileinfosidenav.toggle();
+            this.fileinfosidenav.close();
         }
         else {
             this.filesService.getFileInfo(id)
