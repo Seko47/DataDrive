@@ -64,33 +64,10 @@
         <li>
 
           <a mat-icon-button
-             [matMenuTriggerFor]="createDirectoryMenu">
+             (click)="openCreateDirectoryDialog()">
 
             <mat-icon>create_new_folder</mat-icon>
           </a>
-
-          <mat-menu #createDirectoryMenu="matMenu">
-
-            <form (ngSubmit)="createDirectory()">
-
-              <mat-form-field>
-
-                <input matInput
-                       required
-                       name="name"
-                       type="text"
-                       (click)="stopPropagation($event)"
-                       [(ngModel)]="newDirectory.name"
-                       placeholder="{{ 'FILES.NEW_DIRECTORY_NAME' | translate }}">
-              </mat-form-field>
-
-              <button mat-button
-                      type="submit">
-
-                <mat-icon>save</mat-icon>
-              </button>
-            </form>
-          </mat-menu>
         </li>
 
         <li>

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
 import { DirectoryOut } from '../../models/directory-out';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
-import { FilesService } from '../../services/files.service';
-import { Form } from '@angular/forms';
 import { MatMenu } from '@angular/material/menu';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CreateDirectoryDialogComponent } from '../create-directory-dialog/create-directory-dialog.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'drive-files-toolbar',
@@ -23,15 +23,32 @@ export class ToolbarComponent implements OnInit {
     @ViewChild("createDirectoryMenu", null) createDirectoryMenu: MatMenu;
 
     public newDirectory: CreateDirectoryPost;
+    public createDirectoryDialogRef: MatDialogRef<CreateDirectoryDialogComponent>;
 
     public progress: number;
     public message: string;
 
-    constructor(private filesService: FilesService) {
+    constructor(private createDirectoryDialog: MatDialog) {
+
         this.newDirectory = new CreateDirectoryPost();
     }
 
     ngOnInit() {
+    }
+
+    public openCreateDirectoryDialog() {
+
+        this.createDirectoryDialogRef = this.createDirectoryDialog.open(CreateDirectoryDialogComponent, {
+            hasBackdrop: true
+        });
+
+        this.createDirectoryDialogRef
+            .afterClosed()
+            .pipe(filter(name => name))
+            .subscribe(name => {
+                this.newDirectory.name = name;
+                this.createDirectory();
+            }, err => alert(err.error));
     }
 
     public getBackToParentDirectory() {
@@ -56,7 +73,6 @@ export class ToolbarComponent implements OnInit {
 
             if (this.newDirectory.name.length < 1) {
 
-                console.log("3");
                 return;
             }
 

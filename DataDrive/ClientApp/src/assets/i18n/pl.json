@@ -2,14 +2,22 @@
 	"APP": {
 		"NAME": "DataDrive"
 	},
+	"DIALOG": {
+		"CANCEL_BUTTON": "Anuluj",
+		"CREATE_BUTTON": "Utwórz"
+	},
 	"DRIVE": {
 		"SELECT_THE_DATA_TO_SHOW": "Wybierz dane do pokazania"
 	},
 	"FILES": {
 		"CREATED": "Utworzono",
+		"CREATE_DIRECTORY_DIALOG": {
+			"NAME_INPUT": "Nowy folder",
+			"NAME_PLACEHOLDER": "Nazwa nowego folderu",
+			"TITLE": "Nowy folder"
+		},
 		"DIRECTORY_IS_EMPTY": "Folder jest pusty",
-		"MODIFIED": "Zmodyfikowano",
-		"NEW_DIRECTORY_NAME": "Nazwa nowego folderu"
+		"MODIFIED": "Zmodyfikowano"
 	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",
