@@ -12,6 +12,12 @@
 
       {{ actualFile.name }}
     </h3>
+
+    <a mat-icon-button
+       (click)="changeFileName(); fileinfosidenav.toggle();">
+
+      <mat-icon>edit</mat-icon>
+    </a>
   </mat-toolbar-row>
 
   <mat-toolbar-row>

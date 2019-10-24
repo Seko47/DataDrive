@@ -11,6 +11,7 @@ export class FilesListSidenavComponent implements OnInit {
     @Input() actualFile: FileOut;
 
     @Output() onFileDelete = new EventEmitter<string>();
+    @Output() onFileNameChanged = new EventEmitter<string>();
 
     constructor() { }
 
@@ -19,5 +20,9 @@ export class FilesListSidenavComponent implements OnInit {
 
     public deleteFile() {
         this.onFileDelete.emit(this.actualFile.id);
+    }
+
+    public changeFileName() {
+        this.onFileNameChanged.emit("new name");
     }
 }
