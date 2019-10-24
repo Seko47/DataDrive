@@ -8,10 +8,11 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FilesListContentComponent } from './components/files-list-content/files-list-content.component';
 import { FilesListSidenavComponent } from './components/files-list-sidenav/files-list-sidenav.component';
 import { CreateDirectoryDialogComponent } from './components/create-directory-dialog/create-directory-dialog.component';
+import { ChangeFileNameDialogComponent } from './components/change-file-name-dialog/change-file-name-dialog.component';
 
 
 @NgModule({
-    declarations: [FilesComponent, ToolbarComponent, FilesListContentComponent, FilesListSidenavComponent, CreateDirectoryDialogComponent],
+    declarations: [FilesComponent, ToolbarComponent, FilesListContentComponent, FilesListSidenavComponent, CreateDirectoryDialogComponent, ChangeFileNameDialogComponent],
     imports: [
         CommonModule,
         SharedModule,
