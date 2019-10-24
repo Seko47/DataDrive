@@ -20,6 +20,6 @@ import { ChangeFileNameDialogComponent } from './components/change-file-name-dia
             { path: 'drive/files', component: FilesComponent, canActivate: [AuthorizeGuard] },
         ])
     ],
-    entryComponents: [CreateDirectoryDialogComponent]
+    entryComponents: [CreateDirectoryDialogComponent, ChangeFileNameDialogComponent]
 })
 export class FilesDriveModule { }

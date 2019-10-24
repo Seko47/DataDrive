@@ -3,6 +3,8 @@ import { FileOut } from '../../models/file-out';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
+import { compare } from 'fast-json-patch';
+
 
 @Component({
     selector: 'drive-files-list-sidenav',
@@ -17,9 +19,11 @@ export class FilesListSidenavComponent implements OnInit {
     @Output() onFileNameChanged = new EventEmitter<string>();
 
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
+    public modifiedFile: FileOut;
 
 
-    constructor(private createDirectoryDialog: MatDialog) { }
+    constructor(private createDirectoryDialog: MatDialog) {
+    }
 
     ngOnInit() {
     }
@@ -27,7 +31,10 @@ export class FilesListSidenavComponent implements OnInit {
     public openChangeFileNameDialog() {
 
         this.changeFileNameDialogRef = this.createDirectoryDialog.open(ChangeFileNameDialogComponent, {
-            hasBackdrop: true
+            hasBackdrop: true,
+            data: {
+                filename: this.actualFile.name
+            }
         });
 
         this.changeFileNameDialogRef
@@ -43,6 +50,13 @@ export class FilesListSidenavComponent implements OnInit {
     }
 
     public changeFileName(name: string) {
-        this.onFileNameChanged.emit(name);
+        this.modifiedFile = this.actualFile;
+        this.modifiedFile.name = name;
+        const patch = compare(this.actualFile, this.modifiedFile);
+
+        for (let p of patch) {
+            alert(p.op + " | " + p.path);
+        }
+        //this.onFileNameChanged.emit(name);
     }
 }

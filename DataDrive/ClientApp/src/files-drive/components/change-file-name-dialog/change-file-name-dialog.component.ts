@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-change-file-name-dialog',
@@ -15,19 +15,22 @@ export class ChangeFileNameDialogComponent implements OnInit, AfterViewInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private dialogRef: MatDialogRef<ChangeFileNameDialogComponent>) { }
+        private dialogRef: MatDialogRef<ChangeFileNameDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) private data) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            directoryName: ''
+            directoryName: this.data.filename
         });
     }
 
     ngAfterViewInit(): void {
-        this.inputName.nativeElement.select();
+
+        this.inputName.nativeElement.setSelectionRange(0, this.inputName.nativeElement.value.lastIndexOf('.'));
     }
 
     public onSubmit(form: FormGroup) {
+
         if (form.value.directoryName.length < 1) {
             return;
         }

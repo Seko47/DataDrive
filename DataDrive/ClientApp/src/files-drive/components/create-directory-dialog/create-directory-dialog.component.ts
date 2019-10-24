@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-create-directory-dialog',
@@ -15,11 +16,12 @@ export class CreateDirectoryDialogComponent implements OnInit, AfterViewInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private dialogRef: MatDialogRef<CreateDirectoryDialogComponent>) { }
+        private dialogRef: MatDialogRef<CreateDirectoryDialogComponent>,
+        private translate: TranslateService) { }
 
     ngOnInit(): void {
         this.form = this.formBuilder.group({
-            directoryName: ''
+            directoryName: this.translate.instant('FILES.CREATE_DIRECTORY_DIALOG.NAME_INPUT')
         });
     }
 

@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
 
-  <h1 mat-dialog-title>{{ 'FILES.CREATE_DIRECTORY_DIALOG.TITLE' | translate }}</h1>
+  <h1 mat-dialog-title>{{ 'FILES.CHANGE_FILE_NAME_DIALOG.TITLE' | translate }}</h1>
 
   <div mat-dialog-content>
 
@@ -9,10 +9,10 @@
 
       <input matInput
              #inputName
+             autofocus
              required
              formControlName="directoryName"
-             placeholder="{{ 'FILES.CREATE_DIRECTORY_DIALOG.NAME_PLACEHOLDER' | translate }}"
-             value="{{ 'FILES.CREATE_DIRECTORY_DIALOG.NAME_INPUT' | translate}}" />
+             placeholder="{{ 'FILES.CHANGE_FILE_NAME_DIALOG.NAME_PLACEHOLDER' | translate }}" />
     </mat-form-field>
   </div>
 
@@ -25,7 +25,7 @@
 
     <button mat-button
             type="submit">
-      {{ 'DIALOG.CREATE_BUTTON' | translate }}
+      {{ 'DIALOG.SAVE_BUTTON' | translate }}
     </button>
   </div>
 </form>

@@ -4,12 +4,17 @@
 	},
 	"DIALOG": {
 		"CANCEL_BUTTON": "Anuluj",
-		"CREATE_BUTTON": "Utwórz"
+		"CREATE_BUTTON": "Utwórz",
+		"SAVE_BUTTON": "Zapisz"
 	},
 	"DRIVE": {
 		"SELECT_THE_DATA_TO_SHOW": "Wybierz dane do pokazania"
 	},
 	"FILES": {
+		"CHANGE_FILE_NAME_DIALOG": {
+			"NAME_PLACEHOLDER": "Nazwa pliku",
+			"TITLE": "Zmień nazwę"
+		},
 		"CREATED": "Utworzono",
 		"CREATE_DIRECTORY_DIALOG": {
 			"NAME_INPUT": "Nowy folder",
