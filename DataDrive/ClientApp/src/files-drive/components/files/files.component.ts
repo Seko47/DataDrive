@@ -103,25 +103,27 @@ export class FilesComponent implements OnInit {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public deleteFile() {
-        this.filesService.deleteFile(this.actualFile.id)
+    public deleteFile(id: string) {
+        this.filesService.deleteFile(id)
             .subscribe(result => {
                 this.onFileClick(result);
             }, err => alert(err.error));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public onFileClick(clickedFile: FileOut) {
         if (clickedFile.fileType == FileType.DIRECTORY) {

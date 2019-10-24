@@ -20,69 +20,7 @@
   <mat-sidenav #fileinfosidenav
                position="end">
 
-    <mat-toolbar style="padding: 0em 1em;">
-
-      <mat-toolbar-row>
-
-        <mat-icon *ngIf="actualFile.fileType == 1"
-                  style="margin-right: 0.5em;">folder</mat-icon>
-
-        <mat-icon *ngIf="actualFile.fileType == 0"
-                  style="margin-right: 0.5em;">insert_drive_file</mat-icon>
-
-        <h3 class="text-wrap">
-
-          {{ actualFile.name }}
-        </h3>
-
-        <div>
-
-          <a mat-icon-button
-             (click)="fileinfosidenav.toggle()">
-
-            <mat-icon>close</mat-icon>
-          </a>
-        </div>
-      </mat-toolbar-row>
-
-      <mat-toolbar-row>
-
-        <p style="margin-right: 0.5em;">
-
-          {{ 'FILES.CREATED' | translate }}
-        </p>
-
-        <p fxFlex
-           fxLayout
-           fxLayoutAlign="flex-end">
-
-          {{ (actualFile.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}
-        </p>
-      </mat-toolbar-row>
-
-      <mat-toolbar-row>
-
-        <p style="margin-right: 0.5em;">
-
-          {{ 'FILES.MODIFIED' | translate }}
-        </p>
-
-        <p fxFlex
-           fxLayout
-           fxLayoutAlign="flex-end">
-
-          {{ (actualFile.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}
-        </p>
-      </mat-toolbar-row>
-
-      <mat-toolbar-row>
-
-        <a mat-icon-button
-           (click)="deleteFile(); fileinfosidenav.toggle();">
-
-          <mat-icon>delete</mat-icon>
-        </a>
-      </mat-toolbar-row>
-    </mat-toolbar>
+    <drive-files-list-sidenav [actualFile]="actualFile"
+                              (onFileDelete)="deleteFile($event)"></drive-files-list-sidenav>
   </mat-sidenav>
 </mat-sidenav-container>
