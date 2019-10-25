@@ -23,7 +23,6 @@ export class FilesListContentComponent implements OnInit {
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
-        console.log("MouseEvent");
         if (this.dragFile) {
             this.dragFile = null;
         }

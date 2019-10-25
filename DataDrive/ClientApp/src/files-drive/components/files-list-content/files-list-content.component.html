@@ -2,10 +2,10 @@
      cdkDropList
      cdkDropListSortingDisabled>
   <div *ngIf="dragFile && actualDirectory && actualDirectory.id"
+       #parentListItem
        style="width: 100%; height:50px"
        mat-button
-       cdkDrag
-       (mouseenter)="enter(listItem, parentFile)"
+       (mouseenter)="enter(parentListItem, parentFile)"
        (mouseup)="drop(parentFile)"
        (mouseleave)="leave()">
 
