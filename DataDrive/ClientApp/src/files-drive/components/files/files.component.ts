@@ -6,6 +6,7 @@ import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Operation } from 'fast-json-patch';
 import { FileMove } from '../../models/file-move';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'drive-files',
@@ -113,7 +114,8 @@ export class FilesComponent implements OnInit {
                 if (this.fileinfosidenav) {
                     this.fileinfosidenav.close();
                 }
-                
+
+                saveAs(result, this.actualFile.name);
             }, err => console.log(err.error));
     }
 
