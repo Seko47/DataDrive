@@ -2,8 +2,6 @@ mat-icon.main-file-icon {
   transform: scale(3);
 }
 
-.fileTile{
-  border-color: gray;
-  border-style: solid;
-  border-width: 3px;
+.hoverWhenDraging{
+  background-color: rgba(0, 0, 255, 0.50)
 }

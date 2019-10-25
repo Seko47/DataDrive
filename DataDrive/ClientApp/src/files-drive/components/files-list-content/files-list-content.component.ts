@@ -15,7 +15,7 @@ export class FilesListContentComponent implements OnInit {
     @Output() onFileClick = new EventEmitter<FileOut>();
 
     public dragFile: FileOut;
-    public overMatGridTile: MatGridTile;
+    public overMatGridTile: HTMLDivElement;
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
@@ -39,9 +39,8 @@ export class FilesListContentComponent implements OnInit {
         this.onFileClick.emit(file);
     }
 
-    public drag(matGridTile: MatGridTile, file: FileOut) {
+    public drag(matGridTile: HTMLDivElement, file: FileOut) {
         this.dragFile = file;
-        console.log("drag: " + file.id);
     }
 
     public drop(file: FileOut) {
@@ -58,14 +57,13 @@ export class FilesListContentComponent implements OnInit {
         this.dragFile = null;
     }
 
-    public enter(matGridTile: MatGridTile, file: FileOut) {
+    public enter(matGridTile: HTMLDivElement, file: FileOut) {
         if (this.dragFile) {
             if (this.overMatGridTile && (!matGridTile || this.overMatGridTile != matGridTile)) {
                 this.makeDirectoryNormal(this.overMatGridTile);
             }
 
             if (matGridTile && file && file.fileType == FileType.DIRECTORY) {
-                console.log("enter: " + file.id);
                 this.makeDirectoryDropable(matGridTile);
                 this.overMatGridTile = matGridTile;
             }
@@ -78,11 +76,13 @@ export class FilesListContentComponent implements OnInit {
         }
     }
 
-    private makeDirectoryDropable(matGridTile: MatGridTile) {
-        matGridTile._setStyle("border", "3px outset coral");
+    private makeDirectoryDropable(matGridTile: HTMLDivElement) {
+        matGridTile.classList.add("hoverWhenDraging");
+        //matGridTile._setStyle("border", "3px outset coral");
     }
 
-    private makeDirectoryNormal(matGridTile: MatGridTile) {
-        matGridTile._setStyle("border", "3px solid gray");
+    private makeDirectoryNormal(matGridTile: HTMLDivElement) {
+        matGridTile.classList.remove("hoverWhenDraging");
+        //matGridTile._setStyle("border", "3px solid gray");
     }
 }
