@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
-import { MatGridTile } from '@angular/material/grid-list';
+import { FileMove } from '../../models/file-move';
+import { Operation, compare } from 'fast-json-patch';
 
 @Component({
     selector: 'drive-files-list-content',
@@ -13,6 +14,8 @@ export class FilesListContentComponent implements OnInit {
     @Input() actualDirectory: DirectoryOut;
 
     @Output() onFileClick = new EventEmitter<FileOut>();
+
+    @Output() onFileMove = new EventEmitter<FileMove>();
 
     public dragFile: FileOut;
     public overMatGridTile: HTMLDivElement;
@@ -44,10 +47,19 @@ export class FilesListContentComponent implements OnInit {
     }
 
     public drop(file: FileOut) {
-        if (this.dragFile) {
+        if (this.dragFile && this.dragFile != file) {
             if (file && file.fileType == FileType.DIRECTORY) {
 
-                console.log("drop: " + file.id);
+                const movedFile: FileOut = JSON.parse(JSON.stringify(this.dragFile));
+                movedFile.parentDirectoryID = file.id;
+
+                const patch: Operation[] = compare(this.dragFile, movedFile);
+
+                const fileMove: FileMove = new FileMove();
+                fileMove.fileId = movedFile.id;
+                fileMove.patch = patch;
+
+                this.onFileMove.emit(fileMove);
             }
         }
 

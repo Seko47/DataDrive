@@ -5,6 +5,7 @@ import { FilesService } from '../../services/files.service';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Operation } from 'fast-json-patch';
+import { FileMove } from '../../models/file-move';
 
 @Component({
     selector: 'drive-files',
@@ -126,6 +127,15 @@ export class FilesComponent implements OnInit {
         else if (clickedFile.fileType == FileType.FILE) {
             console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked file")
             this.getFileInfo(clickedFile.id);
+        }
+    }
+
+    public onFileMove(movedFile: FileMove) {
+        if (movedFile.fileId && movedFile.patch) {
+            this.filesService.updateFile(movedFile.fileId, movedFile.patch)
+                .subscribe(result => {
+                    this.getFromDirectory(this.actualDirectory.id);
+                }, err => alert(err.error));
         }
     }
 }
