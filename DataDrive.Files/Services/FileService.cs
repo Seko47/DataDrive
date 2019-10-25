@@ -235,6 +235,8 @@ namespace DataDrive.Files.Services
 
             fileAbstractPatch.ApplyTo(fileAbstract);
 
+            fileAbstract.LastModifiedDateTime = DateTime.Now;
+
             await _databaseContext.SaveChangesAsync();
 
             FileOut result = _mapper.Map<FileOut>(await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id));
