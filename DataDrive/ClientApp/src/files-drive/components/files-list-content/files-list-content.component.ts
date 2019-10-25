@@ -99,11 +99,9 @@ export class FilesListContentComponent implements OnInit {
 
     private makeDirectoryDropable(matGridTile: HTMLDivElement) {
         matGridTile.classList.add("hoverWhenDraging");
-        //matGridTile._setStyle("border", "3px outset coral");
     }
 
     private makeDirectoryNormal(matGridTile: HTMLDivElement) {
         matGridTile.classList.remove("hoverWhenDraging");
-        //matGridTile._setStyle("border", "3px solid gray");
     }
 }
