@@ -53,9 +53,16 @@
   <mat-toolbar-row>
 
     <a mat-icon-button
-       (click)="deleteFile(); fileinfosidenav.toggle();">
+       (click)="deleteFile();">
 
       <mat-icon>delete</mat-icon>
+    </a>
+
+    <a mat-icon-button
+       *ngIf="actualFile && actualFile.fileType == 0"
+       (click)="downloadFile();">
+
+      <mat-icon>get_app</mat-icon>
     </a>
   </mat-toolbar-row>
 </mat-toolbar>

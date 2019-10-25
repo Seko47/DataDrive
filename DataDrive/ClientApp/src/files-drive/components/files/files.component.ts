@@ -107,6 +107,16 @@ export class FilesComponent implements OnInit {
             }, err => alert(err.error));
     }
 
+    public downloadFile(id: string) {
+        this.filesService.downloadFile(id)
+            .subscribe(result => {
+                if (this.fileinfosidenav) {
+                    this.fileinfosidenav.close();
+                }
+                
+            }, err => console.log(err.error));
+    }
+
     public changeFileName(patch: Operation[]) {
         this.filesService.updateFile(this.actualFile.id, patch)
             .subscribe(result => {

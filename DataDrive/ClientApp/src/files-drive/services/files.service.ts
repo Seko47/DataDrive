@@ -12,6 +12,7 @@ import { Operation } from 'fast-json-patch';
     providedIn: 'root'
 })
 export class FilesService {
+
     private baseUrl: string;
 
     constructor(private httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string) {
@@ -52,5 +53,10 @@ export class FilesService {
 
     public updateFile(fileId: string, patch: Operation[]) {
         return this.httpClient.patch<FileOut>(this.baseUrl + 'api/Files/' + fileId, patch);
+    }
+
+    downloadFile(id: string) {
+        return this.httpClient.get(this.baseUrl + 'api/Files/download/' + id,
+            { responseType: 'blob' });
     }
 }

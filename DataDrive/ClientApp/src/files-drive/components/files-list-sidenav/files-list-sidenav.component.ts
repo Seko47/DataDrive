@@ -17,6 +17,7 @@ export class FilesListSidenavComponent implements OnInit {
 
     @Output() onFileDelete = new EventEmitter<string>();
     @Output() onFileNameChanged = new EventEmitter<Operation[]>();
+    @Output() onFileDownload = new EventEmitter<string>();
 
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
 
@@ -45,6 +46,10 @@ export class FilesListSidenavComponent implements OnInit {
 
     public deleteFile() {
         this.onFileDelete.emit(this.actualFile.id);
+    }
+
+    public downloadFile() {
+        this.onFileDownload.emit(this.actualFile.id);
     }
 
     public changeFileName(name: string) {

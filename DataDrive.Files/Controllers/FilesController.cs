@@ -92,7 +92,6 @@ namespace DataDrive.Files.Controllers
         }
 
         [HttpGet("download/{id}")]
-        [Produces("application/octet-stream")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Download(Guid id)

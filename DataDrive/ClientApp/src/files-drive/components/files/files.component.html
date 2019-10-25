@@ -23,6 +23,7 @@
 
     <drive-files-list-sidenav [actualFile]="actualFile"
                               (onFileDelete)="deleteFile($event)"
-                              (onFileNameChanged)="changeFileName($event)"></drive-files-list-sidenav>
+                              (onFileNameChanged)="changeFileName($event)"
+                              (onFileDownload)="downloadFile($event)"></drive-files-list-sidenav>
   </mat-sidenav>
 </mat-sidenav-container>
