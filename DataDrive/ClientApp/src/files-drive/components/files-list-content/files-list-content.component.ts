@@ -19,7 +19,7 @@ export class FilesListContentComponent implements OnInit {
 
     public parentFile: FileOut;
     public dragFile: FileOut;
-    public overMatGridTile: HTMLDivElement;
+    public dropDivElement: HTMLDivElement;
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
@@ -27,9 +27,9 @@ export class FilesListContentComponent implements OnInit {
             this.dragFile = null;
         }
 
-        if (this.overMatGridTile) {
-            this.makeDirectoryNormal(this.overMatGridTile);
-            this.overMatGridTile = null;
+        if (this.dropDivElement) {
+            this.makeDirectoryNormal(this.dropDivElement);
+            this.dropDivElement = null;
         }
     }
 
@@ -44,7 +44,7 @@ export class FilesListContentComponent implements OnInit {
         this.onFileClick.emit(file);
     }
 
-    public drag(matGridTile: HTMLDivElement, file: FileOut) {
+    public drag(divElement: HTMLDivElement, file: FileOut) {
         if (this.actualDirectory) {
             this.parentFile = new FileOut();
             this.parentFile.id = this.actualDirectory.parentDirectoryID;
@@ -72,36 +72,36 @@ export class FilesListContentComponent implements OnInit {
             }
         }
 
-        if (this.overMatGridTile) {
-            this.makeDirectoryNormal(this.overMatGridTile);
+        if (this.dropDivElement) {
+            this.makeDirectoryNormal(this.dropDivElement);
         }
         this.dragFile = null;
     }
 
-    public enter(matGridTile: HTMLDivElement, file: FileOut) {
+    public enter(divElement: HTMLDivElement, file: FileOut) {
         if (this.dragFile) {
-            if (this.overMatGridTile && (!matGridTile || this.overMatGridTile != matGridTile)) {
-                this.makeDirectoryNormal(this.overMatGridTile);
+            if (this.dropDivElement && (!divElement || this.dropDivElement != divElement)) {
+                this.makeDirectoryNormal(this.dropDivElement);
             }
 
-            if (matGridTile && file && file.fileType == FileType.DIRECTORY) {
-                this.makeDirectoryDropable(matGridTile);
-                this.overMatGridTile = matGridTile;
+            if (divElement && file && file.fileType == FileType.DIRECTORY) {
+                this.makeDirectoryDropable(divElement);
+                this.dropDivElement = divElement;
             }
         }
     }
 
     public leave() {
-        if (this.overMatGridTile) {
-            this.makeDirectoryNormal(this.overMatGridTile);
+        if (this.dropDivElement) {
+            this.makeDirectoryNormal(this.dropDivElement);
         }
     }
 
-    private makeDirectoryDropable(matGridTile: HTMLDivElement) {
-        matGridTile.classList.add("hoverWhenDraging");
+    private makeDirectoryDropable(divElement: HTMLDivElement) {
+        divElement.classList.add("hoverWhenDraging");
     }
 
-    private makeDirectoryNormal(matGridTile: HTMLDivElement) {
-        matGridTile.classList.remove("hoverWhenDraging");
+    private makeDirectoryNormal(divElement: HTMLDivElement) {
+        divElement.classList.remove("hoverWhenDraging");
     }
 }

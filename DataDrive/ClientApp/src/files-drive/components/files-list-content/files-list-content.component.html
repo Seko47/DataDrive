@@ -59,39 +59,3 @@
 
   </div>
 </div>
-
-
-
-
-
-<!--
-<mat-grid-list cols="5"
-               rowHeight="1:1.2"
-               cdkDropList
-               (mouseup)="drop(null)">
-
-  <mat-grid-tile mat-button
-                 class="fileTile"
-                 cdkDrag
-                 #listItem
-                 (mousedown)="drag(listItem, file)"
-                 (mouseenter)="enter(listItem, file)"
-                 (mouseup)="drop(file)"
-                 (mouseleave)="leave()"
-                 *ngFor="let file of actualDirectory.files"
-                 title="{{ file.name }}"
-                 (click)="clickFile(file);">
-
-    <mat-icon class="main-file-icon"
-              *ngIf="file.fileType == 1">folder</mat-icon>
-
-    <mat-icon class="main-file-icon"
-              *ngIf="file.fileType == 0">insert_drive_file</mat-icon>
-
-    <mat-grid-tile-footer>
-
-      <p class="text-truncate">{{ file.name }}</p>
-    </mat-grid-tile-footer>
-  </mat-grid-tile>
-</mat-grid-list>
--->
