@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { MatGridTile } from '@angular/material/grid-list';
@@ -16,6 +16,19 @@ export class FilesListContentComponent implements OnInit {
 
     public dragFile: FileOut;
     public overMatGridTile: MatGridTile;
+
+    @HostListener('document:mouseup', ['$event'])
+    onMouseUp(event: MouseEvent) {
+        console.log("MouseEvent");
+        if (this.dragFile) {
+            this.dragFile = null;
+        }
+
+        if (this.overMatGridTile) {
+            this.overMatGridTile._setStyle("border", "0");
+            this.overMatGridTile = null;
+        }
+    }
 
     constructor() { }
 
@@ -39,7 +52,9 @@ export class FilesListContentComponent implements OnInit {
             }
         }
 
-        this.overMatGridTile._setStyle("border", "0");
+        if (this.overMatGridTile) {
+            this.overMatGridTile._setStyle("border", "0");
+        }
         this.dragFile = null;
     }
 
@@ -49,7 +64,6 @@ export class FilesListContentComponent implements OnInit {
                 this.overMatGridTile._setStyle("border", "0");
             }
 
-            console.log(matGridTile)
             if (matGridTile && file && file.fileType == FileType.DIRECTORY) {
                 console.log("over: " + file.id);
                 matGridTile._setStyle("border", "5px solid blue");
