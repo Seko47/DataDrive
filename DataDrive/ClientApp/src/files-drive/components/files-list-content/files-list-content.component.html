@@ -1,7 +1,6 @@
 <div class="card-deck container"
      cdkDropList
-     cdkDropListSortingDisabled
-     (mouseup)="drop(null)">
+     cdkDropListSortingDisabled>
   <div *ngFor="let file of actualDirectory.files"
        #listItem
        style="width: 200px;"
@@ -30,6 +29,15 @@
          style="text-align: center">
         {{ file.name }}
       </p>
+
+      <div class="card"
+           style="width: 300px;"
+           *cdkDragPreview>
+        <p class="text-truncate"
+           style="text-align: center">
+          {{ file.name }}
+        </p>
+      </div>
     </mat-card>
 
   </div>
