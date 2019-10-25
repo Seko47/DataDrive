@@ -4,11 +4,13 @@
                (mouseup)="drop(null)">
 
   <mat-grid-tile mat-button
+                 class="fileTile"
                  cdkDrag
                  #listItem
                  (mousedown)="drag(listItem, file)"
-                 (mouseover)="over(listItem, file)"
+                 (mouseenter)="enter(listItem, file)"
                  (mouseup)="drop(file)"
+                 (mouseleave)="leave()"
                  *ngFor="let file of actualDirectory.files"
                  title="{{ file.name }}"
                  (click)="clickFile(file);">

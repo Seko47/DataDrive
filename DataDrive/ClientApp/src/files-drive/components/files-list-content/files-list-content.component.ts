@@ -25,7 +25,7 @@ export class FilesListContentComponent implements OnInit {
         }
 
         if (this.overMatGridTile) {
-            this.overMatGridTile._setStyle("border", "0");
+            this.makeDirectoryNormal(this.overMatGridTile);
             this.overMatGridTile = null;
         }
     }
@@ -53,22 +53,36 @@ export class FilesListContentComponent implements OnInit {
         }
 
         if (this.overMatGridTile) {
-            this.overMatGridTile._setStyle("border", "0");
+            this.makeDirectoryNormal(this.overMatGridTile);
         }
         this.dragFile = null;
     }
 
-    public over(matGridTile: MatGridTile, file: FileOut) {
+    public enter(matGridTile: MatGridTile, file: FileOut) {
         if (this.dragFile) {
             if (this.overMatGridTile && (!matGridTile || this.overMatGridTile != matGridTile)) {
-                this.overMatGridTile._setStyle("border", "0");
+                this.makeDirectoryNormal(this.overMatGridTile);
             }
 
             if (matGridTile && file && file.fileType == FileType.DIRECTORY) {
-                console.log("over: " + file.id);
-                matGridTile._setStyle("border", "5px solid blue");
+                console.log("enter: " + file.id);
+                this.makeDirectoryDropable(matGridTile);
                 this.overMatGridTile = matGridTile;
             }
         }
+    }
+
+    public leave() {
+        if (this.overMatGridTile) {
+            this.makeDirectoryNormal(this.overMatGridTile);
+        }
+    }
+
+    private makeDirectoryDropable(matGridTile: MatGridTile) {
+        matGridTile._setStyle("border", "3px outset coral");
+    }
+
+    private makeDirectoryNormal(matGridTile: MatGridTile) {
+        matGridTile._setStyle("border", "3px solid gray");
     }
 }
