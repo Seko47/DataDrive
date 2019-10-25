@@ -1,4 +1,4 @@
-<div class="card-deck container"
+<div class="card-deck container ml-auto mr-auto"
      cdkDropList
      cdkDropListSortingDisabled>
   <div class="col-12">
@@ -20,7 +20,7 @@
 
   <div *ngFor="let file of actualDirectory.files"
        #listItem
-       style="width: 200px;"
+       class="col-md-3"
        mat-button
        cdkDrag
        (mousedown)="drag(listItem, file)"
