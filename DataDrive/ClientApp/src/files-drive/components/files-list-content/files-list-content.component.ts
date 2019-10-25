@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, AfterViewInit } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { FileMove } from '../../models/file-move';
@@ -10,13 +10,14 @@ import { Operation, compare } from 'fast-json-patch';
     styleUrls: ['./files-list-content.component.css']
 })
 export class FilesListContentComponent implements OnInit {
-
+    
     @Input() actualDirectory: DirectoryOut;
 
     @Output() onFileClick = new EventEmitter<FileOut>();
 
     @Output() onFileMove = new EventEmitter<FileMove>();
 
+    public parentFile: FileOut;
     public dragFile: FileOut;
     public overMatGridTile: HTMLDivElement;
 
@@ -33,7 +34,9 @@ export class FilesListContentComponent implements OnInit {
         }
     }
 
-    constructor() { }
+    constructor() {
+        
+    }
 
     ngOnInit() {
     }
@@ -43,6 +46,13 @@ export class FilesListContentComponent implements OnInit {
     }
 
     public drag(matGridTile: HTMLDivElement, file: FileOut) {
+        if (this.actualDirectory) {
+            this.parentFile = new FileOut();
+            this.parentFile.id = this.actualDirectory.parentDirectoryID;
+            this.parentFile.fileType = FileType.DIRECTORY;
+            this.parentFile.name = this.actualDirectory.parentDirectoryName;
+        }
+
         this.dragFile = file;
     }
 

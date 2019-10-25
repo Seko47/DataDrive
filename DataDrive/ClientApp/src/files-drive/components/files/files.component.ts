@@ -34,13 +34,9 @@ export class FilesComponent implements OnInit {
 
     public getFromDirectory(id: string) {
 
-        console.log("files.component.ts: getFromDirectoryId == " + id)
-
         this.filesService
             .getFilesFromDirectory(id)
             .subscribe(result => {
-                console.log("files.component.ts: dirName == " + result.name);
-                console.log("files.component.ts: filesInDir == " + result.files.length);
                 if (this.fileinfosidenav) {
                     this.fileinfosidenav.close();
                 }
@@ -79,7 +75,6 @@ export class FilesComponent implements OnInit {
     public createDirectory(newDirectory: CreateDirectoryPost) {
         this.filesService.createDirectory(newDirectory)
             .subscribe(result => {
-                console.log("files.component.ts: new directory created")
                 this.getFromDirectory(result);
             }, err => alert(err.error));
     }
@@ -121,11 +116,9 @@ export class FilesComponent implements OnInit {
 
     public onFileClick(clickedFile: FileOut) {
         if (clickedFile.fileType == FileType.DIRECTORY) {
-            console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked directory")
             this.getFromDirectory(clickedFile.id);
         }
         else if (clickedFile.fileType == FileType.FILE) {
-            console.log("files.component.ts:onFileClick(clickedFile: FileOut) | clicked file")
             this.getFileInfo(clickedFile.id);
         }
     }
