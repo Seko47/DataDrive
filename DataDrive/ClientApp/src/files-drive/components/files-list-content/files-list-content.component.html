@@ -1,7 +1,14 @@
 <mat-grid-list cols="5"
-               rowHeight="1:1.2">
+               rowHeight="1:1.2"
+               cdkDropList
+               (mouseup)="drop(null)">
 
   <mat-grid-tile mat-button
+                 cdkDrag
+                 #listItem
+                 (mousedown)="drag(listItem, file)"
+                 (mouseover)="over(listItem, file)"
+                 (mouseup)="drop(file)"
                  *ngFor="let file of actualDirectory.files"
                  title="{{ file.name }}"
                  (click)="clickFile(file);">
@@ -18,3 +25,4 @@
     </mat-grid-tile-footer>
   </mat-grid-tile>
 </mat-grid-list>
+

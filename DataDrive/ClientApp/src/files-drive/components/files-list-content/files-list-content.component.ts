@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
-import { FileOut } from '../../models/file-out';
+import { FileOut, FileType } from '../../models/file-out';
+import { MatGridTile } from '@angular/material/grid-list';
 
 @Component({
     selector: 'drive-files-list-content',
@@ -13,6 +14,9 @@ export class FilesListContentComponent implements OnInit {
 
     @Output() onFileClick = new EventEmitter<FileOut>();
 
+    public dragFile: FileOut;
+    public overMatGridTile: MatGridTile;
+
     constructor() { }
 
     ngOnInit() {
@@ -20,5 +24,37 @@ export class FilesListContentComponent implements OnInit {
 
     public clickFile(file: FileOut) {
         this.onFileClick.emit(file);
+    }
+
+    public drag(matGridTile: MatGridTile, file: FileOut) {
+        this.dragFile = file;
+        console.log("drag: " + file.id);
+    }
+
+    public drop(file: FileOut) {
+        if (this.dragFile) {
+            if (file && file.fileType == FileType.DIRECTORY) {
+
+                console.log("drop: " + file.id);
+            }
+        }
+
+        this.overMatGridTile._setStyle("border", "0");
+        this.dragFile = null;
+    }
+
+    public over(matGridTile: MatGridTile, file: FileOut) {
+        if (this.dragFile) {
+            if (this.overMatGridTile && (!matGridTile || this.overMatGridTile != matGridTile)) {
+                this.overMatGridTile._setStyle("border", "0");
+            }
+
+            console.log(matGridTile)
+            if (matGridTile && file && file.fileType == FileType.DIRECTORY) {
+                console.log("over: " + file.id);
+                matGridTile._setStyle("border", "5px solid blue");
+                this.overMatGridTile = matGridTile;
+            }
+        }
     }
 }
