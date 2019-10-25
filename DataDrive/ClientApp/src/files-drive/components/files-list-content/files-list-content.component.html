@@ -1,10 +1,11 @@
 <div class="card-deck container ml-auto mr-auto"
      cdkDropList
      cdkDropListSortingDisabled>
-  <div class="col-12">
+  <div class="col-12"
+       style="position: fixed; z-index: 1000;">
     <div *ngIf="dragFile && actualDirectory && actualDirectory.id"
          #parentListItem
-         class="ml-auto mr-auto col-2"
+         class="ml-auto mr-auto col-2 mt-1 mb-1"
          mat-button
          (mouseenter)="enter(parentListItem, parentFile)"
          (mouseup)="drop(parentFile)"
@@ -47,8 +48,7 @@
         {{ file.name }}
       </p>
 
-      <div class="card"
-           style="width: 300px;"
+      <div class="card col-6"
            *cdkDragPreview>
         <p class="text-truncate"
            style="text-align: center">
