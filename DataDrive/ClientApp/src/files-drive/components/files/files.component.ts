@@ -49,6 +49,11 @@ export class FilesComponent implements OnInit {
 
                         this.changeFileName(fileId, newFileName);
                     }
+                    break;
+                }
+                case FilesEventCode.DELETE: {
+
+                    this.deleteFile(fileId);
                 }
             }
         });
@@ -123,8 +128,10 @@ export class FilesComponent implements OnInit {
     }
 
     public deleteFile(id: string) {
+
         this.filesService.deleteFile(id)
             .subscribe(result => {
+
                 this.getFromDirectory(result.id);
             }, err => alert(err.error));
     }
@@ -149,8 +156,14 @@ export class FilesComponent implements OnInit {
 
         this.filesService.updateFile(this.actualFile.id, patch)
             .subscribe(result => {
+                let fileId = result.parentDirectoryID;
 
-                this.getFromDirectory(result.parentDirectoryID);
+                if (result.fileType == FileType.DIRECTORY) {
+
+                    fileId = result.id;
+                }
+
+                this.getFromDirectory(fileId);
             }, err => alert(err.error));
     }
 
