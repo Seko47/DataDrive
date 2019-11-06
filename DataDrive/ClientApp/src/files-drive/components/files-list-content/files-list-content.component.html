@@ -63,17 +63,26 @@
 
   <context-menu #fileMenu>
     <ng-template contextMenuItem let-item (execute)="showMessage('RENAME, ' + $event.item.name)">
-      {{ 'FILES.CONTEXT_MENU.RENAME' | translate }}
+      <button mat-button style="width: 100%">
+        <mat-icon>edit</mat-icon>
+        {{ 'FILES.CONTEXT_MENU.RENAME' | translate }}
+      </button>
     </ng-template>
 
-    <ng-template contextMenuItem let-item (execute)="downloadFile($event.item.id)">
-      {{ 'FILES.CONTEXT_MENU.DOWNLOAD' | translate }}
-    </ng-template>
+    <ng-template contextMenuItem let-item (execute)="downloadFile($event.item.id)"
+                 [visible]="isNotDirectory">
 
-    <ng-template contextMenuItem divider="true"></ng-template>
+      <button mat-button style="width: 100%">
+        <mat-icon>get_app</mat-icon>
+        {{ 'FILES.CONTEXT_MENU.DOWNLOAD' | translate }}
+      </button>
+    </ng-template>
 
     <ng-template contextMenuItem let-item (execute)="deleteFile($event.item.id)">
-      {{ 'FILES.CONTEXT_MENU.DELETE' | translate }}
+      <button mat-button style="width: 100%">
+        <mat-icon>delete</mat-icon>
+        {{ 'FILES.CONTEXT_MENU.DELETE' | translate }}
+      </button>
     </ng-template>
   </context-menu>
 </div>

@@ -119,4 +119,8 @@ export class FilesListContentComponent implements OnInit {
     public showMessage(message: string) {
         alert(message);
     }
+
+    public isNotDirectory(item: FileOut): boolean {
+        return item.fileType != 1;
+    }
 }
