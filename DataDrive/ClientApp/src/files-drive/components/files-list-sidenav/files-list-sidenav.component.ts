@@ -16,8 +16,6 @@ export class FilesListSidenavComponent implements OnInit {
 
     @Input() actualFile: FileOut;
 
-    @Output() onFileDownload = new EventEmitter<string>();
-
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
 
     constructor(private createDirectoryDialog: MatDialog, private filesEventService: FilesEventService) {
@@ -49,15 +47,12 @@ export class FilesListSidenavComponent implements OnInit {
     }
 
     public downloadFile() {
-        this.onFileDownload.emit(this.actualFile.id);
+
+        this.filesEventService.emit([FilesEventCode.DOWNLOAD, this.actualFile.id]);
     }
 
-    public changeFileName(name: string) {
+    public changeFileName(newFileName: string) {
 
-        const eventCode = FilesEventCode.RENAME;
-        const fileId = this.actualFile.id;
-        const newFileName = name;
-
-        this.filesEventService.emit([eventCode, fileId, newFileName]);
+        this.filesEventService.emit([FilesEventCode.RENAME, this.actualFile.id, newFileName]);
     }
 }

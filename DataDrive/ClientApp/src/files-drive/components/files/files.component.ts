@@ -56,6 +56,11 @@ export class FilesComponent implements OnInit, OnDestroy {
                     this.deleteFile(fileId);
                     break;
                 }
+                case FilesEventCode.DOWNLOAD: {
+
+                    this.downloadFile(fileId);
+                    break;
+                }
             }
         });
     }
