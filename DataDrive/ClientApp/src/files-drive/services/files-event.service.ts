@@ -6,9 +6,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FilesEventService {
 
-    private event = new BehaviorSubject<[FilesEventCode, string]>([FilesEventCode.NONE, '']);
+    private event = new BehaviorSubject<[FilesEventCode, string, string?]>([FilesEventCode.NONE, '']);
 
-    public emit(message: [FilesEventCode, string]) {
+    public emit(message: [FilesEventCode, string, string?]) {
         this.event.next(message);
     }
 

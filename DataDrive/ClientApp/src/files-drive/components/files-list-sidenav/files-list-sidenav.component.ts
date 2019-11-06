@@ -4,6 +4,7 @@ import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
 import { compare, Operation } from 'fast-json-patch';
+import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
 
 
 @Component({
@@ -16,12 +17,11 @@ export class FilesListSidenavComponent implements OnInit {
     @Input() actualFile: FileOut;
 
     @Output() onFileDelete = new EventEmitter<string>();
-    @Output() onFileNameChanged = new EventEmitter<Operation[]>();
     @Output() onFileDownload = new EventEmitter<string>();
 
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
 
-    constructor(private createDirectoryDialog: MatDialog) {
+    constructor(private createDirectoryDialog: MatDialog, private filesEventService: FilesEventService) {
     }
 
     ngOnInit() {
@@ -54,10 +54,10 @@ export class FilesListSidenavComponent implements OnInit {
 
     public changeFileName(name: string) {
 
-        const modifiedFile: FileOut = JSON.parse(JSON.stringify(this.actualFile));
-        modifiedFile.name = name;
-        const patch: Operation[] = compare(this.actualFile, modifiedFile);
+        const eventCode = FilesEventCode.RENAME;
+        const fileId = this.actualFile.id;
+        const newFileName = name;
 
-        this.onFileNameChanged.emit(patch);
+        this.filesEventService.emit([eventCode, fileId, newFileName]);
     }
 }

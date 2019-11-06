@@ -4,9 +4,10 @@ import { FileOut, FileType } from '../../models/file-out';
 import { FilesService } from '../../services/files.service';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Operation } from 'fast-json-patch';
+import { Operation, compare } from 'fast-json-patch';
 import { FileMove } from '../../models/file-move';
 import { saveAs } from 'file-saver';
+import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
 
 @Component({
     selector: 'drive-files',
@@ -21,7 +22,8 @@ export class FilesComponent implements OnInit {
     @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
 
-    constructor(private filesService: FilesService) {
+    constructor(private filesService: FilesService, private filesEventService: FilesEventService) {
+
         this.actualDirectory = new DirectoryOut();
         this.actualDirectory.id = null;
         this.actualDirectory.name = "Root";
@@ -31,6 +33,25 @@ export class FilesComponent implements OnInit {
 
     ngOnInit() {
         this.getFromDirectory(null);
+
+        this.filesEventService.asObservable().subscribe((message: [FilesEventCode, string, string?]) => {
+
+            const eventCode = message[0];
+            const fileId = message[1];
+
+            switch (eventCode) {
+
+                case FilesEventCode.RENAME: {
+
+                    if (message[2] && message[2].length > 0) {
+
+                        const newFileName = message[2];
+
+                        this.changeFileName(fileId, newFileName);
+                    }
+                }
+            }
+        });
     }
 
     public getFromDirectory(id: string) {
@@ -119,10 +140,17 @@ export class FilesComponent implements OnInit {
             }, err => console.log(err.error));
     }
 
-    public changeFileName(patch: Operation[]) {
+    public changeFileName(fileId: string, newName: string) {
+
+        this.getFileInfo(fileId);
+        const modifiedFile: FileOut = JSON.parse(JSON.stringify(this.actualFile));
+        modifiedFile.name = newName;
+        const patch: Operation[] = compare(this.actualFile, modifiedFile);
+
         this.filesService.updateFile(this.actualFile.id, patch)
             .subscribe(result => {
-                this.getFromDirectory(this.actualDirectory.id);
+
+                this.getFromDirectory(result.parentDirectoryID);
             }, err => alert(err.error));
     }
 
