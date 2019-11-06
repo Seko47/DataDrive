@@ -57,6 +57,6 @@ export class FilesService {
 
     downloadFile(id: string) {
         return this.httpClient.get(this.baseUrl + 'api/Files/download/' + id,
-            { responseType: 'blob' });
+            { observe: "response", responseType: 'blob' });
     }
 }

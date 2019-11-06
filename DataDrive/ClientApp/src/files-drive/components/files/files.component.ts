@@ -8,6 +8,7 @@ import { Operation, compare } from 'fast-json-patch';
 import { FileMove } from '../../models/file-move';
 import { saveAs } from 'file-saver';
 import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'drive-files',
@@ -148,12 +149,29 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     public downloadFile(id: string) {
         this.filesService.downloadFile(id)
-            .subscribe(result => {
+            .subscribe((result: HttpResponse<Blob>) => {
                 if (this.fileinfosidenav) {
                     this.fileinfosidenav.close();
                 }
 
-                saveAs(result, this.actualFile.name);
+                let fileName = "download";
+                if (result.headers.has("content-disposition")) {
+
+                    let contentDisposition = result.headers.get("content-disposition");
+                    const startIndex = contentDisposition.indexOf("filename=") + 9;
+                    contentDisposition = contentDisposition.substr(startIndex);
+
+                    const endIndex = contentDisposition.indexOf(';');
+                    let rawFileName = contentDisposition.substring(0, endIndex);
+
+                    if (rawFileName.startsWith('"') && rawFileName.endsWith('"')) {
+                        rawFileName = rawFileName.substring(1, rawFileName.length - 1);
+                    }
+
+                    fileName = rawFileName;
+                }
+
+                saveAs(result.body, fileName);
             }, err => console.log(err.error));
     }
 

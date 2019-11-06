@@ -9,6 +9,7 @@ import { FilesListContentComponent } from './components/files-list-content/files
 import { FilesListSidenavComponent } from './components/files-list-sidenav/files-list-sidenav.component';
 import { CreateDirectoryDialogComponent } from './components/create-directory-dialog/create-directory-dialog.component';
 import { ChangeFileNameDialogComponent } from './components/change-file-name-dialog/change-file-name-dialog.component';
+import { ContextMenuModule } from 'ngx-contextmenu';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { ChangeFileNameDialogComponent } from './components/change-file-name-dia
     imports: [
         CommonModule,
         SharedModule,
+        ContextMenuModule.forRoot(),
         RouterModule.forChild([
             { path: 'drive/files', component: FilesComponent, canActivate: [AuthorizeGuard] },
         ])

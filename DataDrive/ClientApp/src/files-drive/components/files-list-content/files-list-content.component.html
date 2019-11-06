@@ -28,7 +28,9 @@
        (mouseenter)="enter(listItem, file)"
        (mouseup)="drop(file)"
        (mouseleave)="leave()"
-       (click)="clickFile(file);">
+       (click)="clickFile(file);"
+       [contextMenu]="fileMenu"
+       [contextMenuSubject]="file">
 
     <mat-card class="card mt-2 mb-2"
               title="{{ file.name }}">
@@ -58,4 +60,20 @@
     </mat-card>
 
   </div>
+
+  <context-menu #fileMenu>
+    <ng-template contextMenuItem let-item (execute)="showMessage('RENAME, ' + $event.item.name)">
+      {{ 'FILES.CONTEXT_MENU.RENAME' | translate }}
+    </ng-template>
+
+    <ng-template contextMenuItem let-item (execute)="downloadFile($event.item.id)">
+      {{ 'FILES.CONTEXT_MENU.DOWNLOAD' | translate }}
+    </ng-template>
+
+    <ng-template contextMenuItem divider="true"></ng-template>
+
+    <ng-template contextMenuItem let-item (execute)="deleteFile($event.item.id)">
+      {{ 'FILES.CONTEXT_MENU.DELETE' | translate }}
+    </ng-template>
+  </context-menu>
 </div>

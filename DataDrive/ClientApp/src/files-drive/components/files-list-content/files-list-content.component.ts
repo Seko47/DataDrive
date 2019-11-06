@@ -3,6 +3,7 @@ import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { FileMove } from '../../models/file-move';
 import { Operation, compare } from 'fast-json-patch';
+import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
 
 @Component({
     selector: 'drive-files-list-content',
@@ -10,7 +11,7 @@ import { Operation, compare } from 'fast-json-patch';
     styleUrls: ['./files-list-content.component.css']
 })
 export class FilesListContentComponent implements OnInit {
-    
+
     @Input() actualDirectory: DirectoryOut;
 
     @Output() onFileClick = new EventEmitter<FileOut>();
@@ -33,11 +34,21 @@ export class FilesListContentComponent implements OnInit {
         }
     }
 
-    constructor() {
-        
+    constructor(private filesEventService: FilesEventService) {
+
     }
 
     ngOnInit() {
+    }
+
+    public downloadFile(fileId: string) {
+
+        this.filesEventService.emit([FilesEventCode.DOWNLOAD, fileId]);
+    }
+
+    public deleteFile(fileId: string) {
+
+        this.filesEventService.emit([FilesEventCode.DELETE, fileId]);
     }
 
     public clickFile(file: FileOut) {
@@ -103,5 +114,9 @@ export class FilesListContentComponent implements OnInit {
 
     private makeDirectoryNormal(divElement: HTMLDivElement) {
         divElement.classList.remove("hoverWhenDraging");
+    }
+
+    public showMessage(message: string) {
+        alert(message);
     }
 }

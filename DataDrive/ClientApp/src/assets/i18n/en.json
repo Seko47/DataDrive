@@ -15,6 +15,11 @@
 			"NAME_PLACEHOLDER": "File name",
 			"TITLE": "Change name"
 		},
+		"CONTEXT_MENU": {
+			"DELETE": "Delete",
+			"DOWNLOAD": "Download",
+			"RENAME": "Rename"
+		},
 		"CREATED": "Created",
 		"CREATE_DIRECTORY_DIALOG": {
 			"NAME_INPUT": "New directory",

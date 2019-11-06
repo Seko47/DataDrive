@@ -15,6 +15,11 @@
 			"NAME_PLACEHOLDER": "Nazwa pliku",
 			"TITLE": "Zmień nazwę"
 		},
+		"CONTEXT_MENU": {
+			"DELETE": "Usuń",
+			"DOWNLOAD": "Pobierz",
+			"RENAME": "Zmień nazwę"
+		},
 		"CREATED": "Utworzono",
 		"CREATE_DIRECTORY_DIALOG": {
 			"NAME_INPUT": "Nowy folder",
