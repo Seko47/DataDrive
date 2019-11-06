@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { FilesService } from '../../services/files.service';
@@ -14,7 +14,7 @@ import { FilesEventService, FilesEventCode } from '../../services/files-event.se
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.css']
 })
-export class FilesComponent implements OnInit {
+export class FilesComponent implements OnInit, OnDestroy {
 
     public actualDirectory: DirectoryOut;
     public actualFile: FileOut;
@@ -54,9 +54,14 @@ export class FilesComponent implements OnInit {
                 case FilesEventCode.DELETE: {
 
                     this.deleteFile(fileId);
+                    break;
                 }
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.filesEventService.unsubscribe();
     }
 
     public getFromDirectory(id: string) {
