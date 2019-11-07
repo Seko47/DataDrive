@@ -217,6 +217,9 @@ namespace DataDrive.Files.Services
                 };
             }
 
+            int[] sortingMap = new[] { 2, 1, 3 };
+            result.Files = result.Files.OrderBy(_ => sortingMap[(int)(_.FileType)]).ThenBy(_ => _.Name).ThenBy(_ => _.ID).ToList();
+
             return result;
         }
 
