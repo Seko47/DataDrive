@@ -1,6 +1,7 @@
 using AutoMapper;
 using DataDrive.Extensions;
 using DataDrive.Files.Services;
+using DataDrive.Share.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -28,6 +29,7 @@ namespace DataDrive
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IShareService, ShareService>();
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();

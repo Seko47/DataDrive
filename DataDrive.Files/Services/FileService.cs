@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace DataDrive.Files.Services
 {
+    //TODO wyszukiwarka plików
     public class FileService : IFileService
     {
         private readonly IDatabaseContext _databaseContext;
@@ -174,7 +175,7 @@ namespace DataDrive.Files.Services
         public async Task<DirectoryOut> GetDirectoryByIdAndUser(Guid? id, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
-
+            //TODO dopisac do każdego pobieranego pliku informację, czy jest udostępniony
             DirectoryOut result;
 
             if (id != null)
