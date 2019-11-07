@@ -1,22 +1,37 @@
 <div class="card-deck container ml-auto mr-auto"
      cdkDropList
      cdkDropListSortingDisabled>
-  <div class="col-12"
-       style="position: fixed; z-index: 1000;">
-    <div *ngIf="dragFile && actualDirectory && actualDirectory.id"
-         #parentListItem
-         class="ml-auto mr-auto col-2 mt-1 mb-1"
-         mat-button
-         (mouseenter)="enter(parentListItem, parentFile)"
-         (mouseup)="drop(parentFile)"
-         (mouseleave)="leave()">
 
-      <p class="text-truncate card"
+  <div *ngIf="dragFile && actualDirectory && actualDirectory.id"
+       #parentListItem
+       class="col-10 ml-auto mr-auto"
+       mat-button
+       (mouseenter)="enter(parentListItem, parentFile)"
+       (mouseup)="drop(parentFile)"
+       (mouseleave)="leave()"
+       style="margin: 0; position: fixed; z-index: 1000; left: 0; right: 0">
+
+    <mat-card class="card mt-2 mb-2"
+              style="padding: 0;">
+
+      <p class="text-truncate"
          style="text-align: center">
-        ...
+        {{ parentFile.name }}
       </p>
+    </mat-card>
+  </div>
 
-    </div>
+  <div class="col-12 ml-auto mr-auto"
+       style="opacity: 0; margin: 0">
+
+    <mat-card class="card mt-2 mb-2"
+              style="padding: 0;">
+
+      <p class="text-truncate"
+         style="text-align: center">
+        &nbsp;
+      </p>
+    </mat-card>
   </div>
 
   <div *ngFor="let file of actualDirectory.files"
