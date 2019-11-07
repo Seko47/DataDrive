@@ -62,7 +62,7 @@
   </div>
 
   <context-menu #fileMenu>
-    <ng-template contextMenuItem let-item (execute)="showMessage('RENAME, ' + $event.item.name)">
+    <ng-template contextMenuItem let-item (execute)="changeFileName($event.item.id, $event.item.name)">
       <button mat-button style="width: 100%">
         <mat-icon>edit</mat-icon>
         {{ 'FILES.CONTEXT_MENU.RENAME' | translate }}

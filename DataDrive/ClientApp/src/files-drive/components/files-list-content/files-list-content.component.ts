@@ -51,6 +51,11 @@ export class FilesListContentComponent implements OnInit {
         this.filesEventService.emit([FilesEventCode.DELETE, fileId]);
     }
 
+    public changeFileName(fileId: string, oldFileName: string) {
+
+        this.filesEventService.emit([FilesEventCode.RENAME, fileId, oldFileName]);
+    }
+
     public clickFile(file: FileOut) {
         this.onFileClick.emit(file);
     }

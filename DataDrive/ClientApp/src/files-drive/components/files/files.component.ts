@@ -9,6 +9,9 @@ import { FileMove } from '../../models/file-move';
 import { saveAs } from 'file-saver';
 import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
 import { HttpResponse } from '@angular/common/http';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'drive-files',
@@ -22,8 +25,10 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
+    public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
 
-    constructor(private filesService: FilesService, private filesEventService: FilesEventService) {
+
+    constructor(private changeFileNameDialogDialog: MatDialog, private filesService: FilesService, private filesEventService: FilesEventService) {
 
         this.actualDirectory = new DirectoryOut();
         this.actualDirectory.id = null;
@@ -46,9 +51,9 @@ export class FilesComponent implements OnInit, OnDestroy {
 
                     if (message[2] && message[2].length > 0) {
 
-                        const newFileName = message[2];
+                        const oldFileName = message[2];
 
-                        this.changeFileName(fileId, newFileName);
+                        this.openChangeFileNameDialog(fileId, oldFileName);
                     }
                     break;
                 }
@@ -68,6 +73,24 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.filesEventService.unsubscribe();
+    }
+
+    public openChangeFileNameDialog(fileId: string, oldFileName: string) {
+
+        this.changeFileNameDialogRef = this.changeFileNameDialogDialog.open(ChangeFileNameDialogComponent, {
+            hasBackdrop: true,
+            data: {
+                filename: oldFileName
+            }
+        });
+
+        this.changeFileNameDialogRef
+            .afterClosed()
+            .pipe(filter(name => name))
+            .subscribe((newFileName: string) => {
+
+                this.changeFileName(fileId, newFileName);
+            }, err => alert(err.error));
     }
 
     public getFromDirectory(id: string) {
@@ -130,11 +153,12 @@ export class FilesComponent implements OnInit, OnDestroy {
         else {
             this.filesService.getFileInfo(id)
                 .subscribe(result => {
+
                     this.actualFile = result;
-                    this.fileinfosidenav.toggle();
                 }, err => {
                     alert(err.error);
                 });
+            this.fileinfosidenav.toggle();
         }
     }
 
@@ -175,24 +199,42 @@ export class FilesComponent implements OnInit, OnDestroy {
             }, err => console.log(err.error));
     }
 
+    private getFileInfoObserve(fileId: string) {
+        return this.filesService.getFileInfo(fileId);
+    }
+
     public changeFileName(fileId: string, newName: string) {
 
-        this.getFileInfo(fileId);
-        const modifiedFile: FileOut = JSON.parse(JSON.stringify(this.actualFile));
-        modifiedFile.name = newName;
-        const patch: Operation[] = compare(this.actualFile, modifiedFile);
-
-        this.filesService.updateFile(this.actualFile.id, patch)
+        this.getFileInfoObserve(fileId)
             .subscribe(result => {
-                let fileId = result.parentDirectoryID;
 
-                if (result.fileType == FileType.DIRECTORY) {
+                this.actualFile = result;
 
-                    fileId = result.id;
-                }
+                const modifiedFile: FileOut = JSON.parse(JSON.stringify(this.actualFile));
+                modifiedFile.name = newName;
+                const patch: Operation[] = compare(this.actualFile, modifiedFile);
 
-                this.getFromDirectory(fileId);
-            }, err => alert(err.error));
+                this.filesService.updateFile(this.actualFile.id, patch)
+                    .subscribe((result: FileOut) => {
+                        let fileId = result.parentDirectoryID;
+
+                        if (result.fileType == FileType.DIRECTORY) {
+
+                            fileId = result.id;
+                        }
+
+                        if (result.fileType == FileType.DIRECTORY && this.actualDirectory.id == result.id) {
+
+                            this.getFromDirectory(result.id);
+                        }
+                        else {
+
+                            this.getFromDirectory(result.parentDirectoryID);
+                        }
+                    }, err => alert(err.error));
+            }, err => {
+                alert(err.error);
+            });;
     }
 
     public onFileClick(clickedFile: FileOut) {
