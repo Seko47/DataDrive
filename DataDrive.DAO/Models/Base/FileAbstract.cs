@@ -10,7 +10,6 @@ namespace DataDrive.DAO.Models.Base
         public DateTime? LastModifiedDateTime { get; set; }
 
         public string Name { get; set; }
-        public bool IsShared { get; set; }
 
         public string OwnerID { get; set; }
         public Guid? ParentDirectoryID { get; set; }
@@ -19,8 +18,8 @@ namespace DataDrive.DAO.Models.Base
 
         public virtual ApplicationUser Owner { get; set; }
         public virtual Directory ParentDirectory { get; set; }
-        //public virtual ShareEveryone ShareEveryone { get; set; }
-        //public virtual List<ShareForUser> ShareForUsers { get; set; }
+        public virtual ShareEveryone ShareEveryone { get; set; }
+        public virtual List<ShareForUser> ShareForUsers { get; set; }
     }
 
     public enum FileType

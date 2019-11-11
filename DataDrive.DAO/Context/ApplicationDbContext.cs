@@ -30,6 +30,18 @@ namespace DataDrive.DAO.Context
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<FileAbstract>()
+                .HasOne<ShareEveryone>(_ => _.ShareEveryone)
+                .WithOne(_ => _.File)
+                .HasForeignKey<ShareEveryone>(_ => _.FileID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ShareForUser>()
+                .HasOne<FileAbstract>(_ => _.File)
+                .WithMany(_ => _.ShareForUsers)
+                .HasForeignKey(_ => _.FileID)
+                .OnDelete(DeleteBehavior.NoAction);
+
             Seed(builder);
         }
 
