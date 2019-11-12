@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataDrive.Share.Controllers
 {
@@ -21,6 +22,15 @@ namespace DataDrive.Share.Controllers
         {
             _shareService = shareService;
             _userManager = userManager;
+        }
+
+        [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Get()
+        {
+            throw new NotImplementedException();
         }
         //TODO share controller methods
         //Get all files shared for logged user (ShareForUser.cs)

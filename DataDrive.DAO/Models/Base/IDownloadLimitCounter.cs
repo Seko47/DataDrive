@@ -2,6 +2,6 @@
 {
     public interface IDownloadLimitCounter
     {
-        public int DownloadLimit { get; set; }
+        public int? DownloadLimit { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace DataDrive.DAO.Models.Base
         public string OwnerID { get; set; }
 
         public virtual FileAbstract File { get; set; }
-        public ApplicationUser Owner { get; set; }
+        public virtual ApplicationUser Owner { get; set; }
     }
 }

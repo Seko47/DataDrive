@@ -4,6 +4,6 @@ namespace DataDrive.DAO.Models.Base
 {
     public interface ITimeExpiration
     {
-        public DateTime ExpirationDateTime { get; set; }
+        public DateTime? ExpirationDateTime { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace DataDrive.DAO.Models
     {
         public string SharedForUserID { get; set; }
 
-        public DateTime ExpirationDateTime { get; set; }
+        public DateTime? ExpirationDateTime { get; set; }
 
         public virtual ApplicationUser SharedForUser { get; set; }
     }
