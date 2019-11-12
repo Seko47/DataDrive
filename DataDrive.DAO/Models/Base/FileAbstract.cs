@@ -16,6 +16,10 @@ namespace DataDrive.DAO.Models.Base
 
         public FileType FileType { get; set; }
 
+        public bool IsShared { get; set; }
+        public bool IsSharedForEveryone { get; set; }
+        public bool IsSharedForUsers { get; set; }
+
         public virtual ApplicationUser Owner { get; set; }
         public virtual Directory ParentDirectory { get; set; }
         public virtual ShareEveryone ShareEveryone { get; set; }
