@@ -153,7 +153,7 @@ namespace DataDrive.Share.Services
 
                 for (int i = 0; i < tokenLength; ++i)
                 {
-                    token += random.Next(rangeLength);
+                    token += range[random.Next(rangeLength)];
                 }
 
             } while (_databaseContext.ShareEveryones.AnyAsync(_ => _.Token == token).Result);

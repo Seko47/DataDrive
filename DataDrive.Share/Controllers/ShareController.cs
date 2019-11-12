@@ -1,4 +1,6 @@
 ﻿using DataDrive.DAO.Models;
+using DataDrive.Share.Models;
+using DataDrive.Share.Models.In;
 using DataDrive.Share.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +15,7 @@ namespace DataDrive.Share.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ShareController
+    public class ShareController : Controller
     {
         private readonly IShareService _shareService;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,20 +26,49 @@ namespace DataDrive.Share.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
+        [HttpGet("{token}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetSharedByToken(string token)
         {
             throw new NotImplementedException();
         }
+
+        [HttpPost("share/everyone")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> ShareForEveryone([FromBody] ShareEveryoneIn shareEveryoneIn)
+        {
+            ShareEveryoneOut share = await _shareService.ShareForEveryone(shareEveryoneIn.FileId, _userManager.GetUserName(User), shareEveryoneIn.Password, shareEveryoneIn.ExpirationDateTime, shareEveryoneIn.DownloadLimit);
+
+            if (share == null)
+            {
+                return NotFound("Something went wrong");
+            }
+
+            return Ok(share);
+        }
+
+        [HttpPost("share/everyone/cancel")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> CancelShareForEveryone([FromBody] Guid fileId)
+        {
+            bool result = await _shareService.CancelSharingForEveryone(fileId, _userManager.GetUserName(User));
+
+            if (!result)
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            return Ok(result);
+        }
+
         //TODO share controller methods
         //Get all files shared for logged user (ShareForUser.cs)
-
-        //Get shared file by Token (ShareEveryone.cs)
-
-        //Disable sharing file by file id
 
         //Post, share file for everyone by file id (generates Token if user not specified)
 

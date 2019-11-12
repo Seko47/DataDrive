@@ -20,6 +20,7 @@ namespace DataDrive.Share.Models
 
         public Guid FileID { get; set; }
         public string FileName { get; set; }
+        public FileType FileType { get; set; }
         public string OwnerUsername { get; set; }
     }
 
@@ -29,7 +30,8 @@ namespace DataDrive.Share.Models
         {
             CreateMap<ShareEveryone, ShareEveryoneOut>()
                 .ForMember(fout => fout.FileName, opt => opt.MapFrom(f => f.File.Name))
-                .ForMember(fout => fout.OwnerUsername, opt => opt.MapFrom(f => f.Owner.UserName));
+                .ForMember(fout => fout.OwnerUsername, opt => opt.MapFrom(f => f.Owner.UserName))
+                .ForMember(fout => fout.FileType, opt => opt.MapFrom(f => f.File.FileType));
         }
     }
 }
