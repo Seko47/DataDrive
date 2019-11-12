@@ -94,9 +94,31 @@ namespace DataDrive.Share.Services
             throw new NotImplementedException();
         }
 
-        public Task CancelSharingForEveryone(Guid fileId, string username)
+        public async Task<bool> CancelSharingForEveryone(Guid fileId, string username)
         {
-            throw new NotImplementedException();
+            ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == user.Id);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == user.Id);
+
+            if (fileAbstract == null || shareEveryone == null)
+            {
+                return false;
+            }
+
+            _databaseContext.ShareEveryones.Remove(shareEveryone);
+            fileAbstract.IsSharedForEveryone = false;
+            fileAbstract.IsShared = fileAbstract.IsSharedForUsers;
+
+            await _databaseContext.SaveChangesAsync();
+
+            return !fileAbstract.IsSharedForEveryone &&
+                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.FileID == fileId && _.OwnerID == user.Id));
         }
 
 
