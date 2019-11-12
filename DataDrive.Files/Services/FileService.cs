@@ -142,9 +142,16 @@ namespace DataDrive.Files.Services
         {
             //TODO modify the method so that the file can be downloaded by the owner and the person to whom the file has been made available, and by anyone other (provided that the file is made available to all those who have a link)
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
-            File fileToDownload = await _databaseContext.Files.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+            //File fileToDownload = await _databaseContext.Files.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+            File fileToDownload = await _databaseContext.Files
+                .Include(_ => _.ShareEveryone)
+                .Include(_ => _.ShareForUsers)
+                .FirstOrDefaultAsync(_ => _.ID == id);
 
-            if (fileToDownload == null)
+            if (fileToDownload == null
+                || (fileToDownload.OwnerID != userId
+                && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId))
+                && !fileToDownload.IsSharedForEveryone))
             {
                 return null;
             }
