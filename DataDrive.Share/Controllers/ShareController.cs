@@ -30,9 +30,16 @@ namespace DataDrive.Share.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetSharedByToken(string token)
+        public async Task<IActionResult> GetShareByToken(string token)
         {
-            throw new NotImplementedException();
+            ShareEveryoneOut result = await _shareService.GetShareForEveryoneByToken(token);
+
+            if (result == null)
+            {
+                return NotFound($"Token {token} not found");
+            }
+
+            return Ok(result);
         }
 
         [HttpPost("share/everyone")]

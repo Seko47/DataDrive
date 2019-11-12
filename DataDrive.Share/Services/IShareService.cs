@@ -9,6 +9,7 @@ namespace DataDrive.Share.Services
         Task<bool> IsSharedForUser(Guid fileId, string username);
         Task<bool> IsSharedForEveryone(Guid fileId);
         Task<bool> IsShared(Guid fileId);
+        Task<ShareEveryoneOut> GetShareForEveryoneByToken(string token);
         Task<ShareEveryoneOut> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit);
         Task<string> ShareForUser(Guid fileId, string ownerUsername, string username);
         Task<bool> CancelSharingForEveryone(Guid fileId, string username);

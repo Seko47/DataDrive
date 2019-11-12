@@ -39,6 +39,23 @@ namespace DataDrive.Share.Services
             throw new NotImplementedException();
         }
 
+        public async Task<ShareEveryoneOut> GetShareForEveryoneByToken(string token)
+        {
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
+                .Include(_ => _.Owner)
+                .Include(_ => _.File)
+                .FirstOrDefaultAsync(_ => _.Token == token);
+
+            if (shareEveryone == null)
+            {
+                return null;
+            }
+
+            ShareEveryoneOut shareEveryoneOut = _mapper.Map<ShareEveryoneOut>(shareEveryone);
+
+            return shareEveryoneOut;
+        }
+
         public async Task<ShareEveryoneOut> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit)
         {
             ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
