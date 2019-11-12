@@ -70,6 +70,12 @@ namespace DataDrive.Files.Services
                 return null;
             }
 
+            List<ShareAbstract> shares = await _databaseContext.ShareAbstracts
+                .Where(_ => _.FileID == fileAbstractToDelete.ID)
+                .ToListAsync();
+
+            _databaseContext.ShareAbstracts.RemoveRange(shares);
+
             Guid? parentDirectoryId = fileAbstractToDelete.ParentDirectoryID;
 
             if (fileAbstractToDelete is File)
