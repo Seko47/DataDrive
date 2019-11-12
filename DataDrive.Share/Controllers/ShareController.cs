@@ -30,6 +30,7 @@ namespace DataDrive.Share.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetShareByToken(string token)
         {
             ShareEveryoneOut result = await _shareService.GetShareForEveryoneByToken(token);
