@@ -85,23 +85,18 @@ namespace DataDrive.Share.Services
             return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, shareEveryoneOut);
         }
 
-        public async Task<ShareEveryoneOut> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit)
+        public async Task<StatusCode<ShareEveryoneOut>> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit)
         {
-            ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            if (user == null)
-            {
-                return null;
-            }
-
-            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == user.Id);
+            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
 
             if (fileAbstract == null)
             {
-                return null;
+                return new StatusCode<ShareEveryoneOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == user.Id);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == userId);
 
             if (shareEveryone == null)
             {
@@ -111,7 +106,7 @@ namespace DataDrive.Share.Services
                     DownloadLimit = downloadLimit,
                     ExpirationDateTime = expirationDateTime,
                     FileID = fileId,
-                    OwnerID = user.Id,
+                    OwnerID = userId,
                     Password = password,
                     Token = GenerateToken()
                 };
@@ -132,7 +127,7 @@ namespace DataDrive.Share.Services
 
             ShareEveryoneOut result = _mapper.Map<ShareEveryoneOut>(shareEveryone);
 
-            return result;
+            return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, result);
         }
 
         public Task<string> ShareForUser(Guid fileId, string ownerUsername, string username)

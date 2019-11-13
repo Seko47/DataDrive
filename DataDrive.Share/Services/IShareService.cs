@@ -12,7 +12,7 @@ namespace DataDrive.Share.Services
         Task<bool> IsShared(Guid fileId);
         Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByToken(string token);
         Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByTokenAndPassword(string token, string password);
-        Task<ShareEveryoneOut> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit);
+        Task<StatusCode<ShareEveryoneOut>> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit);
         Task<string> ShareForUser(Guid fileId, string ownerUsername, string username);
         Task<bool> CancelSharingForEveryone(Guid fileId, string username);
     }

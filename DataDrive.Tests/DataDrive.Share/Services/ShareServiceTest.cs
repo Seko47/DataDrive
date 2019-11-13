@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using DataDrive.DAO.Context;
+using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.Share.Models;
 using DataDrive.Share.Services;
 using DataDrive.Tests.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Xunit;
@@ -291,7 +293,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
     public class ShareServiceTest_ShareForEveryone
     {
         [Fact]
-        public async void Returns_ShareEveryoneOut_when_FileSharedForEveryone()
+        public async void Returns_ShareEveryoneOutAndStatus200OK_when_FileSharedForEveryone()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
 
@@ -320,15 +322,17 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             await databaseContext.Files.AddAsync(file);
             await databaseContext.SaveChangesAsync();
 
-            ShareEveryoneOut shareEveryoneOut = await shareService.ShareForEveryone(file.ID, ownerUsername, null, null, null);
+            StatusCode<ShareEveryoneOut> status = await shareService.ShareForEveryone(file.ID, ownerUsername, null, null, null);
 
-            Assert.NotNull(shareEveryoneOut);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
             Assert.True(file.IsShared);
             Assert.True(file.IsSharedForEveryone);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotExist()
+        public async void Returns_Status404NotFound_when_FileNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
 
@@ -346,13 +350,14 @@ namespace DataDrive.Tests.DataDrive.Share.Services
 
             Assert.NotNull(owner);
 
-            ShareEveryoneOut shareEveryoneOut = await shareService.ShareForEveryone(Guid.NewGuid(), ownerUsername, null, null, null);
+            StatusCode<ShareEveryoneOut> status = await shareService.ShareForEveryone(Guid.NewGuid(), ownerUsername, null, null, null);
 
-            Assert.Null(shareEveryoneOut);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotBelongsToLoggedUser()
+        public async void Returns_Status404NotFound_when_FileNotBelongsToLoggedUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
 
@@ -381,9 +386,10 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             await databaseContext.Files.AddAsync(file);
             await databaseContext.SaveChangesAsync();
 
-            ShareEveryoneOut shareEveryoneOut = await shareService.ShareForEveryone(file.ID, ownerUsername, null, null, null);
+            StatusCode<ShareEveryoneOut> status = await shareService.ShareForEveryone(file.ID, ownerUsername, null, null, null);
 
-            Assert.Null(shareEveryoneOut);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
     }
 
