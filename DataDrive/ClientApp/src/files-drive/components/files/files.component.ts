@@ -12,6 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { filter } from 'rxjs/operators';
+import { ShareFileDialogComponent } from '../share-file-dialog/share-file-dialog.component';
 
 @Component({
     selector: 'drive-files',
@@ -28,7 +29,7 @@ export class FilesComponent implements OnInit, OnDestroy {
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
 
 
-    constructor(private changeFileNameDialogDialog: MatDialog, private filesService: FilesService, private filesEventService: FilesEventService) {
+    constructor(private dialog: MatDialog, private filesService: FilesService, private filesEventService: FilesEventService) {
 
         this.actualDirectory = new DirectoryOut();
         this.actualDirectory.id = null;
@@ -67,6 +68,12 @@ export class FilesComponent implements OnInit, OnDestroy {
                     this.downloadFile(fileId);
                     break;
                 }
+                case FilesEventCode.SHARE: {
+
+                    this.openShareFileDialog(fileId);
+
+                    break;
+                }
             }
         });
     }
@@ -77,7 +84,7 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     public openChangeFileNameDialog(fileId: string, oldFileName: string) {
 
-        this.changeFileNameDialogRef = this.changeFileNameDialogDialog.open(ChangeFileNameDialogComponent, {
+        this.changeFileNameDialogRef = this.dialog.open(ChangeFileNameDialogComponent, {
             hasBackdrop: true,
             data: {
                 filename: oldFileName
@@ -91,6 +98,28 @@ export class FilesComponent implements OnInit, OnDestroy {
 
                 this.changeFileName(fileId, newFileName);
             }, err => alert(err.error));
+    }
+
+    public openShareFileDialog(fileId: string) {
+
+        this.filesService.getFileInfo(fileId)
+            .subscribe(result => {
+
+                const file: FileOut = result;
+
+                if (file) {
+                    const dialogRef = this.dialog.open(ShareFileDialogComponent, {
+                        hasBackdrop: true,
+                        data: {
+                            file: file
+                        }
+                    });
+
+                    dialogRef.afterClosed().subscribe(result => {
+                        console.log(result);
+                    }, err => alert(err.error));
+                }
+            });
     }
 
     public getFromDirectory(id: string) {

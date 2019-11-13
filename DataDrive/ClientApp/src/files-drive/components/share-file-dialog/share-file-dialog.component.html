@@ -1,0 +1,29 @@
+<form (ngSubmit)="onSubmit()">
+
+  <h1 mat-dialog-title>{{ 'FILES.SHARE_FILE_DIALOG.TITLE' | translate }}</h1>
+
+  <div mat-dialog-content>
+
+    <mat-form-field>
+
+      <input matInput
+             required
+             readonly="readonly"
+             style="width: 100%;"
+             placeholder="{{ 'FILES.SHARE_FILE_DIALOG.URL_TO_SHARE' | translate }}" />
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+
+    <button mat-button
+            type="submit">
+      {{ 'DIALOG.SAVE_BUTTON' | translate }}
+    </button>
+  </div>
+</form>
+
+<button mat-button
+        mat-dialog-close>
+  {{ 'DIALOG.CANCEL_BUTTON' | translate }}
+</button>

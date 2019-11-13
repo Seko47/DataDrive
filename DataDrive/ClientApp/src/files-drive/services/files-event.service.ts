@@ -27,5 +27,6 @@ export enum FilesEventCode {
     NONE = 0,
     RENAME = 1,
     DOWNLOAD = 2,
-    DELETE = 3
+    DELETE = 3,
+    SHARE = 4
 }

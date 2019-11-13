@@ -18,7 +18,8 @@
 		"CONTEXT_MENU": {
 			"DELETE": "Usuń",
 			"DOWNLOAD": "Pobierz",
-			"RENAME": "Zmień nazwę"
+			"RENAME": "Zmień nazwę",
+			"SHARE": "Udostępnianie"
 		},
 		"CREATED": "Utworzono",
 		"CREATE_DIRECTORY_DIALOG": {
@@ -27,7 +28,11 @@
 			"TITLE": "Nowy folder"
 		},
 		"DIRECTORY_IS_EMPTY": "Folder jest pusty",
-		"MODIFIED": "Zmodyfikowano"
+		"MODIFIED": "Zmodyfikowano",
+		"SHARE_FILE_DIALOG": {
+			"TITLE": "Udostępnianie",
+			"URL_TO_SHARE": "Link do udostępniania"
+		}
 	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",

@@ -56,6 +56,11 @@ export class FilesListContentComponent implements OnInit {
         this.filesEventService.emit([FilesEventCode.RENAME, fileId, oldFileName]);
     }
 
+    public shareFile(fileId: string) {
+
+        this.filesEventService.emit([FilesEventCode.SHARE, fileId]);
+    }
+
     public clickFile(file: FileOut) {
         this.onFileClick.emit(file);
     }

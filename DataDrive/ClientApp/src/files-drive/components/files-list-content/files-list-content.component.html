@@ -50,6 +50,9 @@
     <mat-card class="card mt-2 mb-2"
               title="{{ file.name }}">
 
+      <mat-icon style="position: absolute; right:5px; top:5px"
+                *ngIf="file.isShared">people</mat-icon>
+
       <mat-card-content class="mt-2"
                         style="text-align: center">
 
@@ -90,6 +93,15 @@
       <button mat-button style="width: 100%">
         <mat-icon>get_app</mat-icon>
         {{ 'FILES.CONTEXT_MENU.DOWNLOAD' | translate }}
+      </button>
+    </ng-template>
+
+    <ng-template contextMenuItem let-item (execute)="shareFile($event.item.id)"
+                 [visible]="isNotDirectory">
+
+      <button mat-button style="width: 100%">
+        <mat-icon>share</mat-icon>
+        {{ 'FILES.CONTEXT_MENU.SHARE' | translate }}
       </button>
     </ng-template>
 

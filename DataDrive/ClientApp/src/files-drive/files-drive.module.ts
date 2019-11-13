@@ -10,10 +10,11 @@ import { FilesListSidenavComponent } from './components/files-list-sidenav/files
 import { CreateDirectoryDialogComponent } from './components/create-directory-dialog/create-directory-dialog.component';
 import { ChangeFileNameDialogComponent } from './components/change-file-name-dialog/change-file-name-dialog.component';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { ShareFileDialogComponent } from './components/share-file-dialog/share-file-dialog.component';
 
 
 @NgModule({
-    declarations: [FilesComponent, ToolbarComponent, FilesListContentComponent, FilesListSidenavComponent, CreateDirectoryDialogComponent, ChangeFileNameDialogComponent],
+    declarations: [FilesComponent, ToolbarComponent, FilesListContentComponent, FilesListSidenavComponent, CreateDirectoryDialogComponent, ChangeFileNameDialogComponent, ShareFileDialogComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -22,6 +23,6 @@ import { ContextMenuModule } from 'ngx-contextmenu';
             { path: 'drive/files', component: FilesComponent, canActivate: [AuthorizeGuard] },
         ])
     ],
-    entryComponents: [CreateDirectoryDialogComponent, ChangeFileNameDialogComponent]
+    entryComponents: [CreateDirectoryDialogComponent, ChangeFileNameDialogComponent, ShareFileDialogComponent]
 })
 export class FilesDriveModule { }
