@@ -1049,16 +1049,11 @@ namespace DataDrive.Tests.DataDrive.Files.Services
     public class FileServiceTest_PostByUser
     {
         [Fact]
-        public async void Returns_ListOfFileUploadResult_when_UploadedMultipleFile()
+        public async void Returns_ListOfFileUploadResultAndStatus200OK_when_UploadedMultipleFile()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
-            MapperConfiguration configuration = new MapperConfiguration(conf =>
-            {
 
-            });
-            IMapper mapper = configuration.CreateMapper();
-
-            IFileService fileService = new FileService(databaseContext, mapper);
+            IFileService fileService = new FileService(databaseContext, null);
 
             string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
 
@@ -1086,10 +1081,12 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 }
             };
 
-            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+            StatusCode<List<FileUploadResult>> status = await fileService.PostByUser(filePost, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(filePost.Files.Count(), result.Count());
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(filePost.Files.Count(), status.Body.Count());
 
             Assert.True(databaseContext.Files
                 .Any(_ => _.ParentDirectoryID == directory.ID && _.Name == "file1.txt"));
@@ -1098,16 +1095,11 @@ namespace DataDrive.Tests.DataDrive.Files.Services
         }
 
         [Fact]
-        public async void Returns_ListOfFileUploadResult_when_UploadedSingleFile()
+        public async void Returns_ListOfFileUploadResultAndStatus200OK_when_UploadedSingleFile()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
-            MapperConfiguration configuration = new MapperConfiguration(conf =>
-            {
 
-            });
-            IMapper mapper = configuration.CreateMapper();
-
-            IFileService fileService = new FileService(databaseContext, mapper);
+            IFileService fileService = new FileService(databaseContext, null);
 
             string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
 
@@ -1132,26 +1124,23 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 }
             };
 
-            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+            StatusCode<List<FileUploadResult>> status = await fileService.PostByUser(filePost, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(filePost.Files.Count(), result.Count());
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(filePost.Files.Count(), status.Body.Count());
 
             Assert.True(databaseContext.Files
                 .Any(_ => _.ParentDirectoryID == directory.ID && _.Name == "file1.txt"));
         }
 
         [Fact]
-        public async void Returns_ListOfFileUploadResult_when_ParentDirectoryIsNull()
+        public async void Returns_ListOfFileUploadResultAndStatus200OK_when_ParentDirectoryIsNull()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
-            MapperConfiguration configuration = new MapperConfiguration(conf =>
-            {
 
-            });
-            IMapper mapper = configuration.CreateMapper();
-
-            IFileService fileService = new FileService(databaseContext, mapper);
+            IFileService fileService = new FileService(databaseContext, null);
 
             string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
 
@@ -1165,26 +1154,23 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 }
             };
 
-            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+            StatusCode<List<FileUploadResult>> status = await fileService.PostByUser(filePost, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(filePost.Files.Count(), result.Count());
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(filePost.Files.Count(), status.Body.Count());
 
             Assert.True(databaseContext.Files
                 .Any(_ => _.ParentDirectoryID == null && _.Name == "file1.txt"));
         }
 
         [Fact]
-        public async void Returns_Null_when_ParentDirectoryNotExist()
+        public async void Returns_Status404NotFound_when_ParentDirectoryNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
-            MapperConfiguration configuration = new MapperConfiguration(conf =>
-            {
 
-            });
-            IMapper mapper = configuration.CreateMapper();
-
-            IFileService fileService = new FileService(databaseContext, mapper);
+            IFileService fileService = new FileService(databaseContext, null);
 
             string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
 
@@ -1199,22 +1185,18 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 }
             };
 
-            List<FileUploadResult> result = await fileService.PostByUser(filePost, "admin@admin.com");
+            StatusCode<List<FileUploadResult>> status = await fileService.PostByUser(filePost, "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_ParentDirectoryNotBelongsToUser()
+        public async void Returns_Status404NotFound_when_ParentDirectoryNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
-            MapperConfiguration configuration = new MapperConfiguration(conf =>
-            {
 
-            });
-            IMapper mapper = configuration.CreateMapper();
-
-            IFileService fileService = new FileService(databaseContext, mapper);
+            IFileService fileService = new FileService(databaseContext, null);
 
             string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
 
@@ -1238,9 +1220,10 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 }
             };
 
-            List<FileUploadResult> result = await fileService.PostByUser(filePost, "user@user.com");
+            StatusCode<List<FileUploadResult>> status = await fileService.PostByUser(filePost, "user@user.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
     }
 }

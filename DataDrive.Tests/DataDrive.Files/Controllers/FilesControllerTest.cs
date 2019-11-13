@@ -347,12 +347,12 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
     public class FilesControllerTest_Post
     {
         [Fact]
-        public async void Returns_OkObjectResult200()
+        public async void Returns_OkObjectResult200_when_Success()
         {
-            Mock<List<FileUploadResult>> fileUploadResults = new Mock<List<FileUploadResult>>();
+            StatusCode<List<FileUploadResult>> status = new StatusCode<List<FileUploadResult>>(StatusCodes.Status200OK);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(fileUploadResults.Object));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 
@@ -379,7 +379,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             List<FileUploadResult> fileUploadResults = new List<FileUploadResult>();
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(fileUploadResults));
+                .Returns(Task.FromResult(new StatusCode<List<FileUploadResult>>(StatusCodes.Status200OK, fileUploadResults)));
 
             string username = "admin@admin.com";
 
@@ -406,10 +406,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_BadRequestObjectResult_when_FilePostFilesEqualNull()
         {
-            Mock<List<FileUploadResult>> fileUploadResults = new Mock<List<FileUploadResult>>();
+            StatusCode<List<FileUploadResult>> fileUploadResults = new StatusCode<List<FileUploadResult>>(StatusCodes.Status200OK);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(fileUploadResults.Object));
+                .Returns(Task.FromResult(fileUploadResults));
 
             string username = "admin@admin.com";
 
@@ -430,10 +430,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_BadRequestObjectResult_when_FilePostFilesEmpty()
         {
-            Mock<List<FileUploadResult>> fileUploadResults = new Mock<List<FileUploadResult>>();
+            StatusCode<List<FileUploadResult>> fileUploadResults = new StatusCode<List<FileUploadResult>>(StatusCodes.Status200OK);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(fileUploadResults.Object));
+                .Returns(Task.FromResult(fileUploadResults));
 
             string username = "admin@admin.com";
 
@@ -454,10 +454,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_NotFoundObjectResult_when_ParentDirectoryNotExistsOrNotBelongsToUser()
         {
-            List<FileUploadResult> fileUploadResults = null;
+            StatusCode<List<FileUploadResult>> status = new StatusCode<List<FileUploadResult>>(StatusCodes.Status404NotFound);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.PostByUser(It.IsAny<FilePost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(fileUploadResults));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 

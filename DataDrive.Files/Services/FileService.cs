@@ -264,7 +264,7 @@ namespace DataDrive.Files.Services
             return new StatusCode<FileOut>(StatusCodes.Status200OK, result);
         }
 
-        public async Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username)
+        public async Task<StatusCode<List<FileUploadResult>>> PostByUser(FilePost filePost, string username)
         {
             string userId = (await _databaseContext.Users
                 .FirstOrDefaultAsync(_ => _.UserName == username))?
@@ -275,7 +275,7 @@ namespace DataDrive.Files.Services
 
             if (directory == null && filePost.ParentDirectoryID != null)
             {
-                return null;
+                return new StatusCode<List<FileUploadResult>>(StatusCodes.Status404NotFound, StatusMessages.PARENT_DIRECTORY_NOT_FOUND);
             }
 
             try
@@ -321,11 +321,11 @@ namespace DataDrive.Files.Services
                     fileStream.Close();
                 }
 
-                return result;
+                return new StatusCode<List<FileUploadResult>>(StatusCodes.Status200OK, result);
             }
             catch
             {
-                return null;
+                return new StatusCode<List<FileUploadResult>>(StatusCodes.Status500InternalServerError, StatusMessages.FAILED_TO_SAVE_FILES);
             }
 
         }

@@ -15,7 +15,7 @@ namespace DataDrive.Files.Services
         Task<StatusCode<DownloadFileInfo>> DownloadByIdAndUser(Guid id, string username);
         Task<StatusCode<DirectoryOut>> DeleteByIdAndUser(Guid id, string username);
         Task<StatusCode<FileOut>> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username);
-        Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username);
+        Task<StatusCode<List<FileUploadResult>>> PostByUser(FilePost filePost, string username);
         Task<StatusCode<DirectoryOut>> GetDirectoryByIdAndUser(Guid? id, string username);
         Task<StatusCode<DirectoryOut>> CreateDirectoryByUser(DirectoryPost directoryPost, string username);
     }
