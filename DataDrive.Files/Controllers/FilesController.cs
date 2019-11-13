@@ -134,18 +134,18 @@ namespace DataDrive.Files.Controllers
 
         [HttpPatch("{id}")]
         [Produces("application/json")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<FilePatch> jsonPatch)
         {
-            FileOut file = await _fileService.PatchByIdAndFilePatchAndUser(id, jsonPatch, _userManager.GetUserName(User));
+            StatusCode<FileOut> status = await _fileService.PatchByIdAndFilePatchAndUser(id, jsonPatch, _userManager.GetUserName(User));
 
-            if (file == null)
+            if (status.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"File {id} not found");
             }
 
-            return Ok(file);
+            return Ok(status.Body);
         }
 
         [HttpPost, DisableRequestSizeLimit]

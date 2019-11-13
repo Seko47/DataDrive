@@ -858,7 +858,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
     public class FileServiceTest_PatchByIdAndFilePatchAndUser
     {
         [Fact]
-        public async void Returns_PatchedFileOut_when_ChangedParentDirectory()
+        public async void Returns_PatchedFileOutAndStatus200OK_when_ChangedParentDirectory()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration configuration = new MapperConfiguration(conf =>
@@ -874,7 +874,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory",
                 OwnerID = userId,
             };
@@ -883,7 +883,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToMove = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -894,15 +894,17 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
             jsonPatchDocument.Add(_ => _.ParentDirectoryID, directory.ID);
 
-            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToMove.ID, jsonPatchDocument, "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.PatchByIdAndFilePatchAndUser(fileToMove.ID, jsonPatchDocument, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(directory.ID, result.ParentDirectoryID);
-            Assert.Equal(fileToMove.Name, result.Name);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(directory.ID, status.Body.ParentDirectoryID);
+            Assert.Equal(fileToMove.Name, status.Body.Name);
         }
 
         [Fact]
-        public async void Returns_PatchedFileOut_when_ChangedName()
+        public async void Returns_PatchedFileOutAndStatus200OK_when_ChangedName()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration configuration = new MapperConfiguration(conf =>
@@ -918,7 +920,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToChange = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -931,15 +933,17 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
             jsonPatchDocument.Add(_ => _.Name, newFileName);
 
-            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(fileToChange.ParentDirectoryID, result.ParentDirectoryID);
-            Assert.Equal(newFileName, result.Name);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(fileToChange.ParentDirectoryID, status.Body.ParentDirectoryID);
+            Assert.Equal(newFileName, status.Body.Name);
         }
 
         [Fact]
-        public async void Returns_PatchedFileOut_when_ChangedNameAndParentDirectory()
+        public async void Returns_PatchedFileOutAndStatus200OK_when_ChangedNameAndParentDirectory()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration configuration = new MapperConfiguration(conf =>
@@ -955,7 +959,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory",
                 OwnerID = userId,
             };
@@ -964,7 +968,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToChange = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -978,15 +982,17 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             jsonPatchDocument.Add(_ => _.ParentDirectoryID, directory.ID);
             jsonPatchDocument.Add(_ => _.Name, newFileName);
 
-            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(directory.ID, result.ParentDirectoryID);
-            Assert.Equal(newFileName, result.Name);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(directory.ID, status.Body.ParentDirectoryID);
+            Assert.Equal(newFileName, status.Body.Name);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotBelongsToUser()
+        public async void Returns_Status404NotFound_when_FileNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration configuration = new MapperConfiguration(conf =>
@@ -1001,7 +1007,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToChange = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -1012,13 +1018,14 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
             jsonPatchDocument.Add(_ => _.Name, "newName");
 
-            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "user@user.com");
+            StatusCode<FileOut> status = await fileService.PatchByIdAndFilePatchAndUser(fileToChange.ID, jsonPatchDocument, "user@user.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotExist()
+        public async void Returns_Status404NotFound_when_FileNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration configuration = new MapperConfiguration(conf =>
@@ -1032,9 +1039,10 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             JsonPatchDocument<FilePatch> jsonPatchDocument = new JsonPatchDocument<FilePatch>();
             jsonPatchDocument.Add(_ => _.Name, "newName");
 
-            FileOut result = await fileService.PatchByIdAndFilePatchAndUser(Guid.NewGuid(), jsonPatchDocument, "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.PatchByIdAndFilePatchAndUser(Guid.NewGuid(), jsonPatchDocument, "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
     }
 

@@ -240,7 +240,7 @@ namespace DataDrive.Files.Services
             return new StatusCode<DirectoryOut>(StatusCodes.Status200OK, result);
         }
 
-        public async Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username)
+        public async Task<StatusCode<FileOut>> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
@@ -248,7 +248,7 @@ namespace DataDrive.Files.Services
 
             if (fileAbstract == null)
             {
-                return null;
+                return new StatusCode<FileOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
             JsonPatchDocument<FileAbstract> fileAbstractPatch = _mapper.Map<JsonPatchDocument<FileAbstract>>(jsonPatchDocument);
@@ -261,7 +261,7 @@ namespace DataDrive.Files.Services
 
             FileOut result = _mapper.Map<FileOut>(await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id));
 
-            return result;
+            return new StatusCode<FileOut>(StatusCodes.Status200OK, result);
         }
 
         public async Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username)
