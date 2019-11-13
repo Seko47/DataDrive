@@ -1,5 +1,6 @@
 ﻿using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
+using DataDrive.Files.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
@@ -98,18 +99,14 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Download(Guid id)
         {
-            Tuple<string, byte[], string> tuple = await _fileService.DownloadByIdAndUser(id, _userManager.GetUserName(User));
+            StatusCode<DownloadFileInfo> status = await _fileService.DownloadByIdAndUser(id, _userManager.GetUserName(User));
 
-            if (tuple == null)
+            if (status.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"File {id} not found");
             }
 
-            string fileName = tuple.Item1;
-            byte[] content = tuple.Item2;
-            string contentType = tuple.Item3;//"application/octet-stream";
-
-            return File(content, contentType, fileName);
+            return File(status.Body.FileContent, status.Body.ContentType, status.Body.FileName);
         }
 
         [HttpDelete("{id}")]

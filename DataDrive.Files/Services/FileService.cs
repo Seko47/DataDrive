@@ -3,6 +3,7 @@ using DataDrive.DAO.Context;
 using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
+using DataDrive.Files.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using Microsoft.AspNetCore.Http;
@@ -138,11 +139,10 @@ namespace DataDrive.Files.Services
             return new StatusCode<DirectoryOut>(StatusCodes.Status200OK, StatusMessages.FILE_DELETED, parentDirectoryOutResult);
         }
 
-        public async Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username)
+        public async Task<StatusCode<DownloadFileInfo>> DownloadByIdAndUser(Guid id, string username)
         {
-            //TODO modify the method so that the file can be downloaded by the owner and the person to whom the file has been made available, and by anyone other (provided that the file is made available to all those who have a link)
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
-            //File fileToDownload = await _databaseContext.Files.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+
             File fileToDownload = await _databaseContext.Files
                 .Include(_ => _.ShareEveryone)
                 .Include(_ => _.ShareForUsers)
@@ -153,19 +153,14 @@ namespace DataDrive.Files.Services
                 && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId))
                 && !fileToDownload.IsSharedForEveryone))
             {
-                return null;
-            }
-
-            //Get MIME type
-            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileToDownload.Name, out string contentType))
-            {
-                contentType = "application/octet-stream";
+                return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
             byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);
 
-            return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
+            DownloadFileInfo downloadFileInfo = new DownloadFileInfo(fileToDownload.Name, fileContent);
+
+            return new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, downloadFileInfo);
         }
 
         public async Task<FileOut> GetByIdAndUser(Guid id, string username)

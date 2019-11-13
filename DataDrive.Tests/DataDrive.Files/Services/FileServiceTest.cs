@@ -3,6 +3,7 @@ using DataDrive.DAO.Context;
 using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
+using DataDrive.Files.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
@@ -347,7 +348,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
         }
 
         [Fact]
-        public async void Returns_TupleFileNameContentArrayContentType()
+        public async void Returns_DownloadFileInfoAndStatus200OK_when_SuccessDownload()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             IFileService fileService = new FileService(databaseContext, null);
@@ -364,7 +365,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDownload = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "ToDownload.txt",
                 OwnerID = userId,
                 ParentDirectoryID = null,
@@ -385,17 +386,18 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             }
 
             byte[] fileContent = System.IO.File.ReadAllBytes(pathToFile);
-            //return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
 
-            Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(fileToDownload.ID, "admin@admin.com");
+            StatusCode<DownloadFileInfo> status = await fileService.DownloadByIdAndUser(fileToDownload.ID, "admin@admin.com");
 
-            Assert.Equal(fileToDownload.Name, result.Item1);
-            Assert.Equal(fileContent, result.Item2);
-            Assert.Equal(contentType, result.Item3);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.Equal(fileToDownload.Name, status.Body.FileName);
+            Assert.Equal(fileContent, status.Body.FileContent);
+            Assert.Equal(contentType, status.Body.ContentType);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotBelongsToUser()
+        public async void Returns_Status404NotFound_when_FileNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             IFileService fileService = new FileService(databaseContext, null);
@@ -412,7 +414,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDownload = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "ToDownload.txt",
                 OwnerID = userId,
                 ParentDirectoryID = null,
@@ -425,30 +427,22 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDownload.ID));
 
-            //Get MIME type
-            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileToDownload.Name, out string contentType))
-            {
-                contentType = "application/octet-stream";
-            }
+            StatusCode<DownloadFileInfo> status = await fileService.DownloadByIdAndUser(fileToDownload.ID, "user@user.com");
 
-            byte[] fileContent = System.IO.File.ReadAllBytes(pathToFile);
-            //return new Tuple<string, byte[], string>(fileToDownload.Name, fileContent, contentType);
-
-            Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(fileToDownload.ID, "user@user.com");
-
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotExist()
+        public async void Returns_Status404NotFound_when_FileNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             IFileService fileService = new FileService(databaseContext, null);
 
-            Tuple<string, byte[], string> result = await fileService.DownloadByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+            StatusCode<DownloadFileInfo> status = await fileService.DownloadByIdAndUser(Guid.NewGuid(), "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
     }
 

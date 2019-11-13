@@ -1,5 +1,6 @@
 ﻿using DataDrive.DAO.Helpers.Communication;
 using DataDrive.Files.Controllers;
+using DataDrive.Files.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
@@ -158,13 +159,12 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_OkObjectResult200_when_FileExistAndBelongsToUser()
         {
-            string contentType = "application/octet-stream";
             byte[] content = Encoding.UTF8.GetBytes("File content ...");
             string fileName = "file.txt";
 
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
+                .Returns(Task.FromResult(new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, new DownloadFileInfo(fileName, content))));
 
             string username = "admin@admin.com";
 
@@ -179,13 +179,12 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_DownloadingFile_when_FileExistAndBelongsToUser()
         {
-            string contentType = "application/octet-stream";
             byte[] content = Encoding.UTF8.GetBytes("File content ...");
             string fileName = "file.txt";
 
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(new Tuple<string, byte[], string>(fileName, content, contentType)));
+                .Returns(Task.FromResult(new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, new DownloadFileInfo(fileName, content))));
 
             string username = "admin@admin.com";
 
@@ -205,11 +204,11 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUSer()
         {
-            Tuple<string, byte[], string> tuple = null;
+            StatusCode<DownloadFileInfo> status = new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound);
 
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.DownloadByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(tuple));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 
