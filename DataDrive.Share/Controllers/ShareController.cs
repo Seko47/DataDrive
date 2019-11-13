@@ -32,7 +32,7 @@ namespace DataDrive.Share.Controllers
         [ProducesResponseType(404)]
         [AllowAnonymous]
         public async Task<IActionResult> GetShareByToken(string token)
-        {
+        {//TODO obsługa hasła
             ShareEveryoneOut result = await _shareService.GetShareForEveryoneByToken(token);
 
             if (result == null)
