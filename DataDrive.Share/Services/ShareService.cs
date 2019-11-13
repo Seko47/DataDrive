@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using DataDrive.DAO.Context;
+using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using DataDrive.Share.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -39,7 +41,7 @@ namespace DataDrive.Share.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ShareEveryoneOut> GetShareForEveryoneByToken(string token)
+        public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByToken(string token)
         {
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
                 .Include(_ => _.Owner)
@@ -48,12 +50,39 @@ namespace DataDrive.Share.Services
 
             if (shareEveryone == null)
             {
-                return null;
+                return new StatusCode<ShareEveryoneOut>(StatusCodes.Status404NotFound, StatusMessages.TOKEN_NOT_FOUND);
+            }
+
+            if (!String.IsNullOrEmpty(shareEveryone.Password))
+            {
+                return new StatusCode<ShareEveryoneOut>(StatusCodes.Status401Unauthorized, StatusMessages.PASSWORD_REQUIRED);
             }
 
             ShareEveryoneOut shareEveryoneOut = _mapper.Map<ShareEveryoneOut>(shareEveryone);
 
-            return shareEveryoneOut;
+            return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, shareEveryoneOut);
+        }
+
+        public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByTokenAndPassword(string token, string password)
+        {
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
+                .Include(_ => _.Owner)
+                .Include(_ => _.File)
+                .FirstOrDefaultAsync(_ => _.Token == token);
+
+            if (shareEveryone == null)
+            {
+                return new StatusCode<ShareEveryoneOut>(StatusCodes.Status404NotFound, StatusMessages.TOKEN_NOT_FOUND);
+            }
+
+            if (shareEveryone.Password != password)
+            {
+                return new StatusCode<ShareEveryoneOut>(StatusCodes.Status401Unauthorized, StatusMessages.PASSWORD_IS_WRONG);
+            }
+
+            ShareEveryoneOut shareEveryoneOut = _mapper.Map<ShareEveryoneOut>(shareEveryone);
+
+            return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, shareEveryoneOut);
         }
 
         public async Task<ShareEveryoneOut> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit)

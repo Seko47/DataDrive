@@ -46,5 +46,8 @@ namespace DataDrive.DAO.Helpers.Communication
         public static readonly string FILE_DELETED = "File deleted";
         public static readonly string DIRECTORY_NOT_FOUND = "Directory not found";
         public static readonly string FAILED_TO_SAVE_FILES = "Failed to save files";
+        public static readonly string TOKEN_NOT_FOUND = "Token not found";
+        public static readonly string PASSWORD_REQUIRED = "Password required";
+        public static readonly string PASSWORD_IS_WRONG = "Password is wrong";
     }
 }

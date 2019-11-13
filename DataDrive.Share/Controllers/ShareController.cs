@@ -1,8 +1,10 @@
-﻿using DataDrive.DAO.Models;
+﻿using DataDrive.DAO.Helpers.Communication;
+using DataDrive.DAO.Models;
 using DataDrive.Share.Models;
 using DataDrive.Share.Models.In;
 using DataDrive.Share.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,18 +31,47 @@ namespace DataDrive.Share.Controllers
         [HttpGet("{token}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [AllowAnonymous]
         public async Task<IActionResult> GetShareByToken(string token)
-        {//TODO obsługa hasła
-            ShareEveryoneOut result = await _shareService.GetShareForEveryoneByToken(token);
+        {
+            StatusCode<ShareEveryoneOut> status = await _shareService.GetShareForEveryoneByToken(token);
 
-            if (result == null)
+            if (status.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"Token {token} not found");
             }
 
-            return Ok(result);
+            if (status.Code == StatusCodes.Status401Unauthorized)
+            {
+                return Unauthorized($"Password required for token {token}");
+            }
+
+            return Ok(status.Body);
+        }
+
+        [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetShareByTokenAndPassword(string token, string password)
+        {
+            StatusCode<ShareEveryoneOut> status = await _shareService.GetShareForEveryoneByTokenAndPassword(token, password);
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound($"Token {token} not found");
+            }
+
+            if (status.Code == StatusCodes.Status401Unauthorized)
+            {
+                return Unauthorized($"Password for token {token} is wrong");
+            }
+
+            return Ok(status.Body);
         }
 
         [HttpPost("share/everyone")]
