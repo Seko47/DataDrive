@@ -6,6 +6,9 @@ export class FileOut {
     public parentDirectoryName: string;
     public name: string;
     public fileType: FileType;
+    public isShared: boolean;
+    public isSharedForEveryone: boolean;
+    public isSharedForUsers: boolean;
 }
 
 export enum FileType {
