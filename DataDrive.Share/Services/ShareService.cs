@@ -41,6 +41,7 @@ namespace DataDrive.Share.Services
             throw new NotImplementedException();
         }
 
+
         public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByToken(string token)
         {
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
@@ -130,22 +131,12 @@ namespace DataDrive.Share.Services
             return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, result);
         }
 
-        public Task<string> ShareForUser(Guid fileId, string ownerUsername, string username)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> CancelSharingForEveryone(Guid fileId, string username)
         {
-            ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            if (user == null)
-            {
-                return false;
-            }
-
-            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == user.Id);
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == user.Id);
+            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == userId);
 
             if (fileAbstract == null || shareEveryone == null)
             {
@@ -159,7 +150,13 @@ namespace DataDrive.Share.Services
             await _databaseContext.SaveChangesAsync();
 
             return !fileAbstract.IsSharedForEveryone &&
-                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.FileID == fileId && _.OwnerID == user.Id));
+                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.FileID == fileId && _.OwnerID == userId));
+        }
+
+
+        public Task<string> ShareForUser(Guid fileId, string ownerUsername, string username)
+        {
+            throw new NotImplementedException();
         }
 
 
