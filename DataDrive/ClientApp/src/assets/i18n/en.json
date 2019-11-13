@@ -30,7 +30,11 @@
 		"DIRECTORY_IS_EMPTY": "Directory is empty",
 		"MODIFIED": "Modified",
 		"SHARE_FILE_DIALOG": {
+			"DOWNLOAD_LIMIT": "Download limit",
+			"EXPIRATION_DATE": "Expiration date",
+			"PASSWORD": "Password",
 			"TITLE": "Sharing",
+			"TOKEN_SHARING_FORM": "Przełącz udostępnianie linku",
 			"URL_TO_SHARE": "Link to sharing"
 		}
 	},

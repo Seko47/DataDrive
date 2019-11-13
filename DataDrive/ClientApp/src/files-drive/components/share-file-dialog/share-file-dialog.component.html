@@ -2,15 +2,72 @@
 <div>
   <h1 mat-dialog-title>{{ 'FILES.SHARE_FILE_DIALOG.TITLE' | translate }}</h1>
 
-  <form (ngSubmit)="onSubmit()">
+  <mat-slide-toggle [checked]="shareEveryoneSliderChecked"
+                    (change)="toggleFileSharingByToken($event)">
+    {{ 'FILES.SHARE_FILE_DIALOG.TOKEN_SHARING_FORM' | translate }}
+  </mat-slide-toggle>
+
+  <form (ngSubmit)="saveShareForEveryone()" *ngIf="shareEveryoneSliderChecked && shareEveryoneOut">
+
     <div mat-dialog-content>
 
-      <mat-slide-toggle [checked]="shareEveryoneSliderChecked"
-                        (change)="toggleFileSharingByToken($event)">
-        {{ 'FILES.SHARE_FILE_DIALOG.TOKEN_SHARING_FORM' | translate }}
-      </mat-slide-toggle>
+      <mat-form-field class="col-sm-10 mr-auto">
 
-      <mat-form-field *ngIf="shareEveryoneSliderChecked && shareEveryoneOut">
+        <input matInput
+               readonly="readonly"
+               value="{{ shareEveryoneOut?.token }}"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.URL_TO_SHARE' | translate }}" />
+      </mat-form-field>
+      &nbsp;
+      <mat-icon class="col-sm-1 ml-auto">file_copy</mat-icon>
+
+      <mat-form-field class="col-sm-4 mr-auto">
+        <input matInput
+               [matDatepicker]="myDatepicker"
+               [value]="shareForEveryoneIn.expirationDateTime"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.EXPIRATION_DATE' | translate }}">
+        <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #myDatepicker></mat-datepicker>
+      </mat-form-field>
+      
+      <mat-form-field class="col-sm-4 ml-auto mr-auto">
+        <input matInput
+               style="width: 100%;"
+               type="number"
+               min="1"
+               value="{{ shareEveryoneOut?.downloadLimit }}"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.DOWNLOAD_LIMIT' | translate }}" />
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-4 ml-auto">
+        <input matInput
+               type="password"
+               value="{{ shareEveryoneOut?.password }}"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.PASSWORD' | translate }}" />
+      </mat-form-field>
+
+    </div>
+
+    <div mat-dialog-actions>
+
+      <button mat-button
+              type="submit" class="mr-auto ml-auto">
+        {{ 'DIALOG.SAVE_BUTTON' | translate }}
+      </button>
+    </div>
+  </form>
+  <br />
+  <hr />
+  <div mat-dialog-content>
+
+    <mat-slide-toggle [checked]="shareEveryoneSliderChecked"
+                      (change)="toggleFileSharingByToken($event)">
+      {{ 'FILES.SHARE_FILE_DIALOG.TOKEN_SHARING_FORM' | translate }}
+    </mat-slide-toggle>
+
+    <form (ngSubmit)="onSubmit()" *ngIf="shareEveryoneSliderChecked && shareEveryoneOut">
+
+      <mat-form-field>
 
         <input matInput
                #tokenInput
@@ -20,21 +77,16 @@
                value="{{ shareEveryoneOut?.token }}"
                placeholder="{{ 'FILES.SHARE_FILE_DIALOG.URL_TO_SHARE' | translate }}" />
       </mat-form-field>
+    </form>
 
 
-    </div>
+  </div>
 
-    <div mat-dialog-actions>
+  <div mat-dialog-actions>
 
-      <button mat-button
-              type="submit">
-        {{ 'DIALOG.SAVE_BUTTON' | translate }}
-      </button>
-    </div>
-  </form>
-
-  <button mat-button
-          mat-dialog-close>
-    {{ 'DIALOG.CANCEL_BUTTON' | translate }}
-  </button>
+    <button mat-button
+            mat-dialog-close>
+      {{ 'DIALOG.CANCEL_BUTTON' | translate }}
+    </button>
+  </div>
 </div>

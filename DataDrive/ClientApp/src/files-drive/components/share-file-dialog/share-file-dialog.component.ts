@@ -1,12 +1,9 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { FilesService } from '../../services/files.service';
 import { FileOut } from '../../models/file-out';
 import { ShareForEveryoneIn } from '../../models/share-for-everyone-in';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
-import { MatInput } from '@angular/material/input';
-import { Router } from '@angular/router';
 
 export interface DialogData {
     file: FileOut;
@@ -19,21 +16,18 @@ export interface DialogData {
 })
 export class ShareFileDialogComponent {
 
-    @ViewChild("tokenInput", null) tokenInput: MatInput;
-
     public file: FileOut;
     public shareForEveryoneIn: ShareForEveryoneIn;
     public shareEveryoneOut: ShareEveryoneOut;
 
-    public urlToShareEveryone: string = "drive/share/";
+    public urlToShareEveryone: string = window.location.origin + "/share/";
 
     public shareEveryoneSliderChecked: boolean;
 
     constructor(
         public dialogRef: MatDialogRef<ShareFileDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
-        private fileService: FilesService,
-        private router: Router) {
+        private fileService: FilesService) {
 
         this.file = this.data.file;
         this.shareForEveryoneIn = new ShareForEveryoneIn();
@@ -52,6 +46,7 @@ export class ShareFileDialogComponent {
     }
 
     toggleFileSharingByToken(event) {
+
         this.shareEveryoneSliderChecked = event.checked;
         if (this.shareEveryoneSliderChecked) {
 
