@@ -41,6 +41,24 @@ namespace DataDrive.Share.Services
             throw new NotImplementedException();
         }
 
+        public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByFileIdAndUser(Guid fileId, string username)
+        {
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))
+                ?.Id;
+
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
+                .FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == userId);
+
+            if (shareEveryone == null)
+            {
+                return new StatusCode<ShareEveryoneOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_IS_NOT_SHARED);
+            }
+
+            ShareEveryoneOut result = _mapper.Map<ShareEveryoneOut>(shareEveryone);
+
+            return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, result);
+        }
 
         public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByToken(string token)
         {

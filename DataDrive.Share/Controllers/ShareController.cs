@@ -26,7 +26,25 @@ namespace DataDrive.Share.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("{token}")]
+        [HttpGet("info/{fileId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetShareInfoByFileId(Guid fileId)
+        {
+            StatusCode<ShareEveryoneOut> status = await _shareService.GetShareForEveryoneByFileIdAndUser(fileId, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound($"Shared file {fileId} is not found");
+            }
+
+            return Ok(status.Body);
+        }
+
+        [HttpGet("get/{token}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]

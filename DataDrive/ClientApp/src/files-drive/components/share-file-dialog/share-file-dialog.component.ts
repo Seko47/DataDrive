@@ -37,11 +37,20 @@ export class ShareFileDialogComponent {
         if (this.file.isShared) {
             if (this.file.isSharedForEveryone) {
 
+                this.fileService.getShareEveryoneInfo(this.file.id)
+                    .subscribe(result => {
+
+                        result.token = this.urlToShareEveryone + result.token;
+
+                        this.shareEveryoneOut = result;
+                        this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
+                        this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
+                    }, err => alert(err.error));
             }
         }
     }
 
-    onNoClick(): void {
+    closeDialog(): void {
         this.dialogRef.close();
     }
 
@@ -64,6 +73,9 @@ export class ShareFileDialogComponent {
             this.fileService.cancelShareFileForEveryone(this.shareForEveryoneIn.fileId)
                 .subscribe(() => {
                     this.shareEveryoneOut = null;
+
+                    this.shareForEveryoneIn = new ShareForEveryoneIn();
+                    this.shareForEveryoneIn.fileId = this.file.id;
                 }, err => alert(err.error));
         }
     }
@@ -77,6 +89,8 @@ export class ShareFileDialogComponent {
                 this.shareEveryoneOut = result;
                 this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
                 this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
+                //TODO przy zapisie data zapisuje się o dzień mniejsza niż wybrana
+                this.closeDialog();
             }, err => alert(err.error));
     }
 }

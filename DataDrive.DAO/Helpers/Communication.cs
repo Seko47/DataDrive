@@ -49,5 +49,6 @@ namespace DataDrive.DAO.Helpers.Communication
         public static readonly string TOKEN_NOT_FOUND = "Token not found";
         public static readonly string PASSWORD_REQUIRED = "Password required";
         public static readonly string PASSWORD_IS_WRONG = "Password is wrong";
+        public static readonly string FILE_IS_NOT_SHARED = "File is not shared";
     }
 }
