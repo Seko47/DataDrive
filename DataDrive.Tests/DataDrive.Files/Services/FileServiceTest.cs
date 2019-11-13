@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataDrive.DAO.Context;
+using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using DataDrive.Files.Models.In;
@@ -21,7 +22,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
     public class FileServiceTest_CreateDirectoryByUser
     {
         [Fact]
-        public async void Returns_DirectoryOut_when_Created()
+        public async void Returns_Status201Created_when_Created()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
@@ -39,16 +40,17 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 Name = "TestDirectory"
             };
 
-            DirectoryOut result = await fileService.CreateDirectoryByUser(directoryPost, "admin@admin.com");
+            StatusCode<DirectoryOut> result = await fileService.CreateDirectoryByUser(directoryPost, "admin@admin.com");
             var a = databaseContext.Users.ToList();
             Assert.NotNull(result);
-            Assert.True(result.ParentDirectoryID == directoryPost.ParentDirectoryID);
-            Assert.True(result.Name == directoryPost.Name);
-            Assert.True(databaseContext.Directories.Any(_ => _.ID == result.ID));
+            Assert.True(result.Code == StatusCodes.Status201Created);
+            Assert.True(result.Body.ParentDirectoryID == directoryPost.ParentDirectoryID);
+            Assert.True(result.Body.Name == directoryPost.Name);
+            Assert.True(databaseContext.Directories.Any(_ => _.ID == result.Body.ID));
         }
 
         [Fact]
-        public async void Returns_Null_when_ParentDirectoryNotExistOrNotBelongsToUser()
+        public async void Returns_Status404NotFound_when_ParentDirectoryNotExistOrNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
@@ -66,9 +68,10 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 Name = "TestDirectory"
             };
 
-            DirectoryOut result = await fileService.CreateDirectoryByUser(directoryPost, "admin@admin.com");
+            StatusCode<DirectoryOut> result = await fileService.CreateDirectoryByUser(directoryPost, "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(result);
+            Assert.True(result.Code == StatusCodes.Status404NotFound);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using DataDrive.Files.Models.In;
+﻿using DataDrive.DAO.Helpers.Communication;
+using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -15,6 +16,6 @@ namespace DataDrive.Files.Services
         Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username);
         Task<List<FileUploadResult>> PostByUser(FilePost filePost, string username);
         Task<DirectoryOut> GetDirectoryByIdAndUser(Guid? id, string username);
-        Task<DirectoryOut> CreateDirectoryByUser(DirectoryPost directoryPost, string username);
+        Task<StatusCode<DirectoryOut>> CreateDirectoryByUser(DirectoryPost directoryPost, string username);
     }
 }

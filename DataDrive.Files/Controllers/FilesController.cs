@@ -1,4 +1,5 @@
-﻿using DataDrive.DAO.Models;
+﻿using DataDrive.DAO.Helpers.Communication;
+using DataDrive.DAO.Models;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
@@ -78,17 +79,23 @@ namespace DataDrive.Files.Controllers
         [HttpPost("createDirectory")]
         [Produces("application/json")]
         [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> CreateDirectory([FromBody] DirectoryPost directoryPost)
         {
-            DirectoryOut directory = await _fileService.CreateDirectoryByUser(directoryPost, _userManager.GetUserName(User));
+            StatusCode<DirectoryOut> result = await _fileService.CreateDirectoryByUser(directoryPost, _userManager.GetUserName(User));
 
-            if (directory == null)
+            if (result.Code == StatusCodes.Status401Unauthorized)
+            {
+                return Unauthorized(result.Message);
+            }
+
+            if (result.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"Directory {directoryPost.ParentDirectoryID} not exist");
             }
 
-            return CreatedAtAction(nameof(GetFromDirectory), directory.ID);
+            return CreatedAtAction(nameof(GetFromDirectory), result.Body.ID);
         }
 
         [HttpGet("download/{id}")]

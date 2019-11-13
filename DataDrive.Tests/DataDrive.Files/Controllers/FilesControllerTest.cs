@@ -1,4 +1,5 @@
-﻿using DataDrive.Files.Controllers;
+﻿using DataDrive.DAO.Helpers.Communication;
+using DataDrive.Files.Controllers;
 using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using DataDrive.Files.Services;
@@ -482,10 +483,13 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_CreatedAtActionResult201()
         {
-            Mock<DirectoryOut> directoryOut = new Mock<DirectoryOut>();
+            StatusCode<DirectoryOut> status = new StatusCode<DirectoryOut>(StatusCodes.Status201Created, new DirectoryOut
+            {
+                ID = Guid.NewGuid()
+            });
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.CreateDirectoryByUser(It.IsAny<DirectoryPost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(directoryOut.Object));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 
@@ -496,13 +500,14 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
 
             Assert.IsType<CreatedAtActionResult>(result);
         }
+
         [Fact]
         public async void Returns_NotFoundObjectResult_when_ParentDirectoryNotExistsOrNotBelongsToUser()
         {
-            DirectoryOut directoryOut = null;
+            StatusCode<DirectoryOut> status = new StatusCode<DirectoryOut>(StatusCodes.Status404NotFound);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.CreateDirectoryByUser(It.IsAny<DirectoryPost>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(directoryOut));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 

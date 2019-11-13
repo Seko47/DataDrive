@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataDrive.DAO.Context;
+using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using DataDrive.Files.Models.In;
@@ -27,15 +28,18 @@ namespace DataDrive.Files.Services
             _mapper = mapper;
         }
 
-        public async Task<DirectoryOut> CreateDirectoryByUser(DirectoryPost directoryPost, string username)
+        public async Task<StatusCode<DirectoryOut>> CreateDirectoryByUser(DirectoryPost directoryPost, string username)
         {
             ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
 
-            if (user == null
-                || (directoryPost.ParentDirectoryID != null && !_databaseContext.Directories.AnyAsync(_ => _.OwnerID == user.Id && _.ID == directoryPost.ParentDirectoryID).Result)
-               )
+            if (user == null)
             {
-                return null;
+                return new StatusCode<DirectoryOut>(StatusCodes.Status401Unauthorized, StatusMessages.USER_NOT_EXISTS);
+            }
+
+            if (directoryPost.ParentDirectoryID != null && !_databaseContext.Directories.AnyAsync(_ => _.OwnerID == user.Id && _.ID == directoryPost.ParentDirectoryID).Result)
+            {
+                return new StatusCode<DirectoryOut>(StatusCodes.Status404NotFound, StatusMessages.PARENT_DIRECTORY_NOT_FOUND);
             }
 
             string nameForNewDirectory = directoryPost.Name;
@@ -55,7 +59,7 @@ namespace DataDrive.Files.Services
 
             DirectoryOut result = _mapper.Map<DirectoryOut>(newDirectory);
 
-            return result;
+            return new StatusCode<DirectoryOut>(StatusCodes.Status201Created, result);
 
         }
 
