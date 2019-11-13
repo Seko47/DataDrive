@@ -30,14 +30,9 @@ namespace DataDrive.Files.Services
 
         public async Task<StatusCode<DirectoryOut>> CreateDirectoryByUser(DirectoryPost directoryPost, string username)
         {
-            ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            if (user == null)
-            {
-                return new StatusCode<DirectoryOut>(StatusCodes.Status401Unauthorized, StatusMessages.USER_NOT_EXISTS);
-            }
-
-            if (directoryPost.ParentDirectoryID != null && !_databaseContext.Directories.AnyAsync(_ => _.OwnerID == user.Id && _.ID == directoryPost.ParentDirectoryID).Result)
+            if (directoryPost.ParentDirectoryID != null && !_databaseContext.Directories.AnyAsync(_ => _.OwnerID == userId && _.ID == directoryPost.ParentDirectoryID).Result)
             {
                 return new StatusCode<DirectoryOut>(StatusCodes.Status404NotFound, StatusMessages.PARENT_DIRECTORY_NOT_FOUND);
             }
@@ -49,7 +44,7 @@ namespace DataDrive.Files.Services
                 CreatedDateTime = DateTime.Now,
                 FileType = FileType.DIRECTORY,
                 Name = nameForNewDirectory,
-                OwnerID = user.Id,
+                OwnerID = userId,
                 ParentDirectoryID = directoryPost.ParentDirectoryID
             };
 
@@ -63,15 +58,16 @@ namespace DataDrive.Files.Services
 
         }
 
-        public async Task<DirectoryOut> DeleteByIdAndUser(Guid id, string username)
+        public async Task<StatusCode<DirectoryOut>> DeleteByIdAndUser(Guid id, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+
             FileAbstract fileAbstractToDelete = await _databaseContext.FileAbstracts
                 .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
 
             if (fileAbstractToDelete == null)
             {
-                return null;
+                return new StatusCode<DirectoryOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
             List<ShareAbstract> shares = await _databaseContext.ShareAbstracts
@@ -89,7 +85,7 @@ namespace DataDrive.Files.Services
 
                 if (System.IO.File.Exists(fileToDelete.Path))
                 {
-                    return null;
+                    return new StatusCode<DirectoryOut>(StatusCodes.Status400BadRequest, StatusMessages.CANNOT_DELETE_FILE);
                 }
 
                 _databaseContext.Files.Remove(fileToDelete);
@@ -139,7 +135,7 @@ namespace DataDrive.Files.Services
                 };
             }
 
-            return parentDirectoryOutResult;
+            return new StatusCode<DirectoryOut>(StatusCodes.Status200OK, StatusMessages.FILE_DELETED, parentDirectoryOutResult);
         }
 
         public async Task<Tuple<string, byte[], string>> DownloadByIdAndUser(Guid id, string username)

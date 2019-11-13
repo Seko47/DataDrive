@@ -226,10 +226,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_OkObjectResult200_when_FileExistAndBelongsToUser()
         {
-            Mock<DirectoryOut> parentDirectoryMock = new Mock<DirectoryOut>();
+            StatusCode<DirectoryOut> status = new StatusCode<DirectoryOut>(StatusCodes.Status200OK);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(parentDirectoryMock.Object));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 
@@ -244,14 +244,14 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         public async void Returns_ParentDirectoryOfDeletingFile_when_FileExistAndBelongsToUser()
         {
             Guid parentId = Guid.NewGuid();
-            DirectoryOut parentDirectoryMock = new DirectoryOut
+            StatusCode<DirectoryOut> status = new StatusCode<DirectoryOut>(StatusCodes.Status200OK, new DirectoryOut
             {
                 ID = parentId
-            };
+            });
 
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(parentDirectoryMock));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 
@@ -262,18 +262,18 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
             OkObjectResult okObjectResult = result as OkObjectResult;
             Assert.NotNull(okObjectResult);
 
-            DirectoryOut parentDirectory = okObjectResult.Value as DirectoryOut;
-            Assert.NotNull(parentDirectory);
-            Assert.Equal(parentId, parentDirectory.ID);
+            DirectoryOut parentDirectoryOut = okObjectResult.Value as DirectoryOut;
+            Assert.NotNull(parentDirectoryOut);
+            Assert.Equal(parentId, parentDirectoryOut.ID);
         }
 
         [Fact]
         public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUser()
         {
-            DirectoryOut parentDirectory = null;
+            StatusCode<DirectoryOut> status = new StatusCode<DirectoryOut>(StatusCodes.Status404NotFound);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.DeleteByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(parentDirectory));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 

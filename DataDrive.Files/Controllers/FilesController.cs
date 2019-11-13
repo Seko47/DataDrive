@@ -85,11 +85,6 @@ namespace DataDrive.Files.Controllers
         {
             StatusCode<DirectoryOut> result = await _fileService.CreateDirectoryByUser(directoryPost, _userManager.GetUserName(User));
 
-            if (result.Code == StatusCodes.Status401Unauthorized)
-            {
-                return Unauthorized(result.Message);
-            }
-
             if (result.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"Directory {directoryPost.ParentDirectoryID} not exist");
@@ -120,17 +115,24 @@ namespace DataDrive.Files.Controllers
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            FileOut parentDirectory = await _fileService.DeleteByIdAndUser(id, _userManager.GetUserName(User));
+            StatusCode<DirectoryOut> result = await _fileService.DeleteByIdAndUser(id, _userManager.GetUserName(User));
 
-            if (parentDirectory == null)
+            if (result.Code == StatusCodes.Status404NotFound)
             {
-                return NotFound($"Directory {id} not found");
+                return NotFound($"File {id} not found");
             }
 
-            return Ok(parentDirectory);
+            if (result.Code == StatusCodes.Status304NotModified)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Body);
         }
 
         [HttpPatch("{id}")]

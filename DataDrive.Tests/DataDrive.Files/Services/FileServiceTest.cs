@@ -90,7 +90,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
         }
 
         [Fact]
-        public async void Returns_ParentDirectory_whenSuccessDeletedFile()
+        public async void Returns_ParentDirectoryAndStatus200OK_whenSuccessDeletedFile()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
@@ -106,7 +106,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory baseDirectory = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "TestDirectory",
                 OwnerID = userId
             };
@@ -124,7 +124,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDelete = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "ToDelete.txt",
                 OwnerID = userId,
                 ParentDirectoryID = baseDirectory.ID,
@@ -137,16 +137,17 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDelete.ID));
 
-            DirectoryOut parentDirectoryResult = await fileService.DeleteByIdAndUser(fileToDelete.ID, "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileService.DeleteByIdAndUser(fileToDelete.ID, "admin@admin.com");
 
-            Assert.NotNull(parentDirectoryResult);
-            Assert.True(parentDirectoryResult.ID == baseDirectory.ID);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.True(status.Body.ID == baseDirectory.ID);
             Assert.False(databaseContext.Files.Any(_ => _.ID == fileToDelete.ID));
             Assert.False(System.IO.File.Exists(pathToFile));
         }
 
         [Fact]
-        public async void Returns_ParentDirectory_whenSuccessDeletedDirectory()
+        public async void Returns_ParentDirectoryAndStatus200OK_whenSuccessDeletedDirectory()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
@@ -162,7 +163,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directoryToDelete = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "ToDeleteDirectory",
                 OwnerID = userId
             };
@@ -180,7 +181,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File file1InDirectoryToDelete = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "file1.txt",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToDelete.ID,
@@ -195,7 +196,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directoryInDirectoryToDelete = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory1",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToDelete.ID,
@@ -215,7 +216,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File file2InDirectoryToDelete = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "file2.txt",
                 OwnerID = userId,
                 ParentDirectoryID = directoryInDirectoryToDelete.ID,
@@ -228,10 +229,11 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Assert.True(databaseContext.Files.Any(_ => _.ID == file2InDirectoryToDelete.ID));
 
-            DirectoryOut parentDirectoryResult = await fileService.DeleteByIdAndUser(directoryToDelete.ID, "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileService.DeleteByIdAndUser(directoryToDelete.ID, "admin@admin.com");
 
-            Assert.NotNull(parentDirectoryResult);
-            Assert.True(parentDirectoryResult.ID == null);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.True(status.Body.ID == null);
             Assert.False(databaseContext.Files.Any(_ => _.ID == file1InDirectoryToDelete.ID));
             Assert.False(System.IO.File.Exists(pathToFile));
 
@@ -243,7 +245,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
         }
 
         [Fact]
-        public async void Returns_Null_whenFileNotExist()
+        public async void Returns_Status404NotFound_whenFileNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
@@ -267,13 +269,14 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             await databaseContext.Directories.AddAsync(baseDirectory);
             await databaseContext.SaveChangesAsync();
 
-            DirectoryOut parentDirectoryResult = await fileService.DeleteByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileService.DeleteByIdAndUser(Guid.NewGuid(), "admin@admin.com");
 
-            Assert.Null(parentDirectoryResult);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_whenFileNotBelongsToUser()
+        public async void Returns_Status404NotFound_whenFileNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
@@ -289,7 +292,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory baseDirectory = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "TestDirectory",
                 OwnerID = userId
             };
@@ -307,7 +310,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDelete = new File
             {
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "ToDelete.txt",
                 OwnerID = userId,
                 ParentDirectoryID = baseDirectory.ID,
@@ -320,9 +323,10 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDelete.ID));
 
-            DirectoryOut parentDirectoryResult = await fileService.DeleteByIdAndUser(fileToDelete.ID, "user@user.com");
+            StatusCode<DirectoryOut> status = await fileService.DeleteByIdAndUser(fileToDelete.ID, "user@user.com");
 
-            Assert.Null(parentDirectoryResult);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
             Assert.True(databaseContext.Files.Any(_ => _.ID == fileToDelete.ID));
             Assert.True(System.IO.File.Exists(pathToFile));
         }
