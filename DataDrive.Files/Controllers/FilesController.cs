@@ -35,14 +35,14 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get(Guid id)
         {
-            FileOut file = await _fileService.GetByIdAndUser(id, _userManager.GetUserName(User));
+            StatusCode<FileOut> status = await _fileService.GetByIdAndUser(id, _userManager.GetUserName(User));
 
-            if (file == null)
+            if (status.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"File {id} not found");
             }
 
-            return Ok(file);
+            return Ok(status.Body);
         }
 
         [HttpGet("fromDirectory/{id}")]

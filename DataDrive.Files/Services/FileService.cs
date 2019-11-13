@@ -163,22 +163,28 @@ namespace DataDrive.Files.Services
             return new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, downloadFileInfo);
         }
 
-        public async Task<FileOut> GetByIdAndUser(Guid id, string username)
+        public async Task<StatusCode<FileOut>> GetByIdAndUser(Guid id, string username)
         {
             string userId = (await _databaseContext.Users
                 .FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
             FileAbstract fileAbstract = await _databaseContext.FileAbstracts
                 .Include(_ => _.ParentDirectory)
-                .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+                .Include(_ => _.ShareEveryone)
+                .Include(_ => _.ShareForUsers)
+                .FirstOrDefaultAsync(_ => _.ID == id);
 
-            if (fileAbstract == null)
+            if (fileAbstract == null
+                || (fileAbstract.OwnerID != userId
+                && (!fileAbstract.IsSharedForUsers || !fileAbstract.ShareForUsers.Any(_ => _.OwnerID == userId))
+                && !fileAbstract.IsSharedForEveryone))
             {
-                return null;
+                return new StatusCode<FileOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
             FileOut fileResult = _mapper.Map<FileOut>(fileAbstract);
-            return fileResult;
+
+            return new StatusCode<FileOut>(StatusCodes.Status200OK, fileResult);
         }
 
         public async Task<DirectoryOut> GetDirectoryByIdAndUser(Guid? id, string username)

@@ -23,10 +23,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_OkObjectResult200_when_FileExistAndBelongsToUser()
         {
-            Mock<FileOut> file = new Mock<FileOut>();
+            StatusCode<FileOut> status = new StatusCode<FileOut>(StatusCodes.Status200OK);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(file.Object));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 
@@ -49,7 +49,7 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
 
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(file));
+                .Returns(Task.FromResult(new StatusCode<FileOut>(StatusCodes.Status200OK, file)));
 
             string username = "admin@admin.com";
 
@@ -66,10 +66,10 @@ namespace DataDrive.Tests.DataDrive.Files.Controllers
         [Fact]
         public async void Returns_NotFoundObjectResult404_when_FileNotExistOrNotBelongsToUser()
         {
-            FileOut file = null;
+            StatusCode<FileOut> status = new StatusCode<FileOut>(StatusCodes.Status404NotFound);
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(_ => _.GetByIdAndUser(It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(file));
+                .Returns(Task.FromResult(status));
 
             string username = "admin@admin.com";
 

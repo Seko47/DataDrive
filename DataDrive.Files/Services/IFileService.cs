@@ -11,7 +11,7 @@ namespace DataDrive.Files.Services
 {
     public interface IFileService
     {
-        Task<FileOut> GetByIdAndUser(Guid id, string username);
+        Task<StatusCode<FileOut>> GetByIdAndUser(Guid id, string username);
         Task<StatusCode<DownloadFileInfo>> DownloadByIdAndUser(Guid id, string username);
         Task<StatusCode<DirectoryOut>> DeleteByIdAndUser(Guid id, string username);
         Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username);

@@ -449,7 +449,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
     public class FileServiceTest_GetByIdAndUser
     {
         [Fact]
-        public async void Returns_FileInfo_when_Success()
+        public async void Returns_FileFileOutAndStatus200OK_when_Success()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -465,7 +465,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "TestFile.pdf",
                 OwnerID = userId
             };
@@ -473,18 +473,20 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             await databaseContext.Files.AddAsync(file);
             await databaseContext.SaveChangesAsync();
 
-            FileOut result = await fileService.GetByIdAndUser(file.ID, "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.GetByIdAndUser(file.ID, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(file.ID, result.ID);
-            Assert.Equal(file.FileType, result.FileType);
-            Assert.Equal(file.CreatedDateTime, result.CreatedDateTime);
-            Assert.Equal(file.Name, result.Name);
-            Assert.Equal(file.ParentDirectoryID, result.ParentDirectoryID);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(file.ID, status.Body.ID);
+            Assert.Equal(file.FileType, status.Body.FileType);
+            Assert.Equal(file.CreatedDateTime, status.Body.CreatedDateTime);
+            Assert.Equal(file.Name, status.Body.Name);
+            Assert.Equal(file.ParentDirectoryID, status.Body.ParentDirectoryID);
         }
 
         [Fact]
-        public async void Returns_DirectoryInfo_when_Success()
+        public async void Returns_DirectoryFileOutAndStatus200OK_when_Success()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -500,7 +502,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directoryToCheck = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory",
                 OwnerID = userId
             };
@@ -511,7 +513,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "TestFile.pdf",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -520,18 +522,20 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             await databaseContext.Files.AddAsync(file);
             await databaseContext.SaveChangesAsync();
 
-            FileOut result = await fileService.GetByIdAndUser(directoryToCheck.ID, "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.GetByIdAndUser(directoryToCheck.ID, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(directoryToCheck.ID, result.ID);
-            Assert.Equal(directoryToCheck.FileType, result.FileType);
-            Assert.Equal(directoryToCheck.CreatedDateTime, result.CreatedDateTime);
-            Assert.Equal(directoryToCheck.Name, result.Name);
-            Assert.Equal(directoryToCheck.ParentDirectoryID, result.ParentDirectoryID);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(directoryToCheck.ID, status.Body.ID);
+            Assert.Equal(directoryToCheck.FileType, status.Body.FileType);
+            Assert.Equal(directoryToCheck.CreatedDateTime, status.Body.CreatedDateTime);
+            Assert.Equal(directoryToCheck.Name, status.Body.Name);
+            Assert.Equal(directoryToCheck.ParentDirectoryID, status.Body.ParentDirectoryID);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotBelongsToUser()
+        public async void Returns_Status404NotFound_when_FileNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -547,7 +551,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "TestFile.pdf",
                 OwnerID = userId
             };
@@ -555,13 +559,14 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             await databaseContext.Files.AddAsync(file);
             await databaseContext.SaveChangesAsync();
 
-            FileOut result = await fileService.GetByIdAndUser(file.ID, "user@user.com");
+            StatusCode<FileOut> status = await fileService.GetByIdAndUser(file.ID, "user@user.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_FileNotExist()
+        public async void Returns_Status404NotFound_when_FileNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -572,9 +577,10 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             IFileService fileService = new FileService(databaseContext, mapper);
 
-            FileOut result = await fileService.GetByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+            StatusCode<FileOut> status = await fileService.GetByIdAndUser(Guid.NewGuid(), "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
     }
 
