@@ -71,6 +71,6 @@ export class FilesService {
     }
 
     getShareEveryoneInfo(fileId: string) {
-        return this.httpClient.get<ShareEveryoneOut>(this.baseUrl + 'api/Share/info/' + fileId);
+        return this.httpClient.get<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/info/' + fileId);
     }
 }

@@ -26,13 +26,12 @@ namespace DataDrive.Share.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("info/{fileId}")]
+        [HttpGet("everyone/info/{fileId}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetShareInfoByFileId(Guid fileId)
+        public async Task<IActionResult> GetShareEveryoneInfoByFileId(Guid fileId)
         {
             StatusCode<ShareEveryoneOut> status = await _shareService.GetShareForEveryoneByFileIdAndUser(fileId, _userManager.GetUserName(User));
 
@@ -44,7 +43,7 @@ namespace DataDrive.Share.Controllers
             return Ok(status.Body);
         }
 
-        [HttpGet("get/{token}")]
+        [HttpGet("everyone/get/{token}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -67,7 +66,7 @@ namespace DataDrive.Share.Controllers
             return Ok(status.Body);
         }
 
-        [HttpPost]
+        [HttpPost("everyone")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]

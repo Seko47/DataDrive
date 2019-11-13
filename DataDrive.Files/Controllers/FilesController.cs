@@ -33,6 +33,7 @@ namespace DataDrive.Files.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
             StatusCode<FileOut> status = await _fileService.GetByIdAndUser(id, _userManager.GetUserName(User));
@@ -97,6 +98,7 @@ namespace DataDrive.Files.Controllers
         [HttpGet("download/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [AllowAnonymous]
         public async Task<IActionResult> Download(Guid id)
         {
             StatusCode<DownloadFileInfo> status = await _fileService.DownloadByIdAndUser(id, _userManager.GetUserName(User));
