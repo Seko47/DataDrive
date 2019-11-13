@@ -67,4 +67,16 @@ export class ShareFileDialogComponent {
                 }, err => alert(err.error));
         }
     }
+
+    saveShareForEveryone() {
+        this.fileService.shareFileForEveryone(this.shareForEveryoneIn)
+            .subscribe(result => {
+
+                result.token = this.urlToShareEveryone + result.token;
+
+                this.shareEveryoneOut = result;
+                this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
+                this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
+            }, err => alert(err.error));
+    }
 }

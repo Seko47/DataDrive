@@ -34,7 +34,7 @@
 			"EXPIRATION_DATE": "Expiration date",
 			"PASSWORD": "Password",
 			"TITLE": "Sharing",
-			"TOKEN_SHARING_FORM": "Przełącz udostępnianie linku",
+			"TOKEN_SHARING_FORM": "Toggle link sharing",
 			"URL_TO_SHARE": "Link to sharing"
 		}
 	},
