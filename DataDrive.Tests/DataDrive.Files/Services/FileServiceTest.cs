@@ -587,7 +587,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
     public class FileServiceTest_GetDirectoryByIdAndUser
     {
         [Fact]
-        public async void Returns_DirectoryWithFileList_when_Success()
+        public async void Returns_DirectoryWithFileListAndStatus200OK_when_Success()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -603,7 +603,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory rootDirectory = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "root",
                 OwnerID = userId
             };
@@ -613,7 +613,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directoryToCheck = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "DirectoryToCheck",
                 OwnerID = userId,
                 ParentDirectoryID = rootDirectory.ID
@@ -624,7 +624,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file1 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File1.exe",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -633,7 +633,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file2 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File2.rar",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -644,7 +644,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directory1 = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory1.d",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -654,20 +654,22 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             await databaseContext.SaveChangesAsync();
 
-            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(directoryToCheck.ID, "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileSerivce.GetDirectoryByIdAndUser(directoryToCheck.ID, "admin@admin.com");
 
-            Assert.NotNull(result);
-            Assert.Equal(directoryToCheck.CreatedDateTime, result.CreatedDateTime);
-            Assert.Equal(directoryToCheck.Files.Count, result.Files.Count);
-            Assert.Equal(directoryToCheck.FileType, result.FileType);
-            Assert.Equal(directoryToCheck.ID, result.ID);
-            Assert.Equal(directoryToCheck.Name, result.Name);
-            Assert.Equal(directoryToCheck.ParentDirectoryID, result.ParentDirectoryID);
-            Assert.Equal(directoryToCheck.ParentDirectory.Name, result.ParentDirectoryName);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
+            Assert.Equal(directoryToCheck.CreatedDateTime, status.Body.CreatedDateTime);
+            Assert.Equal(directoryToCheck.Files.Count, status.Body.Files.Count);
+            Assert.Equal(directoryToCheck.FileType, status.Body.FileType);
+            Assert.Equal(directoryToCheck.ID, status.Body.ID);
+            Assert.Equal(directoryToCheck.Name, status.Body.Name);
+            Assert.Equal(directoryToCheck.ParentDirectoryID, status.Body.ParentDirectoryID);
+            Assert.Equal(directoryToCheck.ParentDirectory.Name, status.Body.ParentDirectoryName);
         }
 
         [Fact]
-        public async void Returns_DirectoryWithFileList_when_ParentDirectoryIsNull()
+        public async void Returns_DirectoryWithFileListAndStatus200OK_when_ParentDirectoryIsNull()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -683,7 +685,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file1 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File1.exe",
                 OwnerID = userId
             };
@@ -691,7 +693,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file2 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File2.rar",
                 OwnerID = userId
             };
@@ -701,7 +703,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directory1 = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory1.d",
                 OwnerID = userId
             };
@@ -710,22 +712,24 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             await databaseContext.SaveChangesAsync();
 
-            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(null, "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileSerivce.GetDirectoryByIdAndUser(null, "admin@admin.com");
 
-            Assert.NotNull(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status200OK);
+            Assert.NotNull(status.Body);
 
             List<FileAbstract> filesFromRoot = await databaseContext.FileAbstracts
                 .Where(_ => _.ParentDirectoryID == null && _.OwnerID == userId)
                 .ToListAsync();
 
-            Assert.Equal(filesFromRoot.Count, result.Files.Count);
-            Assert.Equal(FileType.DIRECTORY, result.FileType);
-            Assert.Null(result.ID);
-            Assert.Null(result.ParentDirectoryID);
+            Assert.Equal(filesFromRoot.Count, status.Body.Files.Count);
+            Assert.Equal(FileType.DIRECTORY, status.Body.FileType);
+            Assert.Null(status.Body.ID);
+            Assert.Null(status.Body.ParentDirectoryID);
         }
 
         [Fact]
-        public async void Returns_Null_when_DirectoryNotExist()
+        public async void Returns_Status404NotFound_when_DirectoryNotExist()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -738,13 +742,14 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             string userId = (await databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == "admin@admin.com")).Id;
 
-            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(Guid.NewGuid(), "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileSerivce.GetDirectoryByIdAndUser(Guid.NewGuid(), "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_DirectoryNotBelongsToUser()
+        public async void Returns_Status404NotFound_when_DirectoryNotBelongsToUser()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -760,7 +765,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory rootDirectory = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "root",
                 OwnerID = userId
             };
@@ -770,7 +775,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directoryToCheck = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "DirectoryToCheck",
                 OwnerID = userId,
                 ParentDirectoryID = rootDirectory.ID
@@ -781,7 +786,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file1 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File1.exe",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -790,7 +795,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file2 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "File2.rar",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -801,7 +806,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directory1 = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                FileType = FileType.DIRECTORY,
                 Name = "Directory1.d",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -811,13 +816,14 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             await databaseContext.SaveChangesAsync();
 
-            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(directoryToCheck.ID, "user@user.com");
+            StatusCode<DirectoryOut> status = await fileSerivce.GetDirectoryByIdAndUser(directoryToCheck.ID, "user@user.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async void Returns_Null_when_DirectoryIsNotADirectory()
+        public async void Returns_Status404NotFound_when_DirectoryIsNotADirectory()
         {
             IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
             MapperConfiguration config = new MapperConfiguration(conf =>
@@ -833,7 +839,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File fileToCheck = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.FILE,
+                FileType = FileType.FILE,
                 Name = "DirectoryToCheck",
                 OwnerID = userId
             };
@@ -842,9 +848,10 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             await databaseContext.SaveChangesAsync();
 
-            DirectoryOut result = await fileSerivce.GetDirectoryByIdAndUser(fileToCheck.ID, "admin@admin.com");
+            StatusCode<DirectoryOut> status = await fileSerivce.GetDirectoryByIdAndUser(fileToCheck.ID, "admin@admin.com");
 
-            Assert.Null(result);
+            Assert.NotNull(status);
+            Assert.True(status.Code == StatusCodes.Status404NotFound);
         }
     }
 

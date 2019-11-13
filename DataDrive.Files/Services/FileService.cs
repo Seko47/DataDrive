@@ -187,10 +187,10 @@ namespace DataDrive.Files.Services
             return new StatusCode<FileOut>(StatusCodes.Status200OK, fileResult);
         }
 
-        public async Task<DirectoryOut> GetDirectoryByIdAndUser(Guid? id, string username)
+        public async Task<StatusCode<DirectoryOut>> GetDirectoryByIdAndUser(Guid? id, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
-            //TODO dopisac do każdego pobieranego pliku informację, czy jest udostępniony
+
             DirectoryOut result;
 
             if (id != null)
@@ -202,7 +202,7 @@ namespace DataDrive.Files.Services
 
                 if (directory == null)
                 {
-                    return null;
+                    return new StatusCode<DirectoryOut>(StatusCodes.Status404NotFound, StatusMessages.DIRECTORY_NOT_FOUND);
                 }
 
                 if (directory.ParentDirectory == null)
@@ -221,7 +221,8 @@ namespace DataDrive.Files.Services
             else
             {
                 List<FileAbstract> files = await _databaseContext.FileAbstracts
-                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId).ToListAsync();
+                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId)
+                    .ToListAsync();
 
                 result = new DirectoryOut
                 {
@@ -236,7 +237,7 @@ namespace DataDrive.Files.Services
             int[] sortingMap = new[] { 2, 1, 3 };
             result.Files = result.Files.OrderBy(_ => sortingMap[(int)(_.FileType)]).ThenBy(_ => _.Name).ThenBy(_ => _.ID).ToList();
 
-            return result;
+            return new StatusCode<DirectoryOut>(StatusCodes.Status200OK, result);
         }
 
         public async Task<FileOut> PatchByIdAndFilePatchAndUser(Guid id, JsonPatchDocument<FilePatch> jsonPatchDocument, string username)

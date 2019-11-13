@@ -51,14 +51,14 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetFromDirectory(Guid? id)
         {
-            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(id, _userManager.GetUserName(User));
+            StatusCode<DirectoryOut> status = await _fileService.GetDirectoryByIdAndUser(id, _userManager.GetUserName(User));
 
-            if (directory == null)
+            if (status.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"Directory {id} not found");
             }
 
-            return Ok(directory);
+            return Ok(status.Body);
         }
 
         [HttpGet("fromRoot")]
@@ -67,14 +67,14 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetFromRoot()
         {
-            DirectoryOut directory = await _fileService.GetDirectoryByIdAndUser(null, _userManager.GetUserName(User));
+            StatusCode<DirectoryOut> status = await _fileService.GetDirectoryByIdAndUser(null, _userManager.GetUserName(User));
 
-            if (directory == null)
+            if (status.Code == StatusCodes.Status404NotFound)
             {
                 return NotFound($"Root directory not found");
             }
 
-            return Ok(directory);
+            return Ok(status.Body);
         }
 
         [HttpPost("createDirectory")]

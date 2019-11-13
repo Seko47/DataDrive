@@ -39,10 +39,11 @@ namespace DataDrive.DAO.Helpers.Communication
 
     public static class StatusMessages
     {
-        public readonly static string USER_NOT_EXISTS = "User not exists";
-        public readonly static string PARENT_DIRECTORY_NOT_FOUND = "Parent directory not found";
-        public readonly static string FILE_NOT_FOUND = "File not found";
-        public readonly static string CANNOT_DELETE_FILE = "File cannot be deleted";
-        public readonly static string FILE_DELETED = "File deleted";
+        public static readonly string USER_NOT_EXISTS = "User not exists";
+        public static readonly string PARENT_DIRECTORY_NOT_FOUND = "Parent directory not found";
+        public static readonly string FILE_NOT_FOUND = "File not found";
+        public static readonly string CANNOT_DELETE_FILE = "File cannot be deleted";
+        public static readonly string FILE_DELETED = "File deleted";
+        public static readonly string DIRECTORY_NOT_FOUND = "Directory not found";
     }
 }
