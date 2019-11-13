@@ -6,6 +6,8 @@ import { DirectoryOut } from '../models/directory-out';
 import { CreateDirectoryPost } from '../models/create-directory-post';
 import { FileUploadResult } from '../models/file-upload-result';
 import { Operation } from 'fast-json-patch';
+import { ShareForEveryoneIn } from '../models/share-for-everyone-in';
+import { ShareEveryoneOut } from '../models/share-everyone-out';
 
 
 @Injectable({
@@ -19,7 +21,7 @@ export class FilesService {
         this.baseUrl = baseUrl;
     }
 
-    deleteFile(id: string) {
+    public deleteFile(id: string) {
         return this.httpClient.delete<FileOut>(this.baseUrl + 'api/Files/' + id);
     }
 
@@ -55,8 +57,16 @@ export class FilesService {
         return this.httpClient.patch<FileOut>(this.baseUrl + 'api/Files/' + fileId, patch);
     }
 
-    downloadFile(id: string) {
+    public downloadFile(id: string) {
         return this.httpClient.get(this.baseUrl + 'api/Files/download/' + id,
             { observe: "response", responseType: 'blob' });
+    }
+
+    public shareFileForEveryone(shareForEveryoneIn: ShareForEveryoneIn) {
+        return this.httpClient.post<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/share', shareForEveryoneIn);
+    }
+
+    public cancelShareFileForEveryone(fileId: string) {
+        return this.httpClient.delete<boolean>(this.baseUrl + 'api/Share/everyone/' + fileId);
     }
 }

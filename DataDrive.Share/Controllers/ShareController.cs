@@ -72,7 +72,7 @@ namespace DataDrive.Share.Controllers
             return Ok(status.Body);
         }
 
-        [HttpPost("share/everyone")]
+        [HttpPost("everyone/share")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -88,11 +88,11 @@ namespace DataDrive.Share.Controllers
             return Ok(status.Body);
         }
 
-        [HttpPost("share/everyone/cancel")]
+        [HttpDelete("everyone/{fileId}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> CancelShareForEveryone([FromBody] Guid fileId)
+        public async Task<IActionResult> CancelShareForEveryone(Guid fileId)
         {
             bool result = await _shareService.CancelSharingForEveryone(fileId, _userManager.GetUserName(User));
 
@@ -101,7 +101,7 @@ namespace DataDrive.Share.Controllers
                 return BadRequest("Something went wrong");
             }
 
-            return Ok(result);
+            return Ok(new { Canceled = result });
         }
 
 

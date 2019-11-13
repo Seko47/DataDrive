@@ -116,7 +116,7 @@ export class FilesComponent implements OnInit, OnDestroy {
                     });
 
                     dialogRef.afterClosed().subscribe(result => {
-                        console.log(result);
+                        this.getFromDirectory(this.actualDirectory.id);
                     }, err => alert(err.error));
                 }
             });

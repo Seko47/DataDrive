@@ -16,7 +16,6 @@ namespace DataDrive.Share.Models
         public string Token { get; set; }
         public DateTime? ExpirationDateTime { get; set; }
         public int? DownloadLimit { get; set; }
-        public string Password { get; set; }
 
         public Guid FileID { get; set; }
         public string FileName { get; set; }

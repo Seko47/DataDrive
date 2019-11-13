@@ -1,29 +1,40 @@
-<form (ngSubmit)="onSubmit()">
 
+<div>
   <h1 mat-dialog-title>{{ 'FILES.SHARE_FILE_DIALOG.TITLE' | translate }}</h1>
 
-  <div mat-dialog-content>
+  <form (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
 
-    <mat-form-field>
+      <mat-slide-toggle [checked]="shareEveryoneSliderChecked"
+                        (change)="toggleFileSharingByToken($event)">
+        {{ 'FILES.SHARE_FILE_DIALOG.TOKEN_SHARING_FORM' | translate }}
+      </mat-slide-toggle>
 
-      <input matInput
-             required
-             readonly="readonly"
-             style="width: 100%;"
-             placeholder="{{ 'FILES.SHARE_FILE_DIALOG.URL_TO_SHARE' | translate }}" />
-    </mat-form-field>
-  </div>
+      <mat-form-field *ngIf="shareEveryoneSliderChecked && shareEveryoneOut">
 
-  <div mat-dialog-actions>
+        <input matInput
+               #tokenInput
+               required
+               readonly="readonly"
+               style="width: 100%;"
+               value="{{ shareEveryoneOut?.token }}"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.URL_TO_SHARE' | translate }}" />
+      </mat-form-field>
 
-    <button mat-button
-            type="submit">
-      {{ 'DIALOG.SAVE_BUTTON' | translate }}
-    </button>
-  </div>
-</form>
 
-<button mat-button
-        mat-dialog-close>
-  {{ 'DIALOG.CANCEL_BUTTON' | translate }}
-</button>
+    </div>
+
+    <div mat-dialog-actions>
+
+      <button mat-button
+              type="submit">
+        {{ 'DIALOG.SAVE_BUTTON' | translate }}
+      </button>
+    </div>
+  </form>
+
+  <button mat-button
+          mat-dialog-close>
+    {{ 'DIALOG.CANCEL_BUTTON' | translate }}
+  </button>
+</div>
