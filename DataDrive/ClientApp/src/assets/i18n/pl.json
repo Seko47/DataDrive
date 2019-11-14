@@ -4,7 +4,9 @@
 	},
 	"DIALOG": {
 		"CANCEL_BUTTON": "Anuluj",
+		"CLOSE_BUTTON": "Zamknij",
 		"CREATE_BUTTON": "Utwórz",
+		"NEXT_BUTTON": "Dalej",
 		"SAVE_BUTTON": "Zapisz"
 	},
 	"DRIVE": {
@@ -49,5 +51,12 @@
 		"HOME": "Strona główna",
 		"MYDRIVE": "Mój Dysk",
 		"SIGN_OUT": "Wyloguj"
+	},
+	"SHARES": {
+		"PASSWORD_FOR_TOKEN_DIALOG": {
+			"PASSWORD_PLACEHOLDER": "Wpisz hasło do zasobu",
+			"TITLE": "Wymagane hasło",
+			"TOKEN_IS_PASSWORD_PROTECTED": "Zasób jest chroniony hasłem"
+		}
 	}
 }

@@ -4,7 +4,9 @@
 	},
 	"DIALOG": {
 		"CANCEL_BUTTON": "Cancel",
+		"CLOSE_BUTTON": "Close",
 		"CREATE_BUTTON": "Create",
+		"NEXT_BUTTON": "Next",
 		"SAVE_BUTTON": "Save"
 	},
 	"DRIVE": {
@@ -49,5 +51,12 @@
 		"HOME": "Home",
 		"MYDRIVE": "My Drive",
 		"SIGN_OUT": "Sign out"
+	},
+	"SHARES": {
+		"PASSWORD_FOR_TOKEN_DIALOG": {
+			"PASSWORD_PLACEHOLDER": "Type in password for token",
+			"TITLE": "Password required",
+			"TOKEN_IS_PASSWORD_PROTECTED": "Token is password-protected"
+		}
 	}
 }
