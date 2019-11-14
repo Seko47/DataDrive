@@ -10,6 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CopyFromInputComponent } from './components/copy-from-input/copy-from-input.component';
+import { NgxKjuaModule } from 'ngx-kjua';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { CopyFromInputComponent } from './components/copy-from-input/copy-from-i
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
+        NgxKjuaModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -44,7 +46,8 @@ import { CopyFromInputComponent } from './components/copy-from-input/copy-from-i
         FormsModule,
         ReactiveFormsModule,
         TranslateModule,
-        CopyFromInputComponent
+        CopyFromInputComponent,
+        NgxKjuaModule
     ]
 })
 export class SharedModule { }

@@ -88,4 +88,15 @@
     &nbsp;
     <app-copy-from-input [inputField]="tokenInput"></app-copy-from-input>
   </div>
+
+  <div class="row col-12">
+
+    <ngx-kjua class="ml-auto mr-auto"
+              [text]="shareEveryoneInfo?.token"
+              [crisp]="true"
+              [render]="'svg'"
+              [ecLevel]="'Q'"
+              [fill]="'#000000'"
+              [back]="'#ffffff'"></ngx-kjua>
+  </div>
 </div>
