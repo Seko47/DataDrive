@@ -140,6 +140,7 @@ namespace DataDrive.Share.Services
                 shareEveryone.DownloadLimit = downloadLimit;
                 shareEveryone.ExpirationDateTime = expirationDateTime;
                 shareEveryone.Password = password;
+                shareEveryone.LastModifiedDateTime = DateTime.Now;
             }
 
             await _databaseContext.SaveChangesAsync();

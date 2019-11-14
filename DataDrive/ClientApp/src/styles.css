@@ -26,5 +26,5 @@ body {
 
 mat-sidenav {
   max-width: 90vw;
-  min-width: 50vw;
+  min-width: 20vw;
 }

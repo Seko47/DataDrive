@@ -36,4 +36,9 @@ export class FilesListSidenavComponent implements OnInit {
 
         this.filesEventService.emit([FilesEventCode.RENAME, this.actualFile.id, this.actualFile.name]);
     }
+
+    public shareFile() {
+
+        this.filesEventService.emit([FilesEventCode.SHARE, this.actualFile.id]);
+    }
 }
