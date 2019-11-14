@@ -4,23 +4,32 @@
                      (onDirectoryCreated)="createDirectory($event)"
                      (onGetFileInfo)="getFileInfo($event)"></drive-files-toolbar>
 
-<p *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
+<div>
+  <div style="position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000"
+       *ngIf="!actualDirectory || (actualDirectory.files && actualDirectory.files.length == 0)">
+    <p>
+      {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
+    </p>
 
-  {{ 'FILES.DIRECTORY_IS_EMPTY' | translate }}
-</p>
+  </div>
 
-<mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
+  <mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
 
-  <mat-sidenav-content style="height: 76vh;">
+    <mat-sidenav-content style="height: 76vh;">
 
-    <drive-files-list-content [actualDirectory]="actualDirectory"
-                              (onFileClick)="onFileClick($event)"
-                              (onFileMove)="onFileMove($event)"></drive-files-list-content>
-  </mat-sidenav-content>
+      <drive-files-list-content [actualDirectory]="actualDirectory"
+                                (onFileClick)="onFileClick($event)"
+                                (onFileMove)="onFileMove($event)"></drive-files-list-content>
+    </mat-sidenav-content>
 
-  <mat-sidenav #fileinfosidenav
-               position="end">
+    <mat-sidenav #fileinfosidenav
+                 position="end">
 
-    <drive-files-list-sidenav [actualFile]="actualFile"></drive-files-list-sidenav>
-  </mat-sidenav>
-</mat-sidenav-container>
+      <drive-files-list-sidenav [actualFile]="actualFile"></drive-files-list-sidenav>
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>
