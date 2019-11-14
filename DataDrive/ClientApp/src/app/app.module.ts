@@ -12,6 +12,7 @@ import { DriveComponent } from './drive/drive.component';
 import { FilesDriveModule } from '../files-drive/files-drive.module';
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
+import { ShareDriveModule } from '../share-drive/share-drive.module';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { AuthorizeGuard } from '../api-authorization/authorize.guard';
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
         ]),
-        FilesDriveModule
+        FilesDriveModule,
+        ShareDriveModule
     ],
     bootstrap: [AppComponent],
 })

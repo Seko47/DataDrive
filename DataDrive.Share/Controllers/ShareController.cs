@@ -72,18 +72,18 @@ namespace DataDrive.Share.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetShareByTokenAndPassword(string token, string password)
+        public async Task<IActionResult> GetShareByTokenAndPassword([FromBody] ShareEveryoneCredentials shareEveryoneCredentials)
         {
-            StatusCode<ShareEveryoneOut> status = await _shareService.GetShareForEveryoneByTokenAndPassword(token, password);
+            StatusCode<ShareEveryoneOut> status = await _shareService.GetShareForEveryoneByTokenAndPassword(shareEveryoneCredentials.Token, shareEveryoneCredentials.Password);
 
             if (status.Code == StatusCodes.Status404NotFound)
             {
-                return NotFound($"Token {token} not found");
+                return NotFound($"Token {shareEveryoneCredentials.Token} not found");
             }
 
             if (status.Code == StatusCodes.Status401Unauthorized)
             {
-                return Unauthorized($"Password for token {token} is wrong");
+                return Unauthorized($"Password for token {shareEveryoneCredentials.Token} is wrong");
             }
 
             return Ok(status.Body);

@@ -70,7 +70,7 @@ export class FilesService {
         return this.httpClient.delete<boolean>(this.baseUrl + 'api/Share/everyone/' + fileId);
     }
 
-    getShareEveryoneInfo(fileId: string) {
+    public getShareEveryoneInfo(fileId: string) {
         return this.httpClient.get<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/info/' + fileId);
     }
 }

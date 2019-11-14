@@ -39,6 +39,8 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\files-drive\models\" />
+    <Folder Include="ClientApp\src\share-drive\components\" />
+    <Folder Include="ClientApp\src\share-drive\services\" />
     <Folder Include="wwwroot\uploads\files\" />
   </ItemGroup>
 
