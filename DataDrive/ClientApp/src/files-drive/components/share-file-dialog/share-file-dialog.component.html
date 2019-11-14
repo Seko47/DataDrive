@@ -13,12 +13,13 @@
       <mat-form-field class="col-sm-10 mr-auto">
 
         <input matInput
+               #tokenInput
                readonly="readonly"
                value="{{ shareEveryoneOut?.token }}"
                placeholder="{{ 'FILES.SHARE_FILE_DIALOG.URL_TO_SHARE' | translate }}" />
       </mat-form-field>
       &nbsp;
-      <mat-icon class="col-sm-1 ml-auto">file_copy</mat-icon>
+      <app-copy-from-input [inputField]="tokenInput"></app-copy-from-input>
 
       <mat-form-field class="col-sm-4 mr-auto">
         <input matInput

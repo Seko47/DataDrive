@@ -9,10 +9,11 @@ import { AuthorizeInterceptor } from '../api-authorization/authorize.interceptor
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CopyFromInputComponent } from './components/copy-from-input/copy-from-input.component';
 
 
 @NgModule({
-    declarations: [],
+    declarations: [CopyFromInputComponent],
     imports: [
         CommonModule,
         ApiAuthorizationModule,
@@ -42,7 +43,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        TranslateModule
+        TranslateModule,
+        CopyFromInputComponent
     ]
 })
 export class SharedModule { }
