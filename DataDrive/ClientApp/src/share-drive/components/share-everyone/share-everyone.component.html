@@ -53,6 +53,7 @@
       <b>{{ (actualFile.lastModifiedDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
     </div>
   </div>
+  <hr />
 
   <div class="row col-12">
 
@@ -83,6 +84,35 @@
   </div>
   <hr />
 
+  <div class="row col-12" *ngIf="shareInfo.expirationDateTime">
+
+    <div class="col-sm-5 mr-auto ml-1">
+
+      {{ 'SHARES.EXPIRATION_DATE' | translate }}
+    </div>
+
+    <div class="col-sm-6 ml-auto mr-0"
+         style="text-align: right">
+
+      <b>{{ (shareInfo.expirationDateTime | date:'dd.MM.yyyy') }}</b>
+    </div>
+  </div>
+
+  <div class="row col-12" *ngIf="shareInfo.downloadLimit">
+
+    <div class="col-sm-5 mr-auto ml-1">
+
+      {{ 'SHARES.DOWNLOAD_LIMIT' | translate }}
+    </div>
+
+    <div class="col-sm-6 ml-auto mr-0"
+         style="text-align: right">
+
+      <b>{{ shareInfo.downloadLimit }}</b>
+    </div>
+  </div>
+  <hr />
+
   <div>
 
     <div class="row col-12">
@@ -104,5 +134,7 @@
       <qrcode class="ml-auto mr-auto"
               [text]="shareInfo?.token"></qrcode>
     </div>
+
   </div>
+
 </div>

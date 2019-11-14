@@ -27,8 +27,9 @@ export class ShareEveryoneComponent implements OnInit {
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
     constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService, private filesEventService: FilesEventService) {
+
         this.token = this.route.snapshot.params.token;
-        this.shareInfo.
+
         this.getShareInfoByToken();
     }
 

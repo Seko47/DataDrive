@@ -66,7 +66,7 @@ export class FilesListSidenavComponent implements OnInit {
 
     public getShareInfo() {
 
-        if (this.actualFile.isShared) {
+        if (this.actualFile && this.actualFile.isShared) {
 
             this.getShareEveryoneInfo();
         }
@@ -74,7 +74,7 @@ export class FilesListSidenavComponent implements OnInit {
 
     public getShareEveryoneInfo() {
 
-        if (this.actualFile.isSharedForEveryone) {
+        if (this.actualFile && this.actualFile.isSharedForEveryone) {
             this.filesService.getShareEveryoneInfo(this.actualFile.id)
                 .subscribe((result: ShareEveryoneOut) => {
                     result.token = this.urlToShareEveryone + result.token;
