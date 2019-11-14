@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div class="row col-12">
+  <div class="row col-12" *ngIf="actualFile.lastModifiedDateTime">
 
     <div class="col-sm-5 mr-auto ml-1">
 
@@ -51,6 +51,34 @@
          style="text-align: right">
 
       <b>{{ (actualFile.lastModifiedDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
+    </div>
+  </div>
+
+  <div class="row col-12">
+
+    <div class="col-sm-5 mr-auto ml-1">
+
+      {{ 'SHARES.CREATED' | translate }}
+    </div>
+
+    <div class="col-sm-6 ml-auto mr-0"
+         style="text-align: right">
+
+      <b>{{ (shareInfo?.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
+    </div>
+  </div>
+
+  <div class="row col-12" *ngIf="shareInfo.lastModifiedDateTime">
+
+    <div class="col-sm-5 mr-auto ml-1">
+
+      {{ 'SHARES.MODIFIED' | translate }}
+    </div>
+
+    <div class="col-sm-6 ml-auto mr-0"
+         style="text-align: right">
+
+      <b>{{ (shareInfo?.lastModifiedDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
     </div>
   </div>
   <hr />

@@ -170,6 +170,7 @@ export class FilesComponent implements OnInit, OnDestroy {
     }
 
     public getFileInfo(id: string) {
+        this.actualFile = null;
         if (id == null) {
             this.actualFile = new FileOut();
             this.actualFile.name = "Root";

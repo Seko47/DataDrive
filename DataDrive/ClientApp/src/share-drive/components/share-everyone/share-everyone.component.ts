@@ -28,7 +28,7 @@ export class ShareEveryoneComponent implements OnInit {
 
     constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService, private filesEventService: FilesEventService) {
         this.token = this.route.snapshot.params.token;
-
+        this.shareInfo.
         this.getShareInfoByToken();
     }
 

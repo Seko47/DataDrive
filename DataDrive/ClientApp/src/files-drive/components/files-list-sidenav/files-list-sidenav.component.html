@@ -25,12 +25,15 @@
 <div class="row col-12">
 
   <a mat-icon-button
+     class="ml-auto mr-auto"
      (click)="deleteFile();">
 
     <mat-icon>delete</mat-icon>
   </a>
 
   <a mat-icon-button
+     class="ml-auto mr-auto"
+     style="transform: scale(2);"
      *ngIf="actualFile && actualFile.fileType == 0"
      (click)="downloadFile();">
 
@@ -38,6 +41,7 @@
   </a>
 
   <a mat-icon-button
+     class="ml-auto mr-auto"
      *ngIf="actualFile && actualFile.fileType == 0"
      (click)="shareFile();">
 
@@ -60,7 +64,7 @@
   </div>
 </div>
 
-<div class="row col-12">
+<div class="row col-12"  *ngIf="actualFile.lastModifiedDateTime">
 
   <div class="col-sm-5 mr-auto ml-1">
 
