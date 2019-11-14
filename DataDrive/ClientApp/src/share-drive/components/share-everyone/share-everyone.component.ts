@@ -6,7 +6,7 @@ import { ShareEveryoneOut } from '../../../files-drive/models/share-everyone-out
 import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { ShareEveryoneCredentials } from '../../models/share-everyone-credentials';
 import { MatDialog } from '@angular/material/dialog';
-import { PasswordForTokenDialogComponent, Status } from '../password-for-token-dialog/password-for-token-dialog.component';
+import { PasswordForTokenDialogComponent } from '../password-for-token-dialog/password-for-token-dialog.component';
 
 @Component({
     selector: 'app-share-everyone',
@@ -94,8 +94,7 @@ export class ShareEveryoneComponent implements OnInit {
             disableClose: true,
             data: {
                 token: this.token,
-                password: "",
-                status: Status.UNDEFINED
+                password: ""
             }
         });
 

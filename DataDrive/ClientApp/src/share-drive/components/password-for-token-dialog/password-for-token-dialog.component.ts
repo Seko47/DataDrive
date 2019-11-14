@@ -5,13 +5,6 @@ import { Router } from '@angular/router';
 export interface DialogData {
     token: string;
     password: string;
-    status: Status
-}
-
-export enum Status {
-    OK,
-    CANCEL,
-    UNDEFINED
 }
 
 @Component({
@@ -27,12 +20,7 @@ export class PasswordForTokenDialogComponent {
 
     onNoClick(): void {
         this.data.password = "";
-        this.data.status = Status.CANCEL;
         this.dialogRef.close(null);
         this.router.navigateByUrl('/');
-    }
-
-    onOkClick(): void {
-        this.data.status = Status.OK;
     }
 }
