@@ -53,6 +53,10 @@
 		"SIGN_OUT": "Sign out"
 	},
 	"SHARES": {
+		"CREATED": "Made available",
+		"DOWNLOAD_LIMIT": "Remaining download count",
+		"EXPIRATION_DATE": "Expiration date",
+		"MODIFIED": "Last edition of the settings",
 		"PASSWORD_FOR_TOKEN_DIALOG": {
 			"PASSWORD_PLACEHOLDER": "Type in password for token",
 			"TITLE": "Password required",

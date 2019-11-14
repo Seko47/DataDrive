@@ -53,6 +53,10 @@
 		"SIGN_OUT": "Wyloguj"
 	},
 	"SHARES": {
+		"CREATED": "Udostępniono",
+		"DOWNLOAD_LIMIT": "Pozostała liczba pobrań",
+		"EXPIRATION_DATE": "Data wygaśnięcia",
+		"MODIFIED": "Ostatnia edycja ustawień",
 		"PASSWORD_FOR_TOKEN_DIALOG": {
 			"PASSWORD_PLACEHOLDER": "Wpisz hasło do zasobu",
 			"TITLE": "Wymagane hasło",
