@@ -1,7 +1,17 @@
 <body>
   <app-nav-menu></app-nav-menu>
 
-  <button (click)="useLanguage('en')">{{ 'LANGUAGE.ENGLISH_SHORT' | translate }}</button>
-  <button (click)="useLanguage('pl')">{{ 'LANGUAGE.POLISH_SHORT' | translate }}</button>
-
+  <div style="text-align: center">
+    <button mat-mini-fab
+            color="primary"
+            (click)="useLanguage('en')">
+      {{ 'LANGUAGE.ENGLISH_SHORT' | translate }}
+    </button>
+    &nbsp;
+    <button mat-mini-fab
+            color="primary"
+            (click)="useLanguage('pl')">
+      {{ 'LANGUAGE.POLISH_SHORT' | translate }}
+    </button>
+  </div>
 </body>
