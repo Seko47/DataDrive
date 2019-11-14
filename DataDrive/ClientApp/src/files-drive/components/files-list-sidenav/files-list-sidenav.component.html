@@ -53,7 +53,8 @@
     {{ 'FILES.CREATED' | translate }}
   </div>
 
-  <div class="col-sm-6 ml-auto mr-0">
+  <div class="col-sm-6 ml-auto mr-0"
+         style="text-align: right">
 
     <b>{{ (actualFile.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
   </div>
@@ -66,7 +67,8 @@
     {{ 'FILES.MODIFIED' | translate }}
   </div>
 
-  <div class="col-sm-6 ml-auto mr-0">
+  <div class="col-sm-6 ml-auto mr-0"
+         style="text-align: right">
 
     <b>{{ (actualFile.lastModifiedDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
   </div>

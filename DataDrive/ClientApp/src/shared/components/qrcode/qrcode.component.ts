@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class QrcodeComponent implements OnInit {
 
-    @Input("text") qrCodeText: string;
+    @Input("text") qrCodeText: string = " ";
 
   constructor() { }
 

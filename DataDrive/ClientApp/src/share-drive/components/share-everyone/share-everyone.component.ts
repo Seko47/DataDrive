@@ -3,10 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FilesService } from '../../../files-drive/services/files.service';
 import { SharesService } from '../../services/shares.service';
 import { ShareEveryoneOut } from '../../../files-drive/models/share-everyone-out';
-import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponseBase, HttpResponse } from '@angular/common/http';
 import { ShareEveryoneCredentials } from '../../models/share-everyone-credentials';
 import { MatDialog } from '@angular/material/dialog';
 import { PasswordForTokenDialogComponent } from '../password-for-token-dialog/password-for-token-dialog.component';
+import { FileOut } from '../../../files-drive/models/file-out';
+import { FilesEventService, FilesEventCode } from '../../../files-drive/services/files-event.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'app-share-everyone',
@@ -18,9 +21,12 @@ export class ShareEveryoneComponent implements OnInit {
     private token: string;
     private password: string = "";
 
+    private actualFile: FileOut;
     private shareInfo: ShareEveryoneOut;
 
-    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService) {
+    public urlToShareEveryone: string = window.location.origin + "/share/";
+
+    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService, private filesEventService: FilesEventService) {
         this.token = this.route.snapshot.params.token;
 
         this.getShareInfoByToken();
@@ -29,11 +35,32 @@ export class ShareEveryoneComponent implements OnInit {
     ngOnInit() {
     }
 
+    getFileOutByFileId(fileId: string) {
+        this.filesService.getFileInfo(fileId)
+            .subscribe(result => {
+
+                this.actualFile = result;
+            }, (err: HttpErrorResponse) => {
+                switch (err.status) {
+                    case 404: {
+                        this.filesService.cancelShareFileForEveryone(fileId);
+
+                        this.router.navigateByUrl("/");
+                        break;
+                    }
+                }
+            });
+    }
+
     getShareInfoByToken() {
         this.sharesService.getShareByToken(this.token)
             .subscribe(result => {
 
+                result.token = this.urlToShareEveryone + result.token;
+
                 this.shareInfo = result;
+
+                this.getFileOutByFileId(this.shareInfo.fileID);
             }, (err: HttpErrorResponse) => {
 
                 switch (err.status) {
@@ -63,7 +90,11 @@ export class ShareEveryoneComponent implements OnInit {
                 this.sharesService.getShareByTokenAndPassword(new ShareEveryoneCredentials(this.token, this.password))
                     .subscribe(result => {
 
+                        result.token = this.urlToShareEveryone + result.token;
+
                         this.shareInfo = result;
+
+                        this.getFileOutByFileId(this.shareInfo.fileID);
                     }, (err: HttpErrorResponse) => {
                         switch (err.status) {
                             case 404: {
@@ -88,6 +119,30 @@ export class ShareEveryoneComponent implements OnInit {
             }
         });
     }
+
+    downloadFile() {
+        this.filesService.downloadFile(this.actualFile.id)
+            .subscribe((result: HttpResponse<Blob>) => {
+               
+                let fileName = "download";
+                if (result.headers.has("content-disposition")) {
+
+                    let contentDisposition = result.headers.get("content-disposition");
+                    const startIndex = contentDisposition.indexOf("filename=") + 9;
+                    contentDisposition = contentDisposition.substr(startIndex);
+
+                    const endIndex = contentDisposition.indexOf(';');
+                    let rawFileName = contentDisposition.substring(0, endIndex);
+
+                    if (rawFileName.startsWith('"') && rawFileName.endsWith('"')) {
+                        rawFileName = rawFileName.substring(1, rawFileName.length - 1);
+                    }
+
+                    fileName = rawFileName;
+                }
+
+                saveAs(result.body, fileName);
+            }, err => console.log(err.error));    }
 
     openPasswordDialog() {
         const dialogRef = this.dialog.open(PasswordForTokenDialogComponent, {
