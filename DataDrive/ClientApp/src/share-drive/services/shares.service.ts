@@ -8,7 +8,7 @@ import { ShareEveryoneCredentials } from '../models/share-everyone-credentials';
     providedIn: 'root'
 })
 export class SharesService {
-
+    
     private baseUrl: string;
 
     constructor(private httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string) {

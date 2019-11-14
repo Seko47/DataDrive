@@ -27,5 +27,4 @@ import { ShareFileDialogComponent } from './components/share-file-dialog/share-f
 })
 export class FilesDriveModule { }
 
-//TODO przycisk share w sidemenu
 //TODO anulowanie udostępniania jeśli minęła data wygaśnięcia lub ilość pobrań wynosi 0
