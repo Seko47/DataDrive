@@ -27,6 +27,5 @@ import { ShareFileDialogComponent } from './components/share-file-dialog/share-f
 })
 export class FilesDriveModule { }
 
-//TODO nowy moduł z shareservice. Kontroler do obsługi tokenu (np. https://localhost:5001/share/EPF9) + token z hasłem
 //TODO przycisk share w sidemenu
 //TODO anulowanie udostępniania jeśli minęła data wygaśnięcia lub ilość pobrań wynosi 0

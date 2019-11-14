@@ -5,6 +5,8 @@ import { SharesService } from '../../services/shares.service';
 import { ShareEveryoneOut } from '../../../files-drive/models/share-everyone-out';
 import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { ShareEveryoneCredentials } from '../../models/share-everyone-credentials';
+import { MatDialog } from '@angular/material/dialog';
+import { PasswordForTokenDialogComponent, Status } from '../password-for-token-dialog/password-for-token-dialog.component';
 
 @Component({
     selector: 'app-share-everyone',
@@ -14,12 +16,20 @@ import { ShareEveryoneCredentials } from '../../models/share-everyone-credential
 export class ShareEveryoneComponent implements OnInit {
 
     private token: string;
+    private password: string = "";
 
     private shareInfo: ShareEveryoneOut;
 
-    constructor(private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService) {
+    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService) {
         this.token = this.route.snapshot.params.token;
 
+        this.getShareInfoByToken();
+    }
+
+    ngOnInit() {
+    }
+
+    getShareInfoByToken() {
         this.sharesService.getShareByToken(this.token)
             .subscribe(result => {
 
@@ -33,15 +43,7 @@ export class ShareEveryoneComponent implements OnInit {
                     }
                     case 401: {
 
-                        //TODO dialog do wpisania hasła
-                        this.sharesService.getShareByTokenAndPassword(new ShareEveryoneCredentials(this.token, '1234'))
-                            .subscribe(result => {
-
-                                this.shareInfo = result;
-                            }, (err: HttpErrorResponse) => {
-
-                                alert(err.error);
-                            })
+                        this.getShareInfoByTokenAndPassword();
                         break;
                     }
                     default: {
@@ -52,9 +54,52 @@ export class ShareEveryoneComponent implements OnInit {
             });
     }
 
-    ngOnInit() {
+    getShareInfoByTokenAndPassword() {
+        this.openPasswordDialog().subscribe(result => {
+
+            if (result !== null) {
+                this.password = result;
+
+                this.sharesService.getShareByTokenAndPassword(new ShareEveryoneCredentials(this.token, this.password))
+                    .subscribe(result => {
+
+                        this.shareInfo = result;
+                    }, (err: HttpErrorResponse) => {
+                        switch (err.status) {
+                            case 404: {
+
+                                this.router.navigateByUrl("/");
+                                break;
+                            }
+                            case 401: {
+
+                                this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                                    this.router.navigate(['share/' + this.token]);
+                                });
+                                break;
+                            }
+                            default: {
+
+                                this.router.navigateByUrl("/");
+                                break;
+                            }
+                        }
+                    });
+            }
+        });
     }
 
+    openPasswordDialog() {
+        const dialogRef = this.dialog.open(PasswordForTokenDialogComponent, {
+            disableClose: true,
+            data: {
+                token: this.token,
+                password: "",
+                status: Status.UNDEFINED
+            }
+        });
 
+        return dialogRef.afterClosed();
+    }
 
 }
