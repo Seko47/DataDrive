@@ -11,10 +11,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CopyFromInputComponent } from './components/copy-from-input/copy-from-input.component';
 import { NgxKjuaModule } from 'ngx-kjua';
+import { QrcodeComponent } from './components/qrcode/qrcode.component';
 
 
 @NgModule({
-    declarations: [CopyFromInputComponent],
+    declarations: [CopyFromInputComponent, QrcodeComponent],
     imports: [
         CommonModule,
         ApiAuthorizationModule,
@@ -47,7 +48,8 @@ import { NgxKjuaModule } from 'ngx-kjua';
         ReactiveFormsModule,
         TranslateModule,
         CopyFromInputComponent,
-        NgxKjuaModule
+        NgxKjuaModule,
+        QrcodeComponent
     ]
 })
 export class SharedModule { }

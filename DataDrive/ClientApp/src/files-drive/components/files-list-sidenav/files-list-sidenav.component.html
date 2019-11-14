@@ -91,12 +91,7 @@
 
   <div class="row col-12">
 
-    <ngx-kjua class="ml-auto mr-auto"
-              [text]="shareEveryoneInfo?.token"
-              [crisp]="true"
-              [render]="'svg'"
-              [ecLevel]="'Q'"
-              [fill]="'#000000'"
-              [back]="'#ffffff'"></ngx-kjua>
+    <qrcode class="ml-auto mr-auto"
+              [text]="shareEveryoneInfo?.token"></qrcode>
   </div>
 </div>
