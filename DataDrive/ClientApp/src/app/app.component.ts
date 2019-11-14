@@ -9,10 +9,15 @@ export class AppComponent {
     title = 'app';
 
     constructor(private translate: TranslateService) {
-        this.translate.setDefaultLang('en');
+        let language = 'en';
+        if (localStorage.getItem("application_language")) {
+            language = localStorage.getItem("application_language");
+        }
+        this.translate.setDefaultLang(language);
     }
 
     public useLanguage(language: string) {
+        localStorage.setItem("application_language", language);
         this.translate.use(language);
     }
 }
