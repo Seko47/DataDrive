@@ -1,4 +1,7 @@
 <body>
+  <button *ngIf="pwaService.promptInstallEvent" (click)="installPwa()">
+    Install
+  </button>
   <app-nav-menu></app-nav-menu>
 
   <div style="text-align: center">
