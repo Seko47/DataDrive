@@ -14,6 +14,8 @@ import { SharedModule } from '../shared/shared.module';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { ShareDriveModule } from '../share-drive/share-drive.module';
 import { ScanQrCodeModule } from '../scan-qr-code/scan-qr-code.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -36,6 +38,7 @@ import { ScanQrCodeModule } from '../scan-qr-code/scan-qr-code.module';
         FilesDriveModule,
         ShareDriveModule,
         ScanQrCodeModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
     bootstrap: [AppComponent],
 })
