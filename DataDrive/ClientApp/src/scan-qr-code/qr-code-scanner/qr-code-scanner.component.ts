@@ -13,13 +13,12 @@ export class QrCodeScannerComponent {
 
     @ViewChild('qrcodescanner', null) qrCodeScanner: ZXingScannerComponent;
 
-    private scannerEnabled: boolean = true;
+    private scannerEnabled: boolean;
     private qrCodeText: string = null;
 
     constructor(private router: Router) { }
 
     public camerasFoundHandler(event: MediaDeviceInfo[]) {
-
 
         this.scannerEnabled = true;
     }
@@ -27,6 +26,7 @@ export class QrCodeScannerComponent {
     public camerasNotFoundHandler(event) {
 
         this.scannerEnabled = false;
+        this.router.navigateByUrl("/");
     }
 
     public scanSuccessHandler(event) {
@@ -34,13 +34,13 @@ export class QrCodeScannerComponent {
         this.scannerEnabled = false;
         this.qrCodeText = event;
 
-        if (this.isSystemURL(this.qrCodeText)) {
+        if (this.isSystemURL()) {
 
             this.router.navigateByUrl(this.qrCodeText.substring(this.systemURL.length));
         }
         else {
 
-            alert("scanSuccessHandler: " + this.qrCodeText + " | Not a system URL");
+
         }
     }
 
@@ -56,8 +56,8 @@ export class QrCodeScannerComponent {
 
     }
 
-    private isSystemURL(text: string) {
+    private isSystemURL() {
 
-        return text.startsWith(this.systemURL);
+        return this.qrCodeText.startsWith(this.systemURL);
     }
 }
