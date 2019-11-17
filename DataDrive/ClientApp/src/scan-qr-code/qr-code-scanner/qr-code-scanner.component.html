@@ -9,7 +9,7 @@
     <label class="alert alert-info ml-auto mr-auto">{{ 'QR_SCANNER.SCAN_A_QR_CODE' | translate }}</label>
   </div>
 
-  <div *ngIf="scannerEnabled && qrCodeText != null && !isSystemURL()" class="row col-12 ml-auto mr-auto">
+  <div *ngIf="qrCodeText != null && !isSystemURL()" class="row col-12 ml-auto mr-auto">
     <label class="alert alert-info ml-auto mr-auto">{{ 'QR_SCANNER.TEXT_IS_NOT_SYSTEM_URL' | translate }}</label>
   </div>
 

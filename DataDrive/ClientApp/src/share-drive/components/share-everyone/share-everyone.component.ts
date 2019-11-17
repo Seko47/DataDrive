@@ -124,7 +124,7 @@ export class ShareEveryoneComponent implements OnInit {
     downloadFile() {
         this.filesService.downloadFile(this.actualFile.id)
             .subscribe((result: HttpResponse<Blob>) => {
-               
+
                 let fileName = "download";
                 if (result.headers.has("content-disposition")) {
 
@@ -143,7 +143,14 @@ export class ShareEveryoneComponent implements OnInit {
                 }
 
                 saveAs(result.body, fileName);
-            }, err => console.log(err.error));    }
+            }, (err: HttpErrorResponse) => {
+                if (err.status == 404) {
+                    alert("Resource is no longer available");
+
+                    this.router.navigateByUrl("/");
+                }
+            });
+    }
 
     openPasswordDialog() {
         const dialogRef = this.dialog.open(PasswordForTokenDialogComponent, {

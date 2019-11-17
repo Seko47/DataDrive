@@ -1,5 +1,12 @@
 <ul fxLayout fxLayoutGap="20px" style="list-style-type:none" *ngIf="isAuthenticated | async">
 
+  <li>
+    <a mat-icon-button
+       [routerLink]='["/scan"]'>
+      <mat-icon>camera</mat-icon>
+    </a>
+  </li>
+
   <li fxHide.xs>
     <a mat-icon-button
        [routerLink]='["/authentication/profile"]'>
@@ -28,6 +35,13 @@
 </ul>
 
 <ul fxLayout fxLayoutGap="20px" style="list-style-type:none" *ngIf="!(isAuthenticated | async)">
+
+  <li>
+    <a mat-icon-button
+       [routerLink]='["/scan"]'>
+      <mat-icon>camera</mat-icon>
+    </a>
+  </li>
 
   <li>
     <a mat-icon-button

@@ -47,6 +47,13 @@
         {{ 'NAVBAR.FILES' | translate }}
       </a>
 
+      <a mat-list-item
+         (click)="sidenav.close()"
+         [routerLink]="'/scan'">
+        <mat-icon>camera</mat-icon>
+        {{ 'NAVBAR.QR_CODE_SCANNER' | translate }}
+      </a>
+
       <button mat-button (click)="sidenav.close()">
         <mat-icon>close</mat-icon>
         {{ 'NAVBAR.CLOSE' | translate }}

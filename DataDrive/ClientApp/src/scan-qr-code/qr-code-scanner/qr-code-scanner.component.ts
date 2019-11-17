@@ -40,7 +40,7 @@ export class QrCodeScannerComponent {
         }
         else {
 
-
+            this.scannerEnabled = true;
         }
     }
 

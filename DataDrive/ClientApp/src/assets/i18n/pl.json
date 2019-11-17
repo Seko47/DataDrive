@@ -50,7 +50,13 @@
 		"HELLO_USERNAME": "Witaj {{ name }}",
 		"HOME": "Strona główna",
 		"MYDRIVE": "Mój Dysk",
+		"QR_CODE_SCANNER": "Skaner",
 		"SIGN_OUT": "Wyloguj"
+	},
+	"QR_SCANNER": {
+		"SCAN_A_QR_CODE": "Zeskanuj kod QR",
+		"TEXT_IS_NOT_SYSTEM_URL": "Ten kod nie został wygenerowany przez tą aplikację",
+		"YOU_HAVE_TO_GRANT_THE_CAMERA_PRIVILEGES": "Musisz przyznać uprawnienia do kamery"
 	},
 	"SHARES": {
 		"CREATED": "Udostępniono",
