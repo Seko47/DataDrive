@@ -1,1 +1,26 @@
-<p>qr-code-scanner works!</p>
+<div class="mt-3 row ml-auto mr-auto">
+  <div *ngIf="!scannerEnabled && qrCodeText == null" class="row col-12 ml-auto mr-auto">
+    <label class="alert alert-danger ml-auto mr-auto">
+      You have to grant the camera privileges
+    </label>
+  </div>
+
+  <div *ngIf="scannerEnabled && qrCodeText == null" class="row col-12 ml-auto mr-auto">
+    <label class="alert alert-info ml-auto mr-auto">Scan a QR code</label>
+  </div>
+
+  <div class="row col-12 ml-auto mr-auto">
+
+    <zxing-scanner *ngIf="scannerEnabled"
+                   [formats]="['QR_CODE', 'EAN_13', 'CODE_128', 'DATA_MATRIX']"
+                   [enable]="scannerEnabled"
+                   (camerasFound)="camerasFoundHandler($event)"
+                   (camerasNotFound)="camerasNotFoundHandler($event)"
+                   (scanSuccess)="scanSuccessHandler($event)"
+                   (scanError)="scanErrorHandler($event)"
+                   (scanFailure)="scanFailureHandler($event)"
+                   (scanComplete)="scanCompleteHandler($event)"
+                   #qrcodescanner></zxing-scanner>
+
+  </div>
+</div>

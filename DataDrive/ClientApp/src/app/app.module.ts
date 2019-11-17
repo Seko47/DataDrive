@@ -13,6 +13,7 @@ import { FilesDriveModule } from '../files-drive/files-drive.module';
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { ShareDriveModule } from '../share-drive/share-drive.module';
+import { ScanQrCodeModule } from '../scan-qr-code/scan-qr-code.module';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import { ShareDriveModule } from '../share-drive/share-drive.module';
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
         ]),
         FilesDriveModule,
-        ShareDriveModule
+        ShareDriveModule,
+        ScanQrCodeModule,
     ],
     bootstrap: [AppComponent],
 })

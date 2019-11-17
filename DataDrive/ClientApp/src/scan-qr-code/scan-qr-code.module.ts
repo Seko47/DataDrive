@@ -10,6 +10,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     imports: [
         CommonModule,
         SharedModule,
+        ZXingScannerModule,
         RouterModule.forChild([
             { path: 'scan', component: QrCodeScannerComponent },
         ])
