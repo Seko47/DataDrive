@@ -55,7 +55,7 @@ namespace DataDrive.Notes.Controllers
 
             if (status.Code == StatusCodes.Status404NotFound)
             {
-                return NotFound("Notes not found");
+                return NotFound(status.Message);
             }
 
             return Ok(status.Body);

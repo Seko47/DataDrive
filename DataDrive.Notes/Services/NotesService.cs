@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataDrive.Notes.Services
@@ -46,9 +47,20 @@ namespace DataDrive.Notes.Services
             return new StatusCode<Guid>(StatusCodes.Status200OK, noteId);
         }
 
-        public Task<StatusCode<List<NoteOut>>> GetAllByUser(string username)
+        public async Task<StatusCode<List<NoteOut>>> GetAllByUser(string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username)).Id;
+
+            List<NoteOut> notes = _mapper.Map<List<NoteOut>>(await _databaseContext.Notes
+                .Where(_ => _.OwnerID == userId)
+                .ToListAsync());
+
+            if (notes == null || !notes.Any())
+            {
+                return new StatusCode<List<NoteOut>>(StatusCodes.Status404NotFound, $"Notes not found");
+            }
+
+            return new StatusCode<List<NoteOut>>(StatusCodes.Status200OK, notes);
         }
 
         public Task<StatusCode<NoteOut>> GetByIdAndUser(Guid noteId, string username)
