@@ -1,11 +1,15 @@
-﻿using DataDrive.DAO.Models;
+﻿using DataDrive.DAO.Helpers.Communication;
+using DataDrive.DAO.Models;
 using DataDrive.Notes.Models.In;
+using DataDrive.Notes.Models.Out;
 using DataDrive.Notes.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataDrive.Notes.Controllers
@@ -31,17 +35,30 @@ namespace DataDrive.Notes.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
-            throw new NotImplementedException();
+            StatusCode<NoteOut> status = await _notesService.GetByIdAndUser(id, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound($"Note {id} not found");
+            }
+
+            return Ok(status.Body);
         }
 
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
-            throw new NotImplementedException();
+            StatusCode<List<NoteOut>> status = await _notesService.GetAllByUser(_userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound("Notes not found");
+            }
+
+            return Ok(status.Body);
         }
 
         [HttpDelete("{id}")]
