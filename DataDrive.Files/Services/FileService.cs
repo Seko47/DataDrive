@@ -8,7 +8,6 @@ using DataDrive.Files.Models.In;
 using DataDrive.Files.Models.Out;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

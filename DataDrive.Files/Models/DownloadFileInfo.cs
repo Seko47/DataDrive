@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.StaticFiles;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataDrive.Files.Models
 {

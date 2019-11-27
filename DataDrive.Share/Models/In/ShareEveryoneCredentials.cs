@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataDrive.Share.Models.In
+﻿namespace DataDrive.Share.Models.In
 {
     public class ShareEveryoneCredentials
     {

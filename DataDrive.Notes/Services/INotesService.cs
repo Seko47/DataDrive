@@ -4,7 +4,6 @@ using DataDrive.Notes.Models.Out;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataDrive.Notes.Services
