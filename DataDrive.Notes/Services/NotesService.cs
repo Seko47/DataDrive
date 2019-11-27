@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataDrive.Notes.Services
 {
-    public class NotesService
+    public class NotesService : INotesService
     {
     }
 }
