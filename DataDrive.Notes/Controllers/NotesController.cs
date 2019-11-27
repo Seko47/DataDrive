@@ -65,11 +65,22 @@ namespace DataDrive.Notes.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            StatusCode<Guid> status = await _notesService.DeleteByIdAndUser(id, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound($"Note {id} not found");
+            }
+
+            if (status.Code == StatusCodes.Status400BadRequest)
+            {
+                return BadRequest(status.Message);
+            }
+
+            return Ok(status.Body);
         }
 
         [HttpPatch("{id}")]
@@ -78,18 +89,24 @@ namespace DataDrive.Notes.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<NotePatch> jsonPatch)
         {
-            throw new NotImplementedException();
+            StatusCode<NoteOut> status = await _notesService.PatchByIdAndFilePatchAndUser(id, jsonPatch, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound($"Note {id} not found");
+            }
+
+            return Ok(status.Body);
         }
 
         [HttpPost, DisableRequestSizeLimit]
         [Produces("application/json")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
         public async Task<IActionResult> Post([FromBody] NotePost notePost)
         {
-            throw new NotImplementedException();
+            StatusCode<NoteOut> status = await _notesService.PostNoteByUser(notePost, _userManager.GetUserName(User));
+
+            return Ok(status.Body);
         }
     }
 }

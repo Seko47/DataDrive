@@ -115,7 +115,6 @@ namespace DataDrive.Files.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -126,7 +125,7 @@ namespace DataDrive.Files.Controllers
                 return NotFound($"File {id} not found");
             }
 
-            if (result.Code == StatusCodes.Status304NotModified)
+            if (result.Code == StatusCodes.Status400BadRequest)
             {
                 return BadRequest(result.Message);
             }
