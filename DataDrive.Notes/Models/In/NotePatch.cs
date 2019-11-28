@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataDrive.DAO.Models.Base;
+using DataDrive.DAO.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 
@@ -11,12 +11,12 @@ namespace DataDrive.Notes.Models.In
         public string Content { get; set; }
     }
 
-    public class JsonPatchDocument_Mapper : Profile
+    public class JsonPatchDocument_NotePatch_Mapper : Profile
     {
-        public JsonPatchDocument_Mapper()
+        public JsonPatchDocument_NotePatch_Mapper()
         {
-            CreateMap(typeof(JsonPatchDocument<NotePatch>), typeof(JsonPatchDocument<FileAbstract>));
-            CreateMap(typeof(Operation<NotePatch>), typeof(Operation<FileAbstract>));
+            CreateMap(typeof(JsonPatchDocument<NotePatch>), typeof(JsonPatchDocument<Note>));
+            CreateMap(typeof(Operation<NotePatch>), typeof(Operation<Note>));
         }
     }
 }

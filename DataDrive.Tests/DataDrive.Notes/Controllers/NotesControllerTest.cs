@@ -292,7 +292,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
             StatusCode<NoteOut> status = new StatusCode<NoteOut>(StatusCodes.Status200OK);
 
             Mock<INotesService> notesServiceMock = new Mock<INotesService>();
-            notesServiceMock.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<NotePatch>>(), It.IsAny<string>()))
+            notesServiceMock.Setup(_ => _.PatchByIdAndNotePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<NotePatch>>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(status));
 
             NotesController notesController = new NotesController(notesServiceMock.Object, UserManagerHelper.GetUserManager(ADMIN_USERNAME));
@@ -313,7 +313,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
             StatusCode<NoteOut> status = new StatusCode<NoteOut>(StatusCodes.Status200OK, note);
 
             Mock<INotesService> notesServiceMock = new Mock<INotesService>();
-            notesServiceMock.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<NotePatch>>(), It.IsAny<string>()))
+            notesServiceMock.Setup(_ => _.PatchByIdAndNotePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<NotePatch>>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(status));
 
             NotesController notesController = new NotesController(notesServiceMock.Object, UserManagerHelper.GetUserManager(ADMIN_USERNAME));
@@ -331,7 +331,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
             StatusCode<NoteOut> status = new StatusCode<NoteOut>(StatusCodes.Status404NotFound);
 
             Mock<INotesService> notesServiceMock = new Mock<INotesService>();
-            notesServiceMock.Setup(_ => _.PatchByIdAndFilePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<NotePatch>>(), It.IsAny<string>()))
+            notesServiceMock.Setup(_ => _.PatchByIdAndNotePatchAndUser(It.IsAny<Guid>(), It.IsAny<JsonPatchDocument<NotePatch>>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(status));
 
             NotesController notesController = new NotesController(notesServiceMock.Object, UserManagerHelper.GetUserManager(ADMIN_USERNAME));

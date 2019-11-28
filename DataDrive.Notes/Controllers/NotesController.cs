@@ -89,7 +89,7 @@ namespace DataDrive.Notes.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<NotePatch> jsonPatch)
         {
-            StatusCode<NoteOut> status = await _notesService.PatchByIdAndFilePatchAndUser(id, jsonPatch, _userManager.GetUserName(User));
+            StatusCode<NoteOut> status = await _notesService.PatchByIdAndNotePatchAndUser(id, jsonPatch, _userManager.GetUserName(User));
 
             if (status.Code == StatusCodes.Status404NotFound)
             {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using System;
 
@@ -19,11 +20,11 @@ namespace DataDrive.Notes.Models.Out
         public FileType FileType { get; set; }
     }
 
-    public class FileAbstract_to_NoteOut : Profile
+    public class Note_to_NoteOut : Profile
     {
-        public FileAbstract_to_NoteOut()
+        public Note_to_NoteOut()
         {
-            CreateMap<FileAbstract, NoteOut>();
+            CreateMap<Note, NoteOut>();
         }
     }
 }

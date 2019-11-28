@@ -124,9 +124,30 @@ namespace DataDrive.Notes.Services
             return new StatusCode<NoteOut>(StatusCodes.Status404NotFound, $"Note {noteId} not found");
         }
 
-        public Task<StatusCode<NoteOut>> PatchByIdAndFilePatchAndUser(Guid guid, JsonPatchDocument<NotePatch> jsonPatchDocument, string v)
+        public async Task<StatusCode<NoteOut>> PatchByIdAndNotePatchAndUser(Guid noteId, JsonPatchDocument<NotePatch> jsonPatchDocument, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))?
+                .Id;
+
+            Note note = await _databaseContext.Notes.FirstOrDefaultAsync(_ => _.ID == noteId && _.OwnerID == userId);
+
+            if (note == null)
+            {
+                return new StatusCode<NoteOut>(StatusCodes.Status404NotFound, $"Note {noteId} not found");
+            }
+
+            JsonPatchDocument<Note> notePatch = _mapper.Map<JsonPatchDocument<Note>>(jsonPatchDocument);
+
+            notePatch.ApplyTo(note);
+            note.LastModifiedDateTime = DateTime.Now;
+
+            await _databaseContext.SaveChangesAsync();
+
+            note = await _databaseContext.Notes
+                .FirstOrDefaultAsync(_ => _.ID == noteId);
+
+            return new StatusCode<NoteOut>(StatusCodes.Status200OK, _mapper.Map<NoteOut>(note));
         }
 
         public Task<StatusCode<NoteOut>> PostNoteByUser(NotePost note, string username)
