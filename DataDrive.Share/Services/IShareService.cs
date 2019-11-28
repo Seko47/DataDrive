@@ -16,5 +16,6 @@ namespace DataDrive.Share.Services
         Task<StatusCode<ShareEveryoneOut>> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit);
         Task<string> ShareForUser(Guid fileId, string ownerUsername, string username);
         Task<bool> CancelSharingForEveryone(Guid fileId, string username);
+        Task<bool> CancelSharingForUser(Guid noteId, string userId);
     }
 }

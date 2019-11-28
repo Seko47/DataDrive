@@ -178,6 +178,11 @@ namespace DataDrive.Share.Services
             throw new NotImplementedException();
         }
 
+        public Task<bool> CancelSharingForUser(Guid noteId, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private string GenerateToken()
         {
@@ -217,5 +222,6 @@ namespace DataDrive.Share.Services
 
             return token.ToUpper();
         }
+
     }
 }

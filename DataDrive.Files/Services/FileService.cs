@@ -149,7 +149,7 @@ namespace DataDrive.Files.Services
 
             if (fileToDownload == null
                 || (fileToDownload.OwnerID != userId
-                && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId))
+                && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId && _.FileID == id))
                 && !fileToDownload.IsSharedForEveryone))
             {
                 return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);

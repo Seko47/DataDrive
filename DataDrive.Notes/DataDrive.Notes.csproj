@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataDrive.DAO\DataDrive.DAO.csproj" />
+    <ProjectReference Include="..\DataDrive.Share\DataDrive.Share.csproj" />
   </ItemGroup>
 
 </Project>
