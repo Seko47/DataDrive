@@ -896,4 +896,38 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             Assert.Equal(StatusCodes.Status404NotFound, status.Code);
         }
     }
+
+    public class NotesServiceTest_PostNoteByUser
+    {
+        private readonly static string ADMIN_USERNAME = "admin@admin.com";
+
+        [Fact]
+        public async void Returns_OkObjectResult200AndCreatedNote_when_NoteCreated()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new Note_to_NoteOut());
+            });
+            IMapper mapper = mapperConfiguration.CreateMapper();
+
+            INotesService notesService = new NotesService(databaseContext, mapper);
+
+            NotePost newNotePost = new NotePost
+            {
+                Title = "Note's title",
+                Content = "Note's content"
+            };
+
+            StatusCode<NoteOut> status = await notesService.PostNoteByUser(newNotePost, ADMIN_USERNAME);
+
+            Assert.NotNull(status);
+            Assert.Equal(StatusCodes.Status200OK, status.Code);
+            Assert.NotNull(status.Body);
+            Assert.Equal(newNotePost.Title, status.Body.Title);
+            Assert.Equal(newNotePost.Content, status.Body.Content);
+            Assert.Equal(DAO.Models.Base.FileType.NOTE, status.Body.FileType);
+            Assert.True(databaseContext.Notes.AnyAsync(_ => _.ID == status.Body.ID).Result);
+        }
+    }
 }

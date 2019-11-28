@@ -150,9 +150,27 @@ namespace DataDrive.Notes.Services
             return new StatusCode<NoteOut>(StatusCodes.Status200OK, _mapper.Map<NoteOut>(note));
         }
 
-        public Task<StatusCode<NoteOut>> PostNoteByUser(NotePost note, string username)
+        public async Task<StatusCode<NoteOut>> PostNoteByUser(NotePost note, string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))?
+                .Id;
+
+            Note newNote = new Note
+            {
+                CreatedDateTime = DateTime.Now,
+                FileType = DAO.Models.Base.FileType.NOTE,
+                Content = note.Content,
+                OwnerID = userId,
+                Title = note.Title
+            };
+
+            await _databaseContext.Notes.AddAsync(newNote);
+            await _databaseContext.SaveChangesAsync();
+
+            NoteOut result = _mapper.Map<NoteOut>(newNote);
+
+            return new StatusCode<NoteOut>(StatusCodes.Status200OK, result);
         }
     }
 }
