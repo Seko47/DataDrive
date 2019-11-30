@@ -13,8 +13,8 @@ export class QrCodeScannerComponent {
 
     @ViewChild('qrcodescanner', null) qrCodeScanner: ZXingScannerComponent;
 
-    private scannerEnabled: boolean;
-    private qrCodeText: string = null;
+    public scannerEnabled: boolean;
+    public qrCodeText: string = null;
 
     constructor(private router: Router) { }
 
@@ -56,7 +56,7 @@ export class QrCodeScannerComponent {
 
     }
 
-    private isSystemURL() {
+    public isSystemURL() {
 
         return this.qrCodeText.startsWith(this.systemURL);
     }

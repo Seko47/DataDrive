@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataDrive.Tests", "DataDriv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataDrive.Share", "DataDrive.Share\DataDrive.Share.csproj", "{F2C7AD84-CD2F-4E53-A95A-482C5B659F0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDrive.Notes", "DataDrive.Notes\DataDrive.Notes.csproj", "{08CE4017-2C2C-4BBE-B8DA-5FA0595BD840}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataDrive.Notes", "DataDrive.Notes\DataDrive.Notes.csproj", "{08CE4017-2C2C-4BBE-B8DA-5FA0595BD840}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

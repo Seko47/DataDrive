@@ -21,8 +21,8 @@ export class ShareEveryoneComponent implements OnInit {
     private token: string;
     private password: string = "";
 
-    private actualFile: FileOut;
-    private shareInfo: ShareEveryoneOut;
+    public actualFile: FileOut;
+    public shareInfo: ShareEveryoneOut;
 
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
