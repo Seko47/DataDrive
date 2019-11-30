@@ -16,6 +16,7 @@ import { ShareDriveModule } from '../share-drive/share-drive.module';
 import { ScanQrCodeModule } from '../scan-qr-code/scan-qr-code.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { NotesDriveModule } from '../notes-drive/notes-drive.module';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,7 @@ import { environment } from '../environments/environment';
         ]),
         FilesDriveModule,
         ShareDriveModule,
+        NotesDriveModule,
         ScanQrCodeModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
