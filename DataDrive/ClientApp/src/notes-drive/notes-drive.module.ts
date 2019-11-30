@@ -4,14 +4,18 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { NotesComponent } from './components/notes/notes.component';
+import { AddNoteComponent } from './components/add-note/add-note.component';
+import { NotesToolbarComponent } from './components/notes-toolbar/notes-toolbar.component';
+import { NotesListComponent } from './components/notes-list/notes-list.component';
 
 @NgModule({
-  declarations: [NotesComponent],
+  declarations: [NotesComponent, AddNoteComponent, NotesToolbarComponent, NotesListComponent],
   imports: [
       CommonModule,
       SharedModule,
       RouterModule.forChild([
           { path: 'drive/notes', component: NotesComponent, canActivate: [AuthorizeGuard] },
+          { path: 'drive/notes/add', component: AddNoteComponent, canActivate: [AuthorizeGuard] },
       ])
   ]
 })

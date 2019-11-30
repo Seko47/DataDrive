@@ -1,0 +1,21 @@
+<mat-toolbar color="secondary">
+  <h1>{{ 'NOTES.TITLE' | translate }}</h1>
+
+  <div fxFlex
+       fxLayout
+       fxLayoutAlign="flex-end">
+
+    <ul fxLayout
+        fxLayoutGap="20px"
+        style="list-style-type:none">
+
+      <li>
+        <a mat-icon-button
+           (click)="addNote()">
+
+          <mat-icon>add_circle</mat-icon>
+        </a>
+      </li>
+    </ul>
+  </div>
+</mat-toolbar>
