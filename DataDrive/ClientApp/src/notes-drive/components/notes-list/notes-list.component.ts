@@ -14,19 +14,11 @@ export class NotesListComponent implements OnInit {
 
     constructor(private notesService: NotesService) {
 
-        this.notesService.getAllOnlineNotes().subscribe(result => {
+        this.notesService.getAllNotes().subscribe(result => {
 
             this.notes = result;
             if (!this.notes) {
                 this.notes = [];
-            }
-
-            var offline = this.notesService.getOffline();
-            if (offline) {
-                offline.forEach(note => {
-
-                    this.notes.push(note);
-                });
             }
 
             this.notes.forEach(note => {
@@ -40,20 +32,7 @@ export class NotesListComponent implements OnInit {
             });
         }, (error: HttpErrorResponse) => {
 
-            this.notesService.getOffline().forEach(note => {
-
-                this.notes.push(note);
-            });
-
-            this.notes.forEach(note => {
-                var div = document.createElement("div");
-                if (note.content) {
-                    note.content = note.content.replace("<div>", "\n");
-                    note.content = note.content.replace("</div>", "\n");
-                }
-                div.innerHTML = note.content;
-                note.content = div.textContent;
-            });
+            alert(error.message);
         });
     }
 

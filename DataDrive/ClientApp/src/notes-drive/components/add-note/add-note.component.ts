@@ -56,14 +56,13 @@ export class AddNoteComponent implements OnInit {
             return;
         }
 
-        this.notesService.addOnlineNote(this.newNote).subscribe(result => {
+        this.notesService.addNote(this.newNote).subscribe(result => {
 
-            this.notesService.sync();
             console.log("Note added");
             this.getBackToList();
         }, (error: HttpErrorResponse) => {
 
-                this.notesService.addOfflineNote(this.newNote);
+                alert(error.message);
                 this.getBackToList();
         });
     }
