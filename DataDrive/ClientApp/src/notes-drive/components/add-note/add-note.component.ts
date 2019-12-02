@@ -3,6 +3,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { Router } from '@angular/router';
 import { NotesService } from '../../services/notes.service';
 import { NotePost } from '../../models/note-post';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-add-note',
@@ -50,8 +51,16 @@ export class AddNoteComponent implements OnInit {
     }
 
     public saveNote(): void {
-        this.notesService.add(this.newNote);
-        this.getBackToList();
+        this.notesService.addOnlineNote(this.newNote).subscribe(result => {
+
+            this.notesService.sync();
+            console.log("Note added");
+            this.getBackToList();
+        }, (error: HttpErrorResponse) => {
+
+                this.notesService.addOfflineNote(this.newNote);
+                this.getBackToList();
+        });
     }
 
     public getBackToList(): void {

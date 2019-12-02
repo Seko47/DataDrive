@@ -7,7 +7,7 @@
        [contextMenu]="noteMenu"
        [contextMenuSubject]="note">
 
-    <mat-card title="{{ note.title }}">
+    <mat-card title="{{ note.title || ('NOTES.NO_NAME' | translate) }}">
       <h4>
         <b>{{ note.title }}</b>
       </h4>

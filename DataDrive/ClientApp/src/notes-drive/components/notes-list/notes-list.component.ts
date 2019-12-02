@@ -14,7 +14,7 @@ export class NotesListComponent implements OnInit {
 
     constructor(private notesService: NotesService) {
 
-        this.notesService.getAll().subscribe(result => {
+        this.notesService.getAllOnlineNotes().subscribe(result => {
 
             this.notes = result;
             if (!this.notes) {
@@ -47,12 +47,16 @@ export class NotesListComponent implements OnInit {
 
             this.notes.forEach(note => {
                 var div = document.createElement("div");
+                if (note.content) {
+                    note.content = note.content.replace("<div>", "\n");
+                    note.content = note.content.replace("</div>", "\n");
+                }
                 div.innerHTML = note.content;
-                alert(div.innerHTML);
-                note.content = div.innerHTML;
+                note.content = div.textContent;
             });
         });
     }
+
     ngOnInit() {
     }
 

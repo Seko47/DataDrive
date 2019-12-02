@@ -57,6 +57,7 @@
 		"ADD": {
 			"GET_BACK": "Back"
 		},
+		"NO_NAME": "Unnamed",
 		"TITLE": "Notes"
 	},
 	"QR_SCANNER": {
