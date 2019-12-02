@@ -51,6 +51,11 @@ export class AddNoteComponent implements OnInit {
     }
 
     public saveNote(): void {
+        if (!this.newNote.title && !this.newNote.content) {
+            alert("Note is empty");
+            return;
+        }
+
         this.notesService.addOnlineNote(this.newNote).subscribe(result => {
 
             this.notesService.sync();
