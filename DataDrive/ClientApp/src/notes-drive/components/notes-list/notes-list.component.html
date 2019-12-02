@@ -37,7 +37,7 @@
       </button>
     </ng-template>
 
-    <ng-template contextMenuItem let-item (execute)="deleteFile($event.item.id)">
+    <ng-template contextMenuItem let-item (execute)="deleteNote($event.item.id)">
       <button mat-button style="width: 100%">
         <mat-icon>delete</mat-icon>
         {{ 'NOTES.CONTEXT_MENU.DELETE' | translate }}

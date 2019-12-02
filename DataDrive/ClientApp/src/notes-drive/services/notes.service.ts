@@ -24,4 +24,8 @@ export class NotesService {
 
         return this.httpClient.post<NoteOut>(this.baseUrl + 'api/Notes', newNote);
     }
+
+    public deleteNote(noteId: string) {
+        return this.httpClient.delete<string>(this.baseUrl + 'api/Notes/' + noteId);
+    }
 }

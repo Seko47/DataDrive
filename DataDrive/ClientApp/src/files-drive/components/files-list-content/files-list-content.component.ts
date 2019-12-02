@@ -3,7 +3,7 @@ import { DirectoryOut } from '../../models/directory-out';
 import { FileOut, FileType } from '../../models/file-out';
 import { FileMove } from '../../models/file-move';
 import { Operation, compare } from 'fast-json-patch';
-import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
+import { EventService, EventCode } from '../../services/files-event.service';
 
 @Component({
     selector: 'drive-files-list-content',
@@ -34,8 +34,7 @@ export class FilesListContentComponent implements OnInit {
         }
     }
 
-    constructor(private filesEventService: FilesEventService) {
-
+    constructor(private filesEventService: EventService) {
     }
 
     ngOnInit() {
@@ -43,22 +42,22 @@ export class FilesListContentComponent implements OnInit {
 
     public downloadFile(fileId: string) {
 
-        this.filesEventService.emit([FilesEventCode.DOWNLOAD, fileId]);
+        this.filesEventService.emit([EventCode.DOWNLOAD, fileId]);
     }
 
     public deleteFile(fileId: string) {
 
-        this.filesEventService.emit([FilesEventCode.DELETE, fileId]);
+        this.filesEventService.emit([EventCode.DELETE, fileId]);
     }
 
     public changeFileName(fileId: string, oldFileName: string) {
 
-        this.filesEventService.emit([FilesEventCode.RENAME, fileId, oldFileName]);
+        this.filesEventService.emit([EventCode.RENAME, fileId, oldFileName]);
     }
 
     public shareFile(fileId: string) {
 
-        this.filesEventService.emit([FilesEventCode.SHARE, fileId]);
+        this.filesEventService.emit([EventCode.SHARE, fileId]);
     }
 
     public clickFile(file: FileOut) {

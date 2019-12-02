@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { NoteOut } from '../../models/note-out';
 import { NotesService } from '../../services/notes.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventService, EventCode } from '../../../files-drive/services/files-event.service';
 
 @Component({
     selector: 'app-notes-list',
@@ -10,33 +11,16 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class NotesListComponent implements OnInit {
 
-    public notes: NoteOut[];
+    @Input("notes") notes: NoteOut[];
 
-    constructor(private notesService: NotesService) {
-
-        this.notesService.getAllNotes().subscribe(result => {
-
-            this.notes = result;
-            if (!this.notes) {
-                this.notes = [];
-            }
-
-            this.notes.forEach(note => {
-                var div = document.createElement("div");
-                if (note.content) {
-                    note.content = note.content.replace("<div>", "\n");
-                    note.content = note.content.replace("</div>", "\n");
-                }
-                div.innerHTML = note.content;
-                note.content = div.textContent;
-            });
-        }, (error: HttpErrorResponse) => {
-
-            alert(error.message);
-        });
+    constructor(private notesEventService: EventService) {
     }
 
     ngOnInit() {
     }
 
+    public deleteNote(noteId: string) {
+
+        this.notesEventService.emit([EventCode.DELETE, noteId]);
+    }
 }

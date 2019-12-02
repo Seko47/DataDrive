@@ -4,7 +4,7 @@ import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
 import { compare, Operation } from 'fast-json-patch';
-import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
+import { EventService, EventCode } from '../../services/files-event.service';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
 import { FilesService } from '../../services/files.service';
 
@@ -22,7 +22,7 @@ export class FilesListSidenavComponent implements OnInit {
 
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
-    constructor(private differs: KeyValueDiffers, private filesService: FilesService, private filesEventService: FilesEventService) {
+    constructor(private differs: KeyValueDiffers, private filesService: FilesService, private filesEventService: EventService) {
         this.actualFile = new FileOut();
         this.customerDiffer = this.differs.find(this.actualFile).create();
     }
@@ -46,22 +46,22 @@ export class FilesListSidenavComponent implements OnInit {
 
     public deleteFile() {
 
-        this.filesEventService.emit([FilesEventCode.DELETE, this.actualFile.id]);
+        this.filesEventService.emit([EventCode.DELETE, this.actualFile.id]);
     }
 
     public downloadFile() {
 
-        this.filesEventService.emit([FilesEventCode.DOWNLOAD, this.actualFile.id]);
+        this.filesEventService.emit([EventCode.DOWNLOAD, this.actualFile.id]);
     }
 
     public changeFileName() {
 
-        this.filesEventService.emit([FilesEventCode.RENAME, this.actualFile.id, this.actualFile.name]);
+        this.filesEventService.emit([EventCode.RENAME, this.actualFile.id, this.actualFile.name]);
     }
 
     public shareFile() {
 
-        this.filesEventService.emit([FilesEventCode.SHARE, this.actualFile.id]);
+        this.filesEventService.emit([EventCode.SHARE, this.actualFile.id]);
     }
 
     public getShareInfo() {

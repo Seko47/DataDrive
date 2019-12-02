@@ -7,7 +7,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Operation, compare } from 'fast-json-patch';
 import { FileMove } from '../../models/file-move';
 import { saveAs } from 'file-saver';
-import { FilesEventService, FilesEventCode } from '../../services/files-event.service';
+import { EventService, EventCode } from '../../services/files-event.service';
 import { HttpResponse } from '@angular/common/http';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
@@ -29,7 +29,7 @@ export class FilesComponent implements OnInit, OnDestroy {
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
 
 
-    constructor(private dialog: MatDialog, private filesService: FilesService, private filesEventService: FilesEventService) {
+    constructor(private dialog: MatDialog, private filesService: FilesService, private filesEventService: EventService) {
 
         this.actualDirectory = new DirectoryOut();
         this.actualDirectory.id = null;
@@ -41,14 +41,14 @@ export class FilesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getFromDirectory(null);
 
-        this.filesEventService.asObservable().subscribe((message: [FilesEventCode, string, string?]) => {
+        this.filesEventService.asObservable().subscribe((message: [EventCode, string, string?]) => {
 
             const eventCode = message[0];
             const fileId = message[1];
 
             switch (eventCode) {
 
-                case FilesEventCode.RENAME: {
+                case EventCode.RENAME: {
 
                     if (message[2] && message[2].length > 0) {
 
@@ -58,17 +58,17 @@ export class FilesComponent implements OnInit, OnDestroy {
                     }
                     break;
                 }
-                case FilesEventCode.DELETE: {
+                case EventCode.DELETE: {
 
                     this.deleteFile(fileId);
                     break;
                 }
-                case FilesEventCode.DOWNLOAD: {
+                case EventCode.DOWNLOAD: {
 
                     this.downloadFile(fileId);
                     break;
                 }
-                case FilesEventCode.SHARE: {
+                case EventCode.SHARE: {
 
                     this.openShareFileDialog(fileId);
 
