@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { Router } from '@angular/router';
+import { NotesService } from '../../services/notes.service';
+import { NotePost } from '../../models/note-post';
 
 @Component({
     selector: 'app-add-note',
@@ -11,8 +14,8 @@ export class AddNoteComponent implements OnInit {
     editorConfig: AngularEditorConfig = {
         editable: true,
         spellcheck: true,
-        height: '70vh',
-        minHeight: '0',
+        height: '40vh',
+        minHeight: '30vh',
         maxHeight: 'auto',
         width: 'auto',
         minWidth: '0',
@@ -37,9 +40,21 @@ export class AddNoteComponent implements OnInit {
         ]
     };
 
-    constructor() { }
+    public newNote: NotePost;
+
+    constructor(private router: Router, private notesService: NotesService) {
+        this.newNote = new NotePost();
+    }
 
     ngOnInit() {
     }
 
+    public saveNote(): void {
+        this.notesService.add(this.newNote);
+        this.getBackToList();
+    }
+
+    public getBackToList(): void {
+        this.router.navigateByUrl('/drive/notes');
+    }
 }

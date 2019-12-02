@@ -1,6 +1,43 @@
+<mat-toolbar>
+  <button mat-button
+          (click)="getBackToList();">
+
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'NOTES.ADD.GET_BACK' | translate }}
+  </button>
+
+  <span class="menu-spacer"></span>
+
+  <div fxFlex
+       fxLayout
+       fxLayoutAlign="flex-end">
+
+    <ul fxLayout
+        fxLayoutGap="20px"
+        style="list-style-type:none">
+
+      <li>
+
+        <a mat-icon-button
+           (click)="saveNote()">
+
+          <mat-icon>save</mat-icon>
+        </a>
+      </li>
+    </ul>
+  </div>
+</mat-toolbar>
+
 <div class="container">
-  <angular-editor [placeholder]="'Enter text here...'"
+  <mat-form-field class="col-12">
+    <input matInput
+           placeholder="Note title"
+           maxlength="50"
+           [(ngModel)]="newNote.title">
+  </mat-form-field>
+
+  <angular-editor [placeholder]="'Note content'"
                   [config]="editorConfig"
-                  [(ngModel)]="htmlContent">
+                  [(ngModel)]="newNote.content">
   </angular-editor>
 </div>

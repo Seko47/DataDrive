@@ -53,6 +53,12 @@
 		"QR_CODE_SCANNER": "Skaner",
 		"SIGN_OUT": "Wyloguj"
 	},
+	"NOTES": {
+		"ADD": {
+			"GET_BACK": "Powrót"
+		},
+		"TITLE": "Notatki"
+	},
 	"QR_SCANNER": {
 		"SCAN_A_QR_CODE": "Zeskanuj kod QR",
 		"TEXT_IS_NOT_SYSTEM_URL": "Ten kod nie został wygenerowany przez tą aplikację",
