@@ -25,7 +25,7 @@
     <ng-template contextMenuItem let-item (execute)="changeFileName($event.item.id, $event.item.name)">
       <button mat-button style="width: 100%">
         <mat-icon>edit</mat-icon>
-        {{ 'FILES.CONTEXT_MENU.RENAME' | translate }}
+        {{ 'NOTES.CONTEXT_MENU.EDIT' | translate }}
       </button>
     </ng-template>
 
@@ -33,14 +33,14 @@
 
       <button mat-button style="width: 100%">
         <mat-icon>share</mat-icon>
-        {{ 'FILES.CONTEXT_MENU.SHARE' | translate }}
+        {{ 'NOTES.CONTEXT_MENU.SHARE' | translate }}
       </button>
     </ng-template>
 
     <ng-template contextMenuItem let-item (execute)="deleteFile($event.item.id)">
       <button mat-button style="width: 100%">
         <mat-icon>delete</mat-icon>
-        {{ 'FILES.CONTEXT_MENU.DELETE' | translate }}
+        {{ 'NOTES.CONTEXT_MENU.DELETE' | translate }}
       </button>
     </ng-template>
   </context-menu>

@@ -57,6 +57,11 @@
 		"ADD": {
 			"GET_BACK": "Powrót"
 		},
+		"CONTEXT_MENU": {
+			"DELETE": "Usuń",
+			"EDIT": "Edytuj",
+			"SHARE": "Udostępnianie"
+		},
 		"NO_NAME": "Bez nazwy",
 		"TITLE": "Notatki"
 	},

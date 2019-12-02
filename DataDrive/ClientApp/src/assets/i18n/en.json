@@ -57,6 +57,11 @@
 		"ADD": {
 			"GET_BACK": "Back"
 		},
+		"CONTEXT_MENU": {
+			"DELETE": "Delete",
+			"EDIT": "Edit",
+			"SHARE": "Sharing"
+		},
 		"NO_NAME": "Unnamed",
 		"TITLE": "Notes"
 	},
