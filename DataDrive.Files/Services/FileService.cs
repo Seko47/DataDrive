@@ -171,7 +171,7 @@ namespace DataDrive.Files.Services
                 .Include(_ => _.ParentDirectory)
                 .Include(_ => _.ShareEveryone)
                 .Include(_ => _.ShareForUsers)
-                .FirstOrDefaultAsync(_ => _.ID == id);
+                .FirstOrDefaultAsync(_ => _.ID == id && (_.FileType == FileType.FILE || _.FileType == FileType.DIRECTORY));
 
             if (fileAbstract == null
                 || (fileAbstract.OwnerID != userId
@@ -220,7 +220,8 @@ namespace DataDrive.Files.Services
             else
             {
                 List<FileAbstract> files = await _databaseContext.FileAbstracts
-                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId)
+                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId 
+                        && (_.FileType == FileType.DIRECTORY || _.FileType == FileType.FILE))
                     .ToListAsync();
 
                 result = new DirectoryOut

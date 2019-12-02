@@ -8,12 +8,14 @@ import { AddNoteComponent } from './components/add-note/add-note.component';
 import { NotesToolbarComponent } from './components/notes-toolbar/notes-toolbar.component';
 import { NotesListComponent } from './components/notes-list/notes-list.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ContextMenuModule } from 'ngx-contextmenu';
 
 @NgModule({
   declarations: [NotesComponent, AddNoteComponent, NotesToolbarComponent, NotesListComponent],
   imports: [
       CommonModule,
       SharedModule,
+      ContextMenuModule.forRoot(),
       AngularEditorModule,
       RouterModule.forChild([
           { path: 'drive/notes', component: NotesComponent, canActivate: [AuthorizeGuard] },

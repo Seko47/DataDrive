@@ -17,8 +17,13 @@ export class NotesService {
         this.baseUrl = baseUrl;
     }
 
-    public add(newNote: NotePost) {
+    public getAll() {
         this.sync();
+
+        return this.httpClient.get<NoteOut[]>(this.baseUrl + 'api/Notes');
+    }
+
+    public add(newNote: NotePost) {
 
         this.post(newNote).subscribe(result => {
 
@@ -51,6 +56,27 @@ export class NotesService {
 
         console.log("Note add to offline")
     }
+
+    public getOffline(): NoteOut[] {
+        const value: string = localStorage.getItem(this.localStorageLocalNotesListOffline)
+        var offlineList: NotePost[];
+
+        if (value) {
+            offlineList = JSON.parse(value);
+        }
+        else {
+            offlineList = [];
+        }
+
+        var notes: NoteOut[];
+
+        for (var i = 0; i < offlineList.length; ++i) {
+            notes.push(new NoteOut(offlineList[i].title, offlineList[i].content));
+        }
+
+        return notes;
+    }
+
 
     public sync() {
         const value: string = localStorage.getItem(this.localStorageLocalNotesListOffline)
