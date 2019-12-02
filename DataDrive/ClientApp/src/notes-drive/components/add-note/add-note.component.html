@@ -1,1 +1,6 @@
-<p>add-note works!</p>
+<div class="container">
+  <angular-editor [placeholder]="'Enter text here...'"
+                  [config]="editorConfig"
+                  [(ngModel)]="htmlContent">
+  </angular-editor>
+</div>

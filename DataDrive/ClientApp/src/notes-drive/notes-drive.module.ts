@@ -7,12 +7,14 @@ import { NotesComponent } from './components/notes/notes.component';
 import { AddNoteComponent } from './components/add-note/add-note.component';
 import { NotesToolbarComponent } from './components/notes-toolbar/notes-toolbar.component';
 import { NotesListComponent } from './components/notes-list/notes-list.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
   declarations: [NotesComponent, AddNoteComponent, NotesToolbarComponent, NotesListComponent],
   imports: [
       CommonModule,
       SharedModule,
+      AngularEditorModule,
       RouterModule.forChild([
           { path: 'drive/notes', component: NotesComponent, canActivate: [AuthorizeGuard] },
           { path: 'drive/notes/add', component: AddNoteComponent, canActivate: [AuthorizeGuard] },
