@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NoteOut } from '../../models/note-out';
 import { NotesService } from '../../services/notes.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,9 +17,26 @@ export class NotesListComponent implements OnInit {
         this.notesService.getAll().subscribe(result => {
 
             this.notes = result;
-            this.notesService.getOffline().forEach(note => {
+            if (!this.notes) {
+                this.notes = [];
+            }
 
-                this.notes.push(note);
+            var offline = this.notesService.getOffline();
+            if (offline) {
+                offline.forEach(note => {
+
+                    this.notes.push(note);
+                });
+            }
+
+            this.notes.forEach(note => {
+                var div = document.createElement("div");
+                if (note.content) {
+                    note.content = note.content.replace("<div>", "\n");
+                    note.content = note.content.replace("</div>", "\n");
+                }
+                div.innerHTML = note.content;
+                note.content = div.textContent;
             });
         }, (error: HttpErrorResponse) => {
 
@@ -27,9 +44,15 @@ export class NotesListComponent implements OnInit {
 
                 this.notes.push(note);
             });
+
+            this.notes.forEach(note => {
+                var div = document.createElement("div");
+                div.innerHTML = note.content;
+                alert(div.innerHTML);
+                note.content = div.innerHTML;
+            });
         });
     }
-
     ngOnInit() {
     }
 

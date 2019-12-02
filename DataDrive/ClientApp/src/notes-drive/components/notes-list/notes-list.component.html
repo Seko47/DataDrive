@@ -1,30 +1,22 @@
 <div class="card-deck container ml-auto mr-auto">
 
   <div *ngFor="let note of notes"
-       class="col-md-12"
+       class="col-md-12 mt-2"
        mat-button
        (click)="show(note);"
        [contextMenu]="noteMenu"
        [contextMenuSubject]="note">
 
-    <mat-card class="card mt-2 mb-2"
-              title="{{ note.title }}">
-
+    <mat-card title="{{ note.title }}">
+      <h4>
+        <b>{{ note.title }}</b>
+      </h4>
       <mat-icon style="position: absolute; right:5px; top:5px"
-                *ngIf="file.isShared">people</mat-icon>
+                    *ngIf="note.isShared">people</mat-icon>
 
-      <p class="text-truncate"
-         style="text-align: center">
-        {{ note.title }}
+      <p class="text-truncate" *ngIf="note.content">
+        {{ note.content }}
       </p>
-
-      <div class="card col-6"
-           *cdkDragPreview>
-        <p class="text-truncate"
-           style="text-align: center">
-          {{ note.title }}
-        </p>
-      </div>
     </mat-card>
 
   </div>
@@ -37,17 +29,7 @@
       </button>
     </ng-template>
 
-    <ng-template contextMenuItem let-item (execute)="downloadFile($event.item.id)"
-                 [visible]="isNotDirectory">
-
-      <button mat-button style="width: 100%">
-        <mat-icon>get_app</mat-icon>
-        {{ 'FILES.CONTEXT_MENU.DOWNLOAD' | translate }}
-      </button>
-    </ng-template>
-
-    <ng-template contextMenuItem let-item (execute)="shareFile($event.item.id)"
-                 [visible]="isNotDirectory">
+    <ng-template contextMenuItem let-item (execute)="shareFile($event.item.id)">
 
       <button mat-button style="width: 100%">
         <mat-icon>share</mat-icon>
