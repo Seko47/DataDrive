@@ -61,12 +61,4 @@ export class FilesService {
         return this.httpClient.get(this.baseUrl + 'api/Files/download/' + id,
             { observe: "response", responseType: 'blob' });
     }
-
-    public shareFileForEveryone(shareForEveryoneIn: ShareForEveryoneIn) {
-        return this.httpClient.post<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/share', shareForEveryoneIn);
-    }
-
-    public cancelShareFileForEveryone(fileId: string) {
-        return this.httpClient.delete<boolean>(this.baseUrl + 'api/Share/everyone/' + fileId);
-    }
 }

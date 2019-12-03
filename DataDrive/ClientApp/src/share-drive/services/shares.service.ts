@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ShareEveryoneOut } from '../../files-drive/models/share-everyone-out';
 import { Observable } from 'rxjs';
 import { ShareEveryoneCredentials } from '../models/share-everyone-credentials';
+import { ShareForEveryoneIn } from '../../files-drive/models/share-for-everyone-in';
 
 @Injectable({
     providedIn: 'root'
@@ -30,5 +31,13 @@ export class SharesService {
 
     public getShareEveryoneInfo(id: string) {
         return this.httpClient.get<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/info/' + id);
+    }
+
+    public cancelShareForEveryone(id: string) {
+        return this.httpClient.delete<boolean>(this.baseUrl + 'api/Share/everyone/' + id);
+    }
+
+    public shareForEveryone(shareForEveryoneIn: ShareForEveryoneIn) {
+        return this.httpClient.post<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/share', shareForEveryoneIn);
     }
 }

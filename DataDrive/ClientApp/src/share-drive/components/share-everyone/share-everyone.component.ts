@@ -8,7 +8,6 @@ import { ShareEveryoneCredentials } from '../../models/share-everyone-credential
 import { MatDialog } from '@angular/material/dialog';
 import { PasswordForTokenDialogComponent } from '../password-for-token-dialog/password-for-token-dialog.component';
 import { FileOut } from '../../../files-drive/models/file-out';
-import { EventService, EventCode } from '../../../files-drive/services/files-event.service';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -26,7 +25,7 @@ export class ShareEveryoneComponent implements OnInit {
 
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
-    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService, private filesEventService: EventService) {
+    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService) {
 
         this.token = this.route.snapshot.params.token;
 
@@ -44,7 +43,7 @@ export class ShareEveryoneComponent implements OnInit {
             }, (err: HttpErrorResponse) => {
                 switch (err.status) {
                     case 404: {
-                        this.filesService.cancelShareFileForEveryone(fileId);
+                        this.sharesService.cancelShareForEveryone(fileId);
 
                         this.router.navigateByUrl("/");
                         break;

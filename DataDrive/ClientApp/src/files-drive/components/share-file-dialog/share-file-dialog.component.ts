@@ -61,7 +61,7 @@ export class ShareFileDialogComponent {
         this.shareEveryoneSliderChecked = event.checked;
         if (this.shareEveryoneSliderChecked) {
 
-            this.fileService.shareFileForEveryone(this.shareForEveryoneIn)
+            this.sharesService.shareForEveryone(this.shareForEveryoneIn)
                 .subscribe(result => {
 
                     result.token = this.urlToShareEveryone + result.token;
@@ -72,7 +72,7 @@ export class ShareFileDialogComponent {
                 }, err => alert(err.error));
         }
         else {
-            this.fileService.cancelShareFileForEveryone(this.shareForEveryoneIn.fileId)
+            this.sharesService.cancelShareForEveryone(this.shareForEveryoneIn.fileId)
                 .subscribe(() => {
                     this.shareEveryoneOut = null;
 
@@ -83,7 +83,7 @@ export class ShareFileDialogComponent {
     }
 
     saveShareForEveryone() {
-        this.fileService.shareFileForEveryone(this.shareForEveryoneIn)
+        this.sharesService.shareForEveryone(this.shareForEveryoneIn)
             .subscribe(result => {
 
                 result.token = this.urlToShareEveryone + result.token;
