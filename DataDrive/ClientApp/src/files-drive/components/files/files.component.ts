@@ -12,7 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { filter } from 'rxjs/operators';
-import { ShareFileDialogComponent } from '../share-file-dialog/share-file-dialog.component';
+import { ShareResourceDialogComponent } from '../../../share-drive/components/share-resource-dialog/share-resource-dialog.component';
 
 @Component({
     selector: 'drive-files',
@@ -108,7 +108,7 @@ export class FilesComponent implements OnInit, OnDestroy {
                 const file: FileOut = result;
 
                 if (file) {
-                    const dialogRef = this.dialog.open(ShareFileDialogComponent, {
+                    const dialogRef = this.dialog.open(ShareResourceDialogComponent, {
                         hasBackdrop: true,
                         data: {
                             file: file
