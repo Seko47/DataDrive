@@ -3,6 +3,8 @@ import { NotePost } from '../models/note-post';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { NoteOut } from '../models/note-out';
 import { Observable } from 'rxjs';
+import { Operation } from 'fast-json-patch';
+
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +17,11 @@ export class NotesService {
         this.baseUrl = baseUrl;
     }
 
+    public getNoteById(noteId: string) {
+
+        return this.httpClient.get<NoteOut>(this.baseUrl + 'api/Notes/' + noteId);
+    }
+
     public getAllNotes() {
 
         return this.httpClient.get<NoteOut[]>(this.baseUrl + 'api/Notes');
@@ -23,6 +30,11 @@ export class NotesService {
     public addNote(newNote: NotePost): Observable<NoteOut> {
 
         return this.httpClient.post<NoteOut>(this.baseUrl + 'api/Notes', newNote);
+    }
+
+    public editNote(noteId: string, patch: Operation[]): Observable<NoteOut> {
+
+        return this.httpClient.patch<NoteOut>(this.baseUrl + 'api/Notes/' + noteId, patch);
     }
 
     public deleteNote(noteId: string) {

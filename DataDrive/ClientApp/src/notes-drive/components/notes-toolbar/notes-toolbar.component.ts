@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-notes-toolbar',
-  templateUrl: './notes-toolbar.component.html',
-  styleUrls: ['./notes-toolbar.component.css']
+    selector: 'app-notes-toolbar',
+    templateUrl: './notes-toolbar.component.html',
+    styleUrls: ['./notes-toolbar.component.css']
 })
 export class NotesToolbarComponent implements OnInit {
 
     constructor(private router: Router) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
     public addNote(): void {
-        this.router.navigateByUrl("/drive/notes/add");
+        this.router.navigate(["/drive/notes/editor"], { queryParams: { mode: "new" } });
     }
 }

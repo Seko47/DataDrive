@@ -4,14 +4,14 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { NotesComponent } from './components/notes/notes.component';
-import { AddNoteComponent } from './components/add-note/add-note.component';
 import { NotesToolbarComponent } from './components/notes-toolbar/notes-toolbar.component';
 import { NotesListComponent } from './components/notes-list/notes-list.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { EditorComponent } from './components/editor/editor.component';
 
 @NgModule({
-  declarations: [NotesComponent, AddNoteComponent, NotesToolbarComponent, NotesListComponent],
+  declarations: [NotesComponent, NotesToolbarComponent, NotesListComponent, EditorComponent],
   imports: [
       CommonModule,
       SharedModule,
@@ -19,7 +19,7 @@ import { ContextMenuModule } from 'ngx-contextmenu';
       AngularEditorModule,
       RouterModule.forChild([
           { path: 'drive/notes', component: NotesComponent, canActivate: [AuthorizeGuard] },
-          { path: 'drive/notes/add', component: AddNoteComponent, canActivate: [AuthorizeGuard] },
+          { path: 'drive/notes/editor', component: EditorComponent, canActivate: [AuthorizeGuard] },
       ])
   ]
 })

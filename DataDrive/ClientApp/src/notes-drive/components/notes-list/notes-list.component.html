@@ -22,7 +22,7 @@
   </div>
 
   <context-menu #noteMenu>
-    <ng-template contextMenuItem let-item (execute)="changeFileName($event.item.id, $event.item.name)">
+    <ng-template contextMenuItem let-item (execute)="editNote($event.item.id)">
       <button mat-button style="width: 100%">
         <mat-icon>edit</mat-icon>
         {{ 'NOTES.CONTEXT_MENU.EDIT' | translate }}
