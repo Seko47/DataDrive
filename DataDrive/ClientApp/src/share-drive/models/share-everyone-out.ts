@@ -1,4 +1,4 @@
-import { FileType } from "./file-out";
+import { FileType } from "../../files-drive/models/file-out";
 
 export class ShareEveryoneOut {
     public id: string;

@@ -2,9 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilesService } from '../../services/files.service';
 import { FileOut } from '../../models/file-out';
-import { ShareForEveryoneIn } from '../../models/share-for-everyone-in';
-import { ShareEveryoneOut } from '../../models/share-everyone-out';
 import { SharesService } from '../../../share-drive/services/shares.service';
+import { ShareForEveryoneIn } from '../../../share-drive/models/share-for-everyone-in';
+import { ShareEveryoneOut } from '../../../share-drive/models/share-everyone-out';
 
 export interface DialogData {
     file: FileOut;

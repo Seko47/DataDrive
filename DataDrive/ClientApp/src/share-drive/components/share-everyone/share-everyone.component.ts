@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilesService } from '../../../files-drive/services/files.service';
 import { SharesService } from '../../services/shares.service';
-import { ShareEveryoneOut } from '../../../files-drive/models/share-everyone-out';
 import { HttpErrorResponse, HttpResponseBase, HttpResponse } from '@angular/common/http';
 import { ShareEveryoneCredentials } from '../../models/share-everyone-credentials';
 import { MatDialog } from '@angular/material/dialog';
 import { PasswordForTokenDialogComponent } from '../password-for-token-dialog/password-for-token-dialog.component';
 import { FileOut } from '../../../files-drive/models/file-out';
 import { saveAs } from 'file-saver';
+import { ShareEveryoneOut } from '../../models/share-everyone-out';
 
 @Component({
     selector: 'app-share-everyone',

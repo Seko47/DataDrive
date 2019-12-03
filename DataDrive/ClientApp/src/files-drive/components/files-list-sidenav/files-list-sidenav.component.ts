@@ -1,13 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, KeyValueDiffer, KeyValueDiffers, KeyValueChanges } from '@angular/core';
+import { Component, OnInit, Input, KeyValueDiffer, KeyValueDiffers, KeyValueChanges } from '@angular/core';
 import { FileOut } from '../../models/file-out';
-import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { filter } from 'rxjs/operators';
-import { compare, Operation } from 'fast-json-patch';
 import { EventService, EventCode } from '../../services/files-event.service';
-import { ShareEveryoneOut } from '../../models/share-everyone-out';
-import { FilesService } from '../../services/files.service';
 import { SharesService } from '../../../share-drive/services/shares.service';
+import { ShareEveryoneOut } from '../../../share-drive/models/share-everyone-out';
 
 
 @Component({
