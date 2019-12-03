@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventService, EventCode } from '../../../files-drive/services/files-event.service';
 import { NotesService } from '../../services/notes.service';
-import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NoteOut } from '../../models/note-out';
 
@@ -14,7 +13,7 @@ export class NotesComponent implements OnInit, OnDestroy {
 
     public notes: NoteOut[];
 
-    constructor(private router: Router, private notesEventService: EventService, private notesService: NotesService) {
+    constructor(private notesEventService: EventService, private notesService: NotesService) {
         this.loadNotes();
     }
 
@@ -27,11 +26,6 @@ export class NotesComponent implements OnInit, OnDestroy {
 
             switch (eventCode) {
 
-                case EventCode.EDIT: {
-
-
-                    break;
-                }
                 case EventCode.DELETE: {
 
                     this.deleteNote(noteId);
