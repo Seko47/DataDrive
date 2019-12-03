@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilesService } from '../../../files-drive/services/files.service';
 import { SharesService } from '../../services/shares.service';
-import { HttpErrorResponse, HttpResponseBase, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ShareEveryoneCredentials } from '../../models/share-everyone-credentials';
 import { MatDialog } from '@angular/material/dialog';
 import { PasswordForTokenDialogComponent } from '../password-for-token-dialog/password-for-token-dialog.component';
-import { FileOut } from '../../../files-drive/models/file-out';
+import { FileOut, ResourceType } from '../../../files-drive/models/file-out';
 import { saveAs } from 'file-saver';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
+import { NotesService } from '../../../notes-drive/services/notes.service';
+import { NoteOut } from '../../../notes-drive/models/note-out';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
     selector: 'app-share-everyone',
@@ -21,11 +24,42 @@ export class ShareEveryoneComponent implements OnInit {
     private password: string = "";
 
     public actualFile: FileOut;
+    public actualNote: NoteOut;
+
     public shareInfo: ShareEveryoneOut;
 
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
-    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private sharesService: SharesService) {
+    editorConfig: AngularEditorConfig = {
+        editable: false,
+        spellcheck: true,
+        height: '40vh',
+        minHeight: '30vh',
+        maxHeight: 'auto',
+        width: 'auto',
+        minWidth: '0',
+        translate: 'yes',
+        enableToolbar: false,
+        showToolbar: false,
+        placeholder: '',
+        defaultParagraphSeparator: '',
+        defaultFontName: '',
+        defaultFontSize: '',
+        fonts: [
+            { class: 'arial', name: 'Arial' },
+            { class: 'times-new-roman', name: 'Times New Roman' },
+            { class: 'calibri', name: 'Calibri' },
+            { class: 'comic-sans-ms', name: 'Comic Sans MS' }
+        ],
+        uploadUrl: '',
+        sanitize: true,
+        toolbarPosition: 'bottom',
+        toolbarHiddenButtons: [
+            ['insertImage', 'insertVideo']
+        ]
+    };
+
+    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private notesService: NotesService, private sharesService: SharesService) {
 
         this.token = this.route.snapshot.params.token;
 
@@ -35,7 +69,7 @@ export class ShareEveryoneComponent implements OnInit {
     ngOnInit() {
     }
 
-    getFileOutByFileId(fileId: string) {
+    getFileOutById(fileId: string) {
         this.filesService.getFileInfo(fileId)
             .subscribe(result => {
                 this.actualFile = result;
@@ -43,7 +77,21 @@ export class ShareEveryoneComponent implements OnInit {
                 switch (err.status) {
                     case 404: {
                         this.sharesService.cancelShareForEveryone(fileId);
+                        this.router.navigateByUrl("/");
+                        break;
+                    }
+                }
+            });
+    }
 
+    getNoteOutById(noteId: string) {
+        this.notesService.getNoteById(noteId)
+            .subscribe(result => {
+                this.actualNote = result;
+            }, (err: HttpErrorResponse) => {
+                switch (err.status) {
+                    case 404: {
+                        this.sharesService.cancelShareForEveryone(noteId);
                         this.router.navigateByUrl("/");
                         break;
                     }
@@ -58,7 +106,12 @@ export class ShareEveryoneComponent implements OnInit {
                 result.token = this.urlToShareEveryone + result.token;
                 this.shareInfo = result;
 
-                this.getFileOutByFileId(this.shareInfo.resourceID);
+                if (this.shareInfo.resourceType == ResourceType.FILE) {
+                    this.getFileOutById(this.shareInfo.resourceID);
+                }
+                else if (this.shareInfo.resourceType == ResourceType.NOTE) {
+                    this.getNoteOutById(this.shareInfo.resourceID);
+                }
             }, (err: HttpErrorResponse) => {
 
                 switch (err.status) {
@@ -92,7 +145,12 @@ export class ShareEveryoneComponent implements OnInit {
 
                         this.shareInfo = result;
 
-                        this.getFileOutByFileId(this.shareInfo.resourceID);
+                        if (this.shareInfo.resourceType == ResourceType.FILE) {
+                            this.getFileOutById(this.shareInfo.resourceID);
+                        }
+                        else if (this.shareInfo.resourceType == ResourceType.NOTE) {
+                            this.getNoteOutById(this.shareInfo.resourceID);
+                        }
                     }, (err: HttpErrorResponse) => {
                         switch (err.status) {
                             case 404: {

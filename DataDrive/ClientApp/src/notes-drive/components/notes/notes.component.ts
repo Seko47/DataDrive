@@ -3,6 +3,9 @@ import { EventService, EventCode } from '../../../files-drive/services/files-eve
 import { NotesService } from '../../services/notes.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NoteOut } from '../../models/note-out';
+import { MatDialog } from '@angular/material/dialog';
+import { ShareResourceDialogComponent } from '../../../share-drive/components/share-resource-dialog/share-resource-dialog.component';
+import { ResourceType } from '../../../files-drive/models/file-out';
 
 @Component({
     selector: 'app-notes',
@@ -13,7 +16,7 @@ export class NotesComponent implements OnInit, OnDestroy {
 
     public notes: NoteOut[];
 
-    constructor(private notesEventService: EventService, private notesService: NotesService) {
+    constructor(private dialog: MatDialog, private notesEventService: EventService, private notesService: NotesService) {
         this.loadNotes();
     }
 
@@ -33,7 +36,7 @@ export class NotesComponent implements OnInit, OnDestroy {
                 }
                 case EventCode.SHARE: {
 
-                    //this.openShareNoteDialog(noteId);
+                    this.openShareNoteDialog(noteId);
 
                     break;
                 }
@@ -43,6 +46,29 @@ export class NotesComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.notesEventService.unsubscribe();
+    }
+
+    public openShareNoteDialog(noteId: string) {
+
+        this.notesService.getNoteById(noteId)
+            .subscribe(result => {
+
+                const note: NoteOut = result;
+
+                if (note) {
+                    const dialogRef = this.dialog.open(ShareResourceDialogComponent, {
+                        hasBackdrop: true,
+                        data: {
+                            note: note,
+                            resourceType: ResourceType.NOTE
+                        }
+                    });
+
+                    dialogRef.afterClosed().subscribe(result => {
+                        this.loadNotes();
+                    }, err => alert(err.error));
+                }
+            });
     }
 
     public loadNotes() {

@@ -9,18 +9,20 @@ import { NotesListComponent } from './components/notes-list/notes-list.component
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { EditorComponent } from './components/editor/editor.component';
+import { ShareResourceDialogComponent } from '../share-drive/components/share-resource-dialog/share-resource-dialog.component';
 
 @NgModule({
-  declarations: [NotesComponent, NotesToolbarComponent, NotesListComponent, EditorComponent],
-  imports: [
-      CommonModule,
-      SharedModule,
-      ContextMenuModule.forRoot(),
-      AngularEditorModule,
-      RouterModule.forChild([
-          { path: 'drive/notes', component: NotesComponent, canActivate: [AuthorizeGuard] },
-          { path: 'drive/notes/editor', component: EditorComponent, canActivate: [AuthorizeGuard] },
-      ])
-  ]
+    declarations: [NotesComponent, NotesToolbarComponent, NotesListComponent, EditorComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ContextMenuModule.forRoot(),
+        AngularEditorModule,
+        RouterModule.forChild([
+            { path: 'drive/notes', component: NotesComponent, canActivate: [AuthorizeGuard] },
+            { path: 'drive/notes/editor', component: EditorComponent, canActivate: [AuthorizeGuard] },
+        ])
+    ],
+    entryComponents: [ShareResourceDialogComponent]
 })
 export class NotesDriveModule { }

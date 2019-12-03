@@ -34,4 +34,9 @@ export class NotesListComponent implements OnInit {
 
         this.router.navigate(["/drive/notes/editor"], { queryParams: { mode: "read", note: noteId } });
     }
+
+    public shareNote(noteId: string) {
+
+        this.notesEventService.emit([EventCode.SHARE, noteId]);
+    }
 }

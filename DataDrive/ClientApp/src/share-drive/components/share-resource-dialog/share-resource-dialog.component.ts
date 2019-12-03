@@ -3,12 +3,15 @@ import { FilesService } from '../../../files-drive/services/files.service';
 import { SharesService } from '../../services/shares.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotesService } from '../../../notes-drive/services/notes.service';
-import { FileOut } from '../../../files-drive/models/file-out';
+import { FileOut, ResourceType } from '../../../files-drive/models/file-out';
 import { ShareForEveryoneIn } from '../../models/share-for-everyone-in';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
+import { NoteOut } from '../../../notes-drive/models/note-out';
 
 export interface DialogData {
     file: FileOut;
+    note: NoteOut,
+    resourceType: ResourceType
 }
 
 @Component({
@@ -18,7 +21,10 @@ export interface DialogData {
 })
 export class ShareResourceDialogComponent {
 
-    public file: FileOut;
+    private resourceId: string;
+    private isShared: boolean;
+    private isSharedForEveryone: boolean;
+
     public shareForEveryoneIn: ShareForEveryoneIn;
     public shareEveryoneOut: ShareEveryoneOut;
 
@@ -29,29 +35,40 @@ export class ShareResourceDialogComponent {
     constructor(
         public dialogRef: MatDialogRef<ShareResourceDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
-        private fileService: FilesService,
-        private notesService: NotesService,
         private sharesService: SharesService
     ) {
 
-        this.file = this.data.file;
+        if (this.data.resourceType == ResourceType.FILE) {
+
+            this.resourceId = this.data.file.id;
+            this.isShared = this.data.file.isShared;
+            this.isSharedForEveryone = this.data.file.isSharedForEveryone;
+        } else if (this.data.resourceType == ResourceType.NOTE) {
+
+            this.resourceId = this.data.note.id;
+            this.isShared = this.data.note.isShared;
+            this.isSharedForEveryone = this.data.note.isSharedForEveryone;
+        }
+        else {
+            this.closeDialog();
+            return;
+        }
+
         this.shareForEveryoneIn = new ShareForEveryoneIn();
-        this.shareForEveryoneIn.fileId = this.file.id;
-        this.shareEveryoneSliderChecked = this.file.isSharedForEveryone;
+        this.shareForEveryoneIn.resourceId = this.resourceId;
+        this.shareEveryoneSliderChecked = this.isSharedForEveryone;
 
-        if (this.file.isShared) {
-            if (this.file.isSharedForEveryone) {
+        if (this.isShared && this.isSharedForEveryone) {
 
-                this.sharesService.getShareEveryoneInfo(this.file.id)
-                    .subscribe(result => {
+            this.sharesService.getShareEveryoneInfo(this.resourceId)
+                .subscribe(result => {
 
-                        result.token = this.urlToShareEveryone + result.token;
+                    result.token = this.urlToShareEveryone + result.token;
 
-                        this.shareEveryoneOut = result;
-                        this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
-                        this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
-                    }, err => alert(err.error));
-            }
+                    this.shareEveryoneOut = result;
+                    this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
+                    this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
+                }, err => alert(err.error));
         }
     }
 
@@ -59,7 +76,7 @@ export class ShareResourceDialogComponent {
         this.dialogRef.close();
     }
 
-    toggleFileSharingByToken(event) {
+    toggleResourceSharingByToken(event) {
 
         this.shareEveryoneSliderChecked = event.checked;
         if (this.shareEveryoneSliderChecked) {
@@ -75,12 +92,12 @@ export class ShareResourceDialogComponent {
                 }, err => alert(err.error));
         }
         else {
-            this.sharesService.cancelShareForEveryone(this.shareForEveryoneIn.fileId)
+            this.sharesService.cancelShareForEveryone(this.shareForEveryoneIn.resourceId)
                 .subscribe(() => {
                     this.shareEveryoneOut = null;
 
                     this.shareForEveryoneIn = new ShareForEveryoneIn();
-                    this.shareForEveryoneIn.fileId = this.file.id;
+                    this.shareForEveryoneIn.resourceId = this.resourceId;
                 }, err => alert(err.error));
         }
     }

@@ -6,6 +6,7 @@ import { ShareEveryoneComponent } from './components/share-everyone/share-everyo
 import { FilesDriveModule } from '../files-drive/files-drive.module';
 import { PasswordForTokenDialogComponent } from './components/password-for-token-dialog/password-for-token-dialog.component';
 import { ShareResourceDialogComponent } from './components/share-resource-dialog/share-resource-dialog.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
     declarations: [ShareEveryoneComponent, PasswordForTokenDialogComponent, ShareResourceDialogComponent],
@@ -13,6 +14,7 @@ import { ShareResourceDialogComponent } from './components/share-resource-dialog
         CommonModule,
         SharedModule,
         FilesDriveModule,
+        AngularEditorModule,
         RouterModule.forChild([
             { path: 'share/:token', component: ShareEveryoneComponent },
         ])

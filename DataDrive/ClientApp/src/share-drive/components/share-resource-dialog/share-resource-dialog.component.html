@@ -3,7 +3,7 @@
   <h1 mat-dialog-title>{{ 'FILES.SHARE_FILE_DIALOG.TITLE' | translate }}</h1>
 
   <mat-slide-toggle [checked]="shareEveryoneSliderChecked"
-                    (change)="toggleFileSharingByToken($event)">
+                    (change)="toggleResourceSharingByToken($event)">
     {{ 'FILES.SHARE_FILE_DIALOG.TOKEN_SHARING_FORM' | translate }}
   </mat-slide-toggle>
 
@@ -73,7 +73,7 @@
 
     <!-- SHARE FOR USER TODO
     <mat-slide-toggle [checked]="shareEveryoneSliderChecked"
-                      (change)="toggleFileSharingByToken($event)">
+                      (change)="toggleResourceSharingByToken($event)">
       {{ 'FILES.SHARE_FILE_DIALOG.TOKEN_SHARING_FORM' | translate }}
     </mat-slide-toggle>
 

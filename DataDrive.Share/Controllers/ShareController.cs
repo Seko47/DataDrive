@@ -95,11 +95,11 @@ namespace DataDrive.Share.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> ShareForEveryone([FromBody] ShareEveryoneIn shareEveryoneIn)
         {
-            StatusCode<ShareEveryoneOut> status = await _shareService.ShareForEveryone(shareEveryoneIn.FileId, _userManager.GetUserName(User), shareEveryoneIn.Password, shareEveryoneIn.ExpirationDateTime, shareEveryoneIn.DownloadLimit);
+            StatusCode<ShareEveryoneOut> status = await _shareService.ShareForEveryone(shareEveryoneIn.ResourceId, _userManager.GetUserName(User), shareEveryoneIn.Password, shareEveryoneIn.ExpirationDateTime, shareEveryoneIn.DownloadLimit);
 
             if (status.Code == StatusCodes.Status404NotFound)
             {
-                return NotFound($"File {shareEveryoneIn.FileId} not found");
+                return NotFound($"File {shareEveryoneIn.ResourceId} not found");
             }
 
             return Ok(status.Body);

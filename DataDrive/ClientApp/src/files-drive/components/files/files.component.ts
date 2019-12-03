@@ -111,7 +111,8 @@ export class FilesComponent implements OnInit, OnDestroy {
                     const dialogRef = this.dialog.open(ShareResourceDialogComponent, {
                         hasBackdrop: true,
                         data: {
-                            file: file
+                            file: file,
+                            resourceType: ResourceType.FILE
                         }
                     });
 
