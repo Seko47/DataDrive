@@ -108,7 +108,7 @@ namespace DataDrive.Share.Services
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
+            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
 
             if (fileAbstract == null)
             {
@@ -154,7 +154,7 @@ namespace DataDrive.Share.Services
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
+            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
 
             if (fileAbstract == null || shareEveryone == null)

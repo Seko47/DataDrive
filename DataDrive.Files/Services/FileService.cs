@@ -62,7 +62,7 @@ namespace DataDrive.Files.Services
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            FileAbstract fileAbstractToDelete = await _databaseContext.FileAbstracts
+            ResourceAbstract fileAbstractToDelete = await _databaseContext.ResourceAbstracts
                 .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
 
             if (fileAbstractToDelete == null)
@@ -97,7 +97,7 @@ namespace DataDrive.Files.Services
                     .Include(_ => _.Files)
                     .FirstOrDefaultAsync(_ => _.ID == fileAbstractToDelete.ID && _.OwnerID == userId);
 
-                foreach (FileAbstract fileAbstract in directoryToDelete.Files.ToList())
+                foreach (ResourceAbstract fileAbstract in directoryToDelete.Files.ToList())
                 {
                     await DeleteByIdAndUser(fileAbstract.ID, username);
                 }
@@ -119,7 +119,7 @@ namespace DataDrive.Files.Services
             }
             else
             {
-                List<FileAbstract> files = await _databaseContext.FileAbstracts
+                List<ResourceAbstract> files = await _databaseContext.ResourceAbstracts
                     .Include(_ => _.ParentDirectory)
                     .Where(_ => _.ParentDirectoryID == null && _.OwnerID == userId)
                     .ToListAsync();
@@ -167,7 +167,7 @@ namespace DataDrive.Files.Services
             string userId = (await _databaseContext.Users
                 .FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            FileAbstract fileAbstract = await _databaseContext.FileAbstracts
+            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts
                 .Include(_ => _.ParentDirectory)
                 .Include(_ => _.ShareEveryone)
                 .Include(_ => _.ShareForUsers)
@@ -219,7 +219,7 @@ namespace DataDrive.Files.Services
             }
             else
             {
-                List<FileAbstract> files = await _databaseContext.FileAbstracts
+                List<ResourceAbstract> files = await _databaseContext.ResourceAbstracts
                     .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId 
                         && (_.ResourceType == ResourceType.DIRECTORY || _.ResourceType == ResourceType.FILE))
                     .ToListAsync();
@@ -244,14 +244,14 @@ namespace DataDrive.Files.Services
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
+            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
 
             if (fileAbstract == null)
             {
                 return new StatusCode<FileOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
-            JsonPatchDocument<FileAbstract> fileAbstractPatch = _mapper.Map<JsonPatchDocument<FileAbstract>>(jsonPatchDocument);
+            JsonPatchDocument<ResourceAbstract> fileAbstractPatch = _mapper.Map<JsonPatchDocument<ResourceAbstract>>(jsonPatchDocument);
 
             fileAbstractPatch.ApplyTo(fileAbstract);
 
@@ -259,7 +259,7 @@ namespace DataDrive.Files.Services
 
             await _databaseContext.SaveChangesAsync();
 
-            FileOut result = _mapper.Map<FileOut>(await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == id));
+            FileOut result = _mapper.Map<FileOut>(await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == id));
 
             return new StatusCode<FileOut>(StatusCodes.Status200OK, result);
         }

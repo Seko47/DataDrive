@@ -718,7 +718,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Assert.True(status.Code == StatusCodes.Status200OK);
             Assert.NotNull(status.Body);
 
-            List<FileAbstract> filesFromRoot = await databaseContext.FileAbstracts
+            List<ResourceAbstract> filesFromRoot = await databaseContext.ResourceAbstracts
                 .Where(_ => _.ParentDirectoryID == null && _.OwnerID == userId)
                 .ToListAsync();
 

@@ -17,7 +17,7 @@ namespace DataDrive.DAO.Context
         {
         }
 
-        public DbSet<FileAbstract> FileAbstracts { get; set; }
+        public DbSet<ResourceAbstract> ResourceAbstracts { get; set; }
         public DbSet<Directory> Directories { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Note> Notes { get; set; }
@@ -30,14 +30,14 @@ namespace DataDrive.DAO.Context
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<FileAbstract>()
+            builder.Entity<ResourceAbstract>()
                 .HasOne<ShareEveryone>(_ => _.ShareEveryone)
                 .WithOne(_ => _.Resource)
                 .HasForeignKey<ShareEveryone>(_ => _.ResourceID)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<ShareForUser>()
-                .HasOne<FileAbstract>(_ => _.Resource)
+                .HasOne<ResourceAbstract>(_ => _.Resource)
                 .WithMany(_ => _.ShareForUsers)
                 .HasForeignKey(_ => _.ResourceID)
                 .OnDelete(DeleteBehavior.NoAction);

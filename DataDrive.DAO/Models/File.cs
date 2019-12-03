@@ -2,7 +2,7 @@
 
 namespace DataDrive.DAO.Models
 {
-    public class File : FileAbstract
+    public class File : ResourceAbstract
     {
         public string Path { get; set; }
     }

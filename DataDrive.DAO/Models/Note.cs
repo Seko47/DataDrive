@@ -2,9 +2,13 @@
 
 namespace DataDrive.DAO.Models
 {
-    public class Note : FileAbstract
+    public class Note : ResourceAbstract
     {
-        public string Title { get; set; }
+        public string Title
+        {
+            get => Name;
+            set => Name = value;
+        }
         public string Content { get; set; }
     }
 }

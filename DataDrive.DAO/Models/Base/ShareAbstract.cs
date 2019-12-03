@@ -11,7 +11,7 @@ namespace DataDrive.DAO.Models.Base
         public Guid ResourceID { get; set; }
         public string OwnerID { get; set; }
 
-        public virtual FileAbstract Resource { get; set; }
+        public virtual ResourceAbstract Resource { get; set; }
         public virtual ApplicationUser Owner { get; set; }
     }
 }

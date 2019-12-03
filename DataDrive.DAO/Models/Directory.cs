@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace DataDrive.DAO.Models
 {
-    public class Directory : FileAbstract
+    public class Directory : ResourceAbstract
     {
-        public virtual List<FileAbstract> Files { get; set; }
+        public virtual List<ResourceAbstract> Files { get; set; }
     }
 }

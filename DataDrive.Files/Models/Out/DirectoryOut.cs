@@ -14,7 +14,7 @@ namespace DataDrive.Files.Models.Out
     {
         public Directory_to_DirectoryOut()
         {
-            CreateMap<FileAbstract, FileOut>()
+            CreateMap<ResourceAbstract, FileOut>()
                 .ForMember(fout => fout.ParentDirectoryName, opt => opt.MapFrom(f => f.ParentDirectory.Name));
 
             CreateMap<Directory, DirectoryOut>()

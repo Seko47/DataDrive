@@ -6,7 +6,7 @@ namespace DataDrive.DAO.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public virtual List<FileAbstract> Files { get; set; }
+        public virtual List<ResourceAbstract> Files { get; set; }
         public virtual List<ShareAbstract> SharedOwn { get; set; }
         public virtual List<ShareForUser> SharedForUser { get; set; }
     }

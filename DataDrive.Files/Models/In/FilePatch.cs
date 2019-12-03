@@ -16,8 +16,8 @@ namespace DataDrive.Files.Models.In
     {
         public JsonPatchDocument_Mapper()
         {
-            CreateMap(typeof(JsonPatchDocument<FilePatch>), typeof(JsonPatchDocument<FileAbstract>));
-            CreateMap(typeof(Operation<FilePatch>), typeof(Operation<FileAbstract>));
+            CreateMap(typeof(JsonPatchDocument<FilePatch>), typeof(JsonPatchDocument<ResourceAbstract>));
+            CreateMap(typeof(Operation<FilePatch>), typeof(Operation<ResourceAbstract>));
         }
     }
 }

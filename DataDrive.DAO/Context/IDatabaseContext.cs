@@ -11,7 +11,7 @@ namespace DataDrive.DAO.Context
         DbSet<ApplicationUser> Users { get; set; }
 
 
-        DbSet<FileAbstract> FileAbstracts { get; set; }
+        DbSet<ResourceAbstract> ResourceAbstracts { get; set; }
         DbSet<Directory> Directories { get; set; }
         DbSet<File> Files { get; set; }
         DbSet<Note> Notes { get; set; }
