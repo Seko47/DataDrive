@@ -46,6 +46,7 @@ export class EditorComponent implements OnInit {
     public newNote: NotePost;
     public oldNote: NotePost;
     public noteId: string;
+    public mode: string;
 
     constructor(private router: Router, private notesService: NotesService, private activatedRoute: ActivatedRoute) {
 
@@ -54,11 +55,11 @@ export class EditorComponent implements OnInit {
 
         this.activatedRoute.queryParams
             .subscribe(params => {
-                var mode: string = params.mode;
-                if (mode === "new") {
+                this.mode = params.mode;
+                if (this.mode === "new") {
 
                     console.log("New note");
-                } else if (mode === "edit") {
+                } else if (this.mode === "edit") {
 
                     var noteId = params.note;
 
@@ -71,6 +72,22 @@ export class EditorComponent implements OnInit {
                             this.noteId = result.id;
 
                             this.newNote = JSON.parse(JSON.stringify(this.oldNote));
+                        });
+                } else if (this.mode === "read") {
+
+                    var noteId = params.note;
+
+                    this.notesService.getNoteById(noteId)
+                        .subscribe((result: NoteOut) => {
+                            this.newNote = new NotePost();
+
+                            this.oldNote.title = result.title;
+                            this.oldNote.content = result.content;
+                            this.noteId = result.id;
+
+                            this.newNote = JSON.parse(JSON.stringify(this.oldNote));
+
+                            this.makeNotEditable();
                         });
                 }
             });
@@ -104,7 +121,13 @@ export class EditorComponent implements OnInit {
             this.notesService.editNote(this.noteId, patch).subscribe(result => {
 
                 console.log("Note edited");
-                this.getBackToList();
+
+                if (this.mode === "read") {
+
+                    this.makeNotEditable();
+                } else {
+                    this.getBackToList();
+                }
             }, (error: HttpErrorResponse) => {
 
                 alert(error.message);
@@ -115,5 +138,19 @@ export class EditorComponent implements OnInit {
 
     public getBackToList(): void {
         this.router.navigateByUrl('/drive/notes');
+    }
+
+    public makeEditable(): void {
+
+        this.editorConfig.editable = true;
+        this.editorConfig.showToolbar = true;
+        this.editorConfig.height = "40vh";
+    }
+
+    public makeNotEditable(): void {
+
+        this.editorConfig.editable = false;
+        this.editorConfig.showToolbar = false;
+        this.editorConfig.height = "60vh";
     }
 }

@@ -19,9 +19,17 @@
       <li>
 
         <a mat-icon-button
-           (click)="saveNote()">
+           (click)="saveNote()"
+           *ngIf="editorConfig.editable">
 
           <mat-icon>save</mat-icon>
+        </a>
+
+        <a mat-icon-button
+           (click)="makeEditable()"
+           *ngIf="!editorConfig.editable">
+
+          <mat-icon>edit</mat-icon>
         </a>
       </li>
     </ul>
@@ -31,7 +39,7 @@
 <div class="container">
   <mat-form-field class="col-12">
     <input matInput
-           placeholder="Note title"
+           placeholder="{{ 'NOTES.ADD.TITLE' | translate }}"
            maxlength="50"
            [(ngModel)]="newNote.title">
   </mat-form-field>

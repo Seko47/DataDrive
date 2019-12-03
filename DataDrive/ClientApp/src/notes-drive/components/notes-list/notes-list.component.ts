@@ -29,4 +29,9 @@ export class NotesListComponent implements OnInit {
 
         this.router.navigate(["/drive/notes/editor"], { queryParams: { mode: "edit", note: noteId } });
     }
+
+    public showNote(noteId: string) {
+
+        this.router.navigate(["/drive/notes/editor"], { queryParams: { mode: "read", note: noteId } });
+    }
 }

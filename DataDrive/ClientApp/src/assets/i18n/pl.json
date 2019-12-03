@@ -55,7 +55,8 @@
 	},
 	"NOTES": {
 		"ADD": {
-			"GET_BACK": "Powrót"
+			"GET_BACK": "Powrót",
+			"TITLE": "Tytuł notatki"
 		},
 		"CONTEXT_MENU": {
 			"DELETE": "Usuń",

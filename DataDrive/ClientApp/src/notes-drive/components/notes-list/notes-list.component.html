@@ -3,7 +3,7 @@
   <div *ngFor="let note of notes"
        class="col-md-12 mt-2"
        mat-button
-       (click)="show(note);"
+       (click)="showNote(note.id);"
        [contextMenu]="noteMenu"
        [contextMenuSubject]="note">
 
