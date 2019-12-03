@@ -27,4 +27,8 @@ export class SharesService {
             'password': shareEveryoneCredentials.password
         });
     }
+
+    public getShareEveryoneInfo(id: string) {
+        return this.httpClient.get<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/info/' + id);
+    }
 }

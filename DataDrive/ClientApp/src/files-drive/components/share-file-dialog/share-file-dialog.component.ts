@@ -4,6 +4,7 @@ import { FilesService } from '../../services/files.service';
 import { FileOut } from '../../models/file-out';
 import { ShareForEveryoneIn } from '../../models/share-for-everyone-in';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
+import { SharesService } from '../../../share-drive/services/shares.service';
 
 export interface DialogData {
     file: FileOut;
@@ -27,7 +28,8 @@ export class ShareFileDialogComponent {
     constructor(
         public dialogRef: MatDialogRef<ShareFileDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
-        private fileService: FilesService) {
+        private fileService: FilesService,
+        private sharesService: SharesService) {
 
         this.file = this.data.file;
         this.shareForEveryoneIn = new ShareForEveryoneIn();
@@ -37,7 +39,7 @@ export class ShareFileDialogComponent {
         if (this.file.isShared) {
             if (this.file.isSharedForEveryone) {
 
-                this.fileService.getShareEveryoneInfo(this.file.id)
+                this.sharesService.getShareEveryoneInfo(this.file.id)
                     .subscribe(result => {
 
                         result.token = this.urlToShareEveryone + result.token;

@@ -7,6 +7,7 @@ import { compare, Operation } from 'fast-json-patch';
 import { EventService, EventCode } from '../../services/files-event.service';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
 import { FilesService } from '../../services/files.service';
+import { SharesService } from '../../../share-drive/services/shares.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class FilesListSidenavComponent implements OnInit {
 
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
-    constructor(private differs: KeyValueDiffers, private filesService: FilesService, private filesEventService: EventService) {
+    constructor(private differs: KeyValueDiffers, private filesEventService: EventService, private sharesService: SharesService) {
         this.actualFile = new FileOut();
         this.customerDiffer = this.differs.find(this.actualFile).create();
     }
@@ -75,7 +76,7 @@ export class FilesListSidenavComponent implements OnInit {
     public getShareEveryoneInfo() {
 
         if (this.actualFile && this.actualFile.isSharedForEveryone) {
-            this.filesService.getShareEveryoneInfo(this.actualFile.id)
+            this.sharesService.getShareEveryoneInfo(this.actualFile.id)
                 .subscribe((result: ShareEveryoneOut) => {
                     result.token = this.urlToShareEveryone + result.token;
 

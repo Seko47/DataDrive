@@ -69,8 +69,4 @@ export class FilesService {
     public cancelShareFileForEveryone(fileId: string) {
         return this.httpClient.delete<boolean>(this.baseUrl + 'api/Share/everyone/' + fileId);
     }
-
-    public getShareEveryoneInfo(fileId: string) {
-        return this.httpClient.get<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/info/' + fileId);
-    }
 }
