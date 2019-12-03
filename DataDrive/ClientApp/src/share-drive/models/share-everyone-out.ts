@@ -1,4 +1,4 @@
-import { FileType } from "../../files-drive/models/file-out";
+import { ResourceType } from "../../files-drive/models/file-out";
 
 export class ShareEveryoneOut {
     public id: string;
@@ -7,8 +7,8 @@ export class ShareEveryoneOut {
     public token: string;
     public expirationDateTime: Date;
     public downloadLimit: number;
-    public fileID: string;
-    public fileName: string;
-    public fileType: FileType;
+    public resourceId: string;
+    public resourceName: string;
+    public resourceType: ResourceType;
     public ownerUsername: string;
 }

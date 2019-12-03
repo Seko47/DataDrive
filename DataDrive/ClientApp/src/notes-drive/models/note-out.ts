@@ -1,4 +1,4 @@
-import { FileType } from "../../files-drive/models/file-out";
+import { ResourceType } from "../../files-drive/models/file-out";
 
 export class NoteOut {
     public id: string;
@@ -11,12 +11,12 @@ export class NoteOut {
 
     public title: string;
     public content: string;
-    public fileType: FileType;
+    public resourceType: ResourceType;
 
     constructor(title: string, content: string) {
         this.title = title;
         this.content = content;
         this.createdDateTime = new Date();
-        this.fileType = FileType.NOTE;
+        this.resourceType = ResourceType.NOTE;
     }
 }

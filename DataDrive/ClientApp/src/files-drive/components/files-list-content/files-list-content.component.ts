@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, AfterViewInit } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
-import { FileOut, FileType } from '../../models/file-out';
+import { FileOut, ResourceType } from '../../models/file-out';
 import { FileMove } from '../../models/file-move';
 import { Operation, compare } from 'fast-json-patch';
 import { EventService, EventCode } from '../../services/files-event.service';
@@ -68,7 +68,7 @@ export class FilesListContentComponent implements OnInit {
         if (this.actualDirectory) {
             this.parentFile = new FileOut();
             this.parentFile.id = this.actualDirectory.parentDirectoryID;
-            this.parentFile.fileType = FileType.DIRECTORY;
+            this.parentFile.resourceType = ResourceType.DIRECTORY;
             this.parentFile.name = this.actualDirectory.parentDirectoryName;
         }
 
@@ -77,7 +77,7 @@ export class FilesListContentComponent implements OnInit {
 
     public drop(file: FileOut) {
         if (this.dragFile && this.dragFile != file) {
-            if (file && file.fileType == FileType.DIRECTORY) {
+            if (file && file.resourceType == ResourceType.DIRECTORY) {
 
                 const movedFile: FileOut = JSON.parse(JSON.stringify(this.dragFile));
                 movedFile.parentDirectoryID = file.id;
@@ -104,7 +104,7 @@ export class FilesListContentComponent implements OnInit {
                 this.makeDirectoryNormal(this.dropDivElement);
             }
 
-            if (divElement && file && file.fileType == FileType.DIRECTORY) {
+            if (divElement && file && file.resourceType == ResourceType.DIRECTORY) {
                 this.makeDirectoryDropable(divElement);
                 this.dropDivElement = divElement;
             }
@@ -130,6 +130,6 @@ export class FilesListContentComponent implements OnInit {
     }
 
     public isNotDirectory(item: FileOut): boolean {
-        return item.fileType != 1;
+        return item.resourceType != 1;
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
-import { FileOut, FileType } from '../../models/file-out';
+import { FileOut, ResourceType } from '../../models/file-out';
 import { FilesService } from '../../services/files.service';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -176,7 +176,7 @@ export class FilesComponent implements OnInit, OnDestroy {
             this.actualFile.name = "Root";
             this.actualFile.createdDateTime = new Date();
             this.actualFile.lastModifiedDateTime = new Date();
-            this.actualFile.fileType = FileType.DIRECTORY;
+            this.actualFile.resourceType = ResourceType.DIRECTORY;
 
             this.fileinfosidenav.close();
         }
@@ -248,12 +248,12 @@ export class FilesComponent implements OnInit, OnDestroy {
                     .subscribe((result: FileOut) => {
                         let fileId = result.parentDirectoryID;
 
-                        if (result.fileType == FileType.DIRECTORY) {
+                        if (result.resourceType == ResourceType.DIRECTORY) {
 
                             fileId = result.id;
                         }
 
-                        if (result.fileType == FileType.DIRECTORY && this.actualDirectory.id == result.id) {
+                        if (result.resourceType == ResourceType.DIRECTORY && this.actualDirectory.id == result.id) {
 
                             this.getFromDirectory(result.id);
                         }
@@ -268,10 +268,10 @@ export class FilesComponent implements OnInit, OnDestroy {
     }
 
     public onFileClick(clickedFile: FileOut) {
-        if (clickedFile.fileType == FileType.DIRECTORY) {
+        if (clickedFile.resourceType == ResourceType.DIRECTORY) {
             this.getFromDirectory(clickedFile.id);
         }
-        else if (clickedFile.fileType == FileType.FILE) {
+        else if (clickedFile.resourceType == ResourceType.FILE) {
             this.getFileInfo(clickedFile.id);
         }
     }

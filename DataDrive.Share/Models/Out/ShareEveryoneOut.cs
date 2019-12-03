@@ -15,9 +15,9 @@ namespace DataDrive.Share.Models
         public DateTime? ExpirationDateTime { get; set; }
         public int? DownloadLimit { get; set; }
 
-        public Guid FileID { get; set; }
-        public string FileName { get; set; }
-        public FileType FileType { get; set; }
+        public Guid ResourceID { get; set; }
+        public string ResourceName { get; set; }
+        public ResourceType ResourceType { get; set; }
         public string OwnerUsername { get; set; }
     }
 
@@ -26,9 +26,9 @@ namespace DataDrive.Share.Models
         public ShareEveryone_to_ShareEveryoneOut()
         {
             CreateMap<ShareEveryone, ShareEveryoneOut>()
-                .ForMember(fout => fout.FileName, opt => opt.MapFrom(f => f.File.Name))
+                .ForMember(fout => fout.ResourceName, opt => opt.MapFrom(f => f.File.Name))
                 .ForMember(fout => fout.OwnerUsername, opt => opt.MapFrom(f => f.Owner.UserName))
-                .ForMember(fout => fout.FileType, opt => opt.MapFrom(f => f.File.FileType));
+                .ForMember(fout => fout.ResourceType, opt => opt.MapFrom(f => f.File.ResourceType));
         }
     }
 }

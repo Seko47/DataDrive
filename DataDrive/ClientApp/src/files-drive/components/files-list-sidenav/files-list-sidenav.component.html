@@ -3,10 +3,10 @@
 
     <mat-toolbar-row>
 
-      <mat-icon *ngIf="actualFile.fileType == 1"
+      <mat-icon *ngIf="actualFile.resourceType == 1"
                 class="ml-0 mr-auto">folder</mat-icon>
 
-      <mat-icon *ngIf="actualFile.fileType == 0"
+      <mat-icon *ngIf="actualFile.resourceType == 0"
                 class="ml-0 mr-auto">insert_drive_file</mat-icon>
 
       <h3 class="text-wrap ml-auto mr-auto">
@@ -35,7 +35,7 @@
     <a mat-icon-button
        class="ml-auto mr-auto"
        style="transform: scale(2);"
-       *ngIf="actualFile.fileType == 0"
+       *ngIf="actualFile.resourceType == 0"
        (click)="downloadFile();">
 
       <mat-icon>get_app</mat-icon>
@@ -43,7 +43,7 @@
 
     <a mat-icon-button
        class="ml-auto mr-auto"
-       *ngIf="actualFile.fileType == 0"
+       *ngIf="actualFile.resourceType == 0"
        (click)="shareFile();">
 
       <mat-icon>share</mat-icon>

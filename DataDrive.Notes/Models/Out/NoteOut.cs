@@ -17,7 +17,7 @@ namespace DataDrive.Notes.Models.Out
 
         public string Title { get; set; }
         public string Content { get; set; }
-        public FileType FileType { get; set; }
+        public ResourceType ResourceType { get; set; }
     }
 
     public class Note_to_NoteOut : Profile

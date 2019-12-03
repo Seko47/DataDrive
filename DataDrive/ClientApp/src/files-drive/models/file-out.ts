@@ -5,13 +5,13 @@ export class FileOut {
     public parentDirectoryID: string;
     public parentDirectoryName: string;
     public name: string;
-    public fileType: FileType;
+    public resourceType: ResourceType;
     public isShared: boolean;
     public isSharedForEveryone: boolean;
     public isSharedForUsers: boolean;
 }
 
-export enum FileType {
+export enum ResourceType {
     FILE,
     DIRECTORY,
     NOTE

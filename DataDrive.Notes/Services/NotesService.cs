@@ -159,7 +159,7 @@ namespace DataDrive.Notes.Services
             Note newNote = new Note
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Content = note.Content,
                 OwnerID = userId,
                 Title = note.Title

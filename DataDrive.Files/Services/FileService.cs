@@ -42,7 +42,7 @@ namespace DataDrive.Files.Services
             Directory newDirectory = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = nameForNewDirectory,
                 OwnerID = userId,
                 ParentDirectoryID = directoryPost.ParentDirectoryID
@@ -128,7 +128,7 @@ namespace DataDrive.Files.Services
                 {
                     ID = null,
                     Files = _mapper.Map<List<FileOut>>(files),
-                    FileType = FileType.DIRECTORY,
+                    ResourceType = ResourceType.DIRECTORY,
                     Name = "root",
                     ParentDirectoryID = null,
                     ParentDirectoryName = null
@@ -171,7 +171,7 @@ namespace DataDrive.Files.Services
                 .Include(_ => _.ParentDirectory)
                 .Include(_ => _.ShareEveryone)
                 .Include(_ => _.ShareForUsers)
-                .FirstOrDefaultAsync(_ => _.ID == id && (_.FileType == FileType.FILE || _.FileType == FileType.DIRECTORY));
+                .FirstOrDefaultAsync(_ => _.ID == id && (_.ResourceType == ResourceType.FILE || _.ResourceType == ResourceType.DIRECTORY));
 
             if (fileAbstract == null
                 || (fileAbstract.OwnerID != userId
@@ -209,7 +209,7 @@ namespace DataDrive.Files.Services
                     directory.ParentDirectory = new Directory
                     {
                         CreatedDateTime = DateTime.Now,
-                        FileType = FileType.DIRECTORY,
+                        ResourceType = ResourceType.DIRECTORY,
                         LastModifiedDateTime = DateTime.Now,
                         Name = "Root"
                     };
@@ -221,21 +221,21 @@ namespace DataDrive.Files.Services
             {
                 List<FileAbstract> files = await _databaseContext.FileAbstracts
                     .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId 
-                        && (_.FileType == FileType.DIRECTORY || _.FileType == FileType.FILE))
+                        && (_.ResourceType == ResourceType.DIRECTORY || _.ResourceType == ResourceType.FILE))
                     .ToListAsync();
 
                 result = new DirectoryOut
                 {
                     CreatedDateTime = DateTime.Now,
                     Files = _mapper.Map<List<FileOut>>(files),
-                    FileType = FileType.DIRECTORY,
+                    ResourceType = ResourceType.DIRECTORY,
                     LastModifiedDateTime = DateTime.Now,
                     Name = "Root"
                 };
             }
 
             int[] sortingMap = new[] { 2, 1, 3 };
-            result.Files = result.Files.OrderBy(_ => sortingMap[(int)(_.FileType)]).ThenBy(_ => _.Name).ThenBy(_ => _.ID).ToList();
+            result.Files = result.Files.OrderBy(_ => sortingMap[(int)(_.ResourceType)]).ThenBy(_ => _.Name).ThenBy(_ => _.ID).ToList();
 
             return new StatusCode<DirectoryOut>(StatusCodes.Status200OK, result);
         }
@@ -306,7 +306,7 @@ namespace DataDrive.Files.Services
                     File newFile = new File
                     {
                         CreatedDateTime = DateTime.Now,
-                        FileType = FileType.FILE,
+                        ResourceType = ResourceType.FILE,
                         Name = file.FileName,
                         OwnerID = userId,
                         ParentDirectoryID = filePost.ParentDirectoryID,

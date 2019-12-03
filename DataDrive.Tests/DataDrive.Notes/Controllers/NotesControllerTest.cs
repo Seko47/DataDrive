@@ -43,7 +43,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
                 ID = Guid.NewGuid(),
                 Title = "Note Title",
                 Content = "Note Content",
-                FileType = DAO.Models.Base.FileType.NOTE
+                ResourceType = DAO.Models.Base.ResourceType.NOTE
             };
 
             Mock<INotesService> notesServiceMock = new Mock<INotesService>();
@@ -87,7 +87,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
                 Content = "Note Content",
                 IsShared = true,
                 IsSharedForEveryone = true,
-                FileType = DAO.Models.Base.FileType.NOTE
+                ResourceType = DAO.Models.Base.ResourceType.NOTE
             };
 
             Mock<INotesService> notesServiceMock = new Mock<INotesService>();
@@ -131,7 +131,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
                 Content = "Note Content",
                 IsShared = true,
                 IsSharedForUsers = true,
-                FileType = DAO.Models.Base.FileType.NOTE
+                ResourceType = DAO.Models.Base.ResourceType.NOTE
             };
 
             Mock<INotesService> notesServiceMock = new Mock<INotesService>();
@@ -196,7 +196,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Controllers
                     ID = Guid.NewGuid(),
                     Title = "Note1 Title",
                     Content = "Note1 Content",
-                    FileType = DAO.Models.Base.FileType.NOTE
+                    ResourceType = DAO.Models.Base.ResourceType.NOTE
                 },
                 new NoteOut
                 {

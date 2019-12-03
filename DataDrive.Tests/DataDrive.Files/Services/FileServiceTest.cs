@@ -107,7 +107,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory baseDirectory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "TestDirectory",
                 OwnerID = userId
             };
@@ -125,7 +125,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDelete = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "ToDelete.txt",
                 OwnerID = userId,
                 ParentDirectoryID = baseDirectory.ID,
@@ -164,7 +164,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directoryToDelete = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "ToDeleteDirectory",
                 OwnerID = userId
             };
@@ -182,7 +182,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File file1InDirectoryToDelete = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "file1.txt",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToDelete.ID,
@@ -197,7 +197,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directoryInDirectoryToDelete = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory1",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToDelete.ID,
@@ -217,7 +217,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File file2InDirectoryToDelete = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "file2.txt",
                 OwnerID = userId,
                 ParentDirectoryID = directoryInDirectoryToDelete.ID,
@@ -262,7 +262,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory baseDirectory = new Directory
             {
-                FileType = DAO.Models.Base.FileType.DIRECTORY,
+                ResourceType = DAO.Models.Base.ResourceType.DIRECTORY,
                 Name = "TestDirectory",
                 OwnerID = userId
             };
@@ -293,7 +293,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory baseDirectory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "TestDirectory",
                 OwnerID = userId
             };
@@ -311,7 +311,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDelete = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "ToDelete.txt",
                 OwnerID = userId,
                 ParentDirectoryID = baseDirectory.ID,
@@ -365,7 +365,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDownload = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "ToDownload.txt",
                 OwnerID = userId,
                 ParentDirectoryID = null,
@@ -414,7 +414,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToDownload = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "ToDownload.txt",
                 OwnerID = userId,
                 ParentDirectoryID = null,
@@ -465,7 +465,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "TestFile.pdf",
                 OwnerID = userId
             };
@@ -479,7 +479,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Assert.True(status.Code == StatusCodes.Status200OK);
             Assert.NotNull(status.Body);
             Assert.Equal(file.ID, status.Body.ID);
-            Assert.Equal(file.FileType, status.Body.FileType);
+            Assert.Equal(file.ResourceType, status.Body.ResourceType);
             Assert.Equal(file.CreatedDateTime, status.Body.CreatedDateTime);
             Assert.Equal(file.Name, status.Body.Name);
             Assert.Equal(file.ParentDirectoryID, status.Body.ParentDirectoryID);
@@ -502,7 +502,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directoryToCheck = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory",
                 OwnerID = userId
             };
@@ -513,7 +513,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "TestFile.pdf",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -528,7 +528,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Assert.True(status.Code == StatusCodes.Status200OK);
             Assert.NotNull(status.Body);
             Assert.Equal(directoryToCheck.ID, status.Body.ID);
-            Assert.Equal(directoryToCheck.FileType, status.Body.FileType);
+            Assert.Equal(directoryToCheck.ResourceType, status.Body.ResourceType);
             Assert.Equal(directoryToCheck.CreatedDateTime, status.Body.CreatedDateTime);
             Assert.Equal(directoryToCheck.Name, status.Body.Name);
             Assert.Equal(directoryToCheck.ParentDirectoryID, status.Body.ParentDirectoryID);
@@ -551,7 +551,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "TestFile.pdf",
                 OwnerID = userId
             };
@@ -603,7 +603,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory rootDirectory = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "root",
                 OwnerID = userId
             };
@@ -613,7 +613,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directoryToCheck = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "DirectoryToCheck",
                 OwnerID = userId,
                 ParentDirectoryID = rootDirectory.ID
@@ -624,7 +624,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file1 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File1.exe",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -633,7 +633,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file2 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File2.rar",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -644,7 +644,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directory1 = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory1.d",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -661,7 +661,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Assert.NotNull(status.Body);
             Assert.Equal(directoryToCheck.CreatedDateTime, status.Body.CreatedDateTime);
             Assert.Equal(directoryToCheck.Files.Count, status.Body.Files.Count);
-            Assert.Equal(directoryToCheck.FileType, status.Body.FileType);
+            Assert.Equal(directoryToCheck.ResourceType, status.Body.ResourceType);
             Assert.Equal(directoryToCheck.ID, status.Body.ID);
             Assert.Equal(directoryToCheck.Name, status.Body.Name);
             Assert.Equal(directoryToCheck.ParentDirectoryID, status.Body.ParentDirectoryID);
@@ -685,7 +685,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file1 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File1.exe",
                 OwnerID = userId
             };
@@ -693,7 +693,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file2 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File2.rar",
                 OwnerID = userId
             };
@@ -703,7 +703,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directory1 = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory1.d",
                 OwnerID = userId
             };
@@ -723,7 +723,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
                 .ToListAsync();
 
             Assert.Equal(filesFromRoot.Count, status.Body.Files.Count);
-            Assert.Equal(FileType.DIRECTORY, status.Body.FileType);
+            Assert.Equal(ResourceType.DIRECTORY, status.Body.ResourceType);
             Assert.Null(status.Body.ID);
             Assert.Null(status.Body.ParentDirectoryID);
         }
@@ -765,7 +765,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory rootDirectory = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "root",
                 OwnerID = userId
             };
@@ -775,7 +775,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directoryToCheck = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "DirectoryToCheck",
                 OwnerID = userId,
                 ParentDirectoryID = rootDirectory.ID
@@ -786,7 +786,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file1 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File1.exe",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -795,7 +795,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File file2 = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File2.rar",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -806,7 +806,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             Directory directory1 = new Directory
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory1.d",
                 OwnerID = userId,
                 ParentDirectoryID = directoryToCheck.ID
@@ -839,7 +839,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
             File fileToCheck = new File
             {
                 CreatedDateTime = DateTime.Now,
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "DirectoryToCheck",
                 OwnerID = userId
             };
@@ -874,7 +874,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory",
                 OwnerID = userId,
             };
@@ -883,7 +883,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToMove = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -920,7 +920,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToChange = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -959,7 +959,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 Name = "Directory",
                 OwnerID = userId,
             };
@@ -968,7 +968,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToChange = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -1007,7 +1007,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             File fileToChange = new File
             {
-                FileType = FileType.FILE,
+                ResourceType = ResourceType.FILE,
                 Name = "File.txt",
                 OwnerID = userId
             };
@@ -1059,7 +1059,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 OwnerID = userId,
                 Name = "Directory"
             };
@@ -1105,7 +1105,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 OwnerID = userId,
                 Name = "Directory"
             };
@@ -1202,7 +1202,7 @@ namespace DataDrive.Tests.DataDrive.Files.Services
 
             Directory directory = new Directory
             {
-                FileType = FileType.DIRECTORY,
+                ResourceType = ResourceType.DIRECTORY,
                 OwnerID = userId,
                 Name = "Directory"
             };

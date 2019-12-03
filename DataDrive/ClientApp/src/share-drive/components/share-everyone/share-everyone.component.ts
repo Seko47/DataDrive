@@ -60,7 +60,7 @@ export class ShareEveryoneComponent implements OnInit {
 
                 this.shareInfo = result;
 
-                this.getFileOutByFileId(this.shareInfo.fileID);
+                this.getFileOutByFileId(this.shareInfo.resourceId);
             }, (err: HttpErrorResponse) => {
 
                 switch (err.status) {
@@ -94,7 +94,7 @@ export class ShareEveryoneComponent implements OnInit {
 
                         this.shareInfo = result;
 
-                        this.getFileOutByFileId(this.shareInfo.fileID);
+                        this.getFileOutByFileId(this.shareInfo.resourceId);
                     }, (err: HttpErrorResponse) => {
                         switch (err.status) {
                             case 404: {

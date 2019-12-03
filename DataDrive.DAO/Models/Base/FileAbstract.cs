@@ -14,7 +14,7 @@ namespace DataDrive.DAO.Models.Base
         public string OwnerID { get; set; }
         public Guid? ParentDirectoryID { get; set; }
 
-        public FileType FileType { get; set; }
+        public ResourceType ResourceType { get; set; }
 
         public bool IsShared { get; set; }
         public bool IsSharedForEveryone { get; set; }
@@ -26,7 +26,7 @@ namespace DataDrive.DAO.Models.Base
         public virtual List<ShareForUser> ShareForUsers { get; set; }
     }
 
-    public enum FileType
+    public enum ResourceType
     {
         FILE,
         DIRECTORY,

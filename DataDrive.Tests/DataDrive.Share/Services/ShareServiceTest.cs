@@ -31,7 +31,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 Name = "TestDirectory",
                 OwnerID = owner.Id,
                 IsShared = true,
-                FileType = DAO.Models.Base.FileType.DIRECTORY
+                ResourceType = DAO.Models.Base.ResourceType.DIRECTORY
             };
 
             await databaseContext.Directories.AddAsync(directory);
@@ -69,7 +69,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 Name = "TestFile.txt",
                 OwnerID = owner.Id,
                 IsShared = true,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -107,7 +107,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 Name = "TestDirectory",
                 OwnerID = owner.Id,
                 IsShared = true,
-                FileType = DAO.Models.Base.FileType.DIRECTORY
+                ResourceType = DAO.Models.Base.ResourceType.DIRECTORY
             };
 
             await databaseContext.Directories.AddAsync(directory);
@@ -136,7 +136,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 Name = "TestFile.txt",
                 OwnerID = owner.Id,
                 IsShared = true,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -169,7 +169,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 OwnerID = owner.Id,
                 IsShared = true,
                 IsSharedForEveryone = true,
-                FileType = DAO.Models.Base.FileType.DIRECTORY
+                ResourceType = DAO.Models.Base.ResourceType.DIRECTORY
             };
 
             await databaseContext.Directories.AddAsync(directory);
@@ -208,7 +208,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 OwnerID = owner.Id,
                 IsShared = true,
                 IsSharedForEveryone = true,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -247,7 +247,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 OwnerID = owner.Id,
                 IsShared = true,
                 IsSharedForEveryone = false,
-                FileType = DAO.Models.Base.FileType.DIRECTORY
+                ResourceType = DAO.Models.Base.ResourceType.DIRECTORY
             };
 
             await databaseContext.Directories.AddAsync(directory);
@@ -277,7 +277,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 OwnerID = owner.Id,
                 IsShared = true,
                 IsSharedForEveryone = false,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -316,7 +316,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 ParentDirectoryID = null,
                 Name = "TestFile.txt",
                 OwnerID = owner.Id,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -380,7 +380,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 ParentDirectoryID = null,
                 Name = "TestFile.txt",
                 OwnerID = Guid.NewGuid().ToString(),
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -414,7 +414,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 OwnerID = owner.Id,
                 IsShared = true,
                 IsSharedForEveryone = true,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);
@@ -457,7 +457,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
                 OwnerID = owner.Id,
                 IsShared = true,
                 IsSharedForEveryone = true,
-                FileType = DAO.Models.Base.FileType.FILE
+                ResourceType = DAO.Models.Base.ResourceType.FILE
             };
 
             await databaseContext.Files.AddAsync(file);

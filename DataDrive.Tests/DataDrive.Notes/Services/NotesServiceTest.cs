@@ -37,7 +37,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note noteToDelete = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -72,7 +72,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note noteToDelete = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = Guid.NewGuid().ToString(),
@@ -132,7 +132,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note1 = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note1's title",
                 Content = "Note1's content",
                 OwnerID = userId,
@@ -141,7 +141,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note2 = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note1's title",
                 Content = "Note1's content",
                 OwnerID = userId,
@@ -178,7 +178,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note1 = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note1's title",
                 Content = "Note1's content",
                 OwnerID = Guid.NewGuid().ToString(),
@@ -187,7 +187,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note2 = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note1's title",
                 Content = "Note1's content",
                 OwnerID = Guid.NewGuid().ToString(),
@@ -228,7 +228,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -264,7 +264,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -317,7 +317,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -374,7 +374,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -430,7 +430,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = ownerId,
@@ -485,7 +485,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = ownerId,
@@ -539,7 +539,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -591,7 +591,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -645,7 +645,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = ownerId,
@@ -713,7 +713,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note note = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = Guid.NewGuid().ToString(),
@@ -755,7 +755,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note noteToChange = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -800,7 +800,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note noteToChange = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = userId,
@@ -845,7 +845,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
 
             Note noteToChange = new Note
             {
-                FileType = DAO.Models.Base.FileType.NOTE,
+                ResourceType = DAO.Models.Base.ResourceType.NOTE,
                 Title = "Note's title",
                 Content = "Note's content",
                 OwnerID = Guid.NewGuid().ToString(),
@@ -926,7 +926,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             Assert.NotNull(status.Body);
             Assert.Equal(newNotePost.Title, status.Body.Title);
             Assert.Equal(newNotePost.Content, status.Body.Content);
-            Assert.Equal(DAO.Models.Base.FileType.NOTE, status.Body.FileType);
+            Assert.Equal(DAO.Models.Base.ResourceType.NOTE, status.Body.ResourceType);
             Assert.True(databaseContext.Notes.AnyAsync(_ => _.ID == status.Body.ID).Result);
         }
     }
