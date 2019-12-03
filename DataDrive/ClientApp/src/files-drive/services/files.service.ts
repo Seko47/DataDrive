@@ -6,8 +6,6 @@ import { DirectoryOut } from '../models/directory-out';
 import { CreateDirectoryPost } from '../models/create-directory-post';
 import { FileUploadResult } from '../models/file-upload-result';
 import { Operation } from 'fast-json-patch';
-import { ShareForEveryoneIn } from '../models/share-for-everyone-in';
-import { ShareEveryoneOut } from '../models/share-everyone-out';
 
 
 @Injectable({
