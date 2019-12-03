@@ -1,5 +1,15 @@
-<h3>{{ 'DRIVE.SELECT_THE_DATA_TO_SHOW' | translate }}</h3>
-<a mat-button [routerLink]="['/drive/files']">
-  <mat-icon>folder</mat-icon>
-  {{ 'NAVBAR.FILES' | translate }}
-</a>
+<div class="container text-center">
+  <br />
+  <h3>{{ 'DRIVE.SELECT_THE_DATA_TO_SHOW' | translate }}</h3>
+  <div class="ml-auto mr-auto">
+    <a mat-button [routerLink]="['/drive/files']">
+      <mat-icon>folder</mat-icon>
+      {{ 'NAVBAR.FILES' | translate }}
+    </a>
+
+    <a mat-button [routerLink]="['/drive/notes']">
+      <mat-icon>notes</mat-icon>
+      {{ 'NAVBAR.NOTES' | translate }}
+    </a>
+  </div>
+</div>

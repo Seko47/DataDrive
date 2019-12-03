@@ -50,6 +50,7 @@
 		"HELLO_USERNAME": "Hello {{ name }}",
 		"HOME": "Home",
 		"MYDRIVE": "My Drive",
+		"NOTES": "Notes",
 		"QR_CODE_SCANNER": "Scanner",
 		"SIGN_OUT": "Sign out"
 	},

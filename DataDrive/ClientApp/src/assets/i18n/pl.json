@@ -50,6 +50,7 @@
 		"HELLO_USERNAME": "Witaj {{ name }}",
 		"HOME": "Strona główna",
 		"MYDRIVE": "Mój Dysk",
+		"NOTES": "Notatki",
 		"QR_CODE_SCANNER": "Skaner",
 		"SIGN_OUT": "Wyloguj"
 	},

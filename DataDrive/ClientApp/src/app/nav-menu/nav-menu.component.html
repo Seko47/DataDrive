@@ -49,6 +49,14 @@
 
       <a mat-list-item
          (click)="sidenav.close()"
+         *ngIf="isAuthenticated | async"
+         [routerLink]="'/drive/notes'">
+        <mat-icon>notes</mat-icon>
+        {{ 'NAVBAR.NOTES' | translate }}
+      </a>
+
+      <a mat-list-item
+         (click)="sidenav.close()"
          [routerLink]="'/scan'">
         <mat-icon>camera</mat-icon>
         {{ 'NAVBAR.QR_CODE_SCANNER' | translate }}
