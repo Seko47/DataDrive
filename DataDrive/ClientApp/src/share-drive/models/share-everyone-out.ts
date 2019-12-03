@@ -7,7 +7,7 @@ export class ShareEveryoneOut {
     public token: string;
     public expirationDateTime: Date;
     public downloadLimit: number;
-    public resourceId: string;
+    public resourceID: string;
     public resourceName: string;
     public resourceType: ResourceType;
     public ownerUsername: string;

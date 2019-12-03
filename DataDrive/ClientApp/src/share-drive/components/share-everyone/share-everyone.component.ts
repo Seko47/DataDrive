@@ -38,7 +38,6 @@ export class ShareEveryoneComponent implements OnInit {
     getFileOutByFileId(fileId: string) {
         this.filesService.getFileInfo(fileId)
             .subscribe(result => {
-
                 this.actualFile = result;
             }, (err: HttpErrorResponse) => {
                 switch (err.status) {
@@ -57,10 +56,9 @@ export class ShareEveryoneComponent implements OnInit {
             .subscribe(result => {
 
                 result.token = this.urlToShareEveryone + result.token;
-
                 this.shareInfo = result;
 
-                this.getFileOutByFileId(this.shareInfo.resourceId);
+                this.getFileOutByFileId(this.shareInfo.resourceID);
             }, (err: HttpErrorResponse) => {
 
                 switch (err.status) {
@@ -94,7 +92,7 @@ export class ShareEveryoneComponent implements OnInit {
 
                         this.shareInfo = result;
 
-                        this.getFileOutByFileId(this.shareInfo.resourceId);
+                        this.getFileOutByFileId(this.shareInfo.resourceID);
                     }, (err: HttpErrorResponse) => {
                         switch (err.status) {
                             case 404: {

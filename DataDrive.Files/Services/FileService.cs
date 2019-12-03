@@ -71,7 +71,7 @@ namespace DataDrive.Files.Services
             }
 
             List<ShareAbstract> shares = await _databaseContext.ShareAbstracts
-                .Where(_ => _.FileID == fileAbstractToDelete.ID)
+                .Where(_ => _.ResourceID == fileAbstractToDelete.ID)
                 .ToListAsync();
 
             _databaseContext.ShareAbstracts.RemoveRange(shares);
@@ -149,7 +149,7 @@ namespace DataDrive.Files.Services
 
             if (fileToDownload == null
                 || (fileToDownload.OwnerID != userId
-                && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId && _.FileID == id))
+                && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId && _.ResourceID == id))
                 && !fileToDownload.IsSharedForEveryone))
             {
                 return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);

@@ -24,14 +24,14 @@ namespace DataDrive.Share.Services
 
         public async Task<bool> IsShared(Guid fileId)
         {
-            ShareAbstract share = await _databaseContext.ShareAbstracts.FirstOrDefaultAsync(_ => _.FileID == fileId);
+            ShareAbstract share = await _databaseContext.ShareAbstracts.FirstOrDefaultAsync(_ => _.ResourceID == fileId);
 
             return share != null;
         }
 
         public async Task<bool> IsSharedForEveryone(Guid fileId)
         {
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId);
 
             return shareEveryone != null;
         }
@@ -48,7 +48,7 @@ namespace DataDrive.Share.Services
                 ?.Id;
 
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
-                .FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == userId);
+                .FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
 
             if (shareEveryone == null)
             {
@@ -64,7 +64,7 @@ namespace DataDrive.Share.Services
         {
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
                 .Include(_ => _.Owner)
-                .Include(_ => _.File)
+                .Include(_ => _.Resource)
                 .FirstOrDefaultAsync(_ => _.Token == token);
 
             if (shareEveryone == null)
@@ -86,7 +86,7 @@ namespace DataDrive.Share.Services
         {
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
                 .Include(_ => _.Owner)
-                .Include(_ => _.File)
+                .Include(_ => _.Resource)
                 .FirstOrDefaultAsync(_ => _.Token == token);
 
             if (shareEveryone == null)
@@ -115,7 +115,7 @@ namespace DataDrive.Share.Services
                 return new StatusCode<ShareEveryoneOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == userId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
 
             if (shareEveryone == null)
             {
@@ -124,7 +124,7 @@ namespace DataDrive.Share.Services
                     CreatedDateTime = DateTime.Now,
                     DownloadLimit = downloadLimit,
                     ExpirationDateTime = expirationDateTime,
-                    FileID = fileId,
+                    ResourceID = fileId,
                     OwnerID = userId,
                     Password = password,
                     Token = GenerateToken()
@@ -155,7 +155,7 @@ namespace DataDrive.Share.Services
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
             FileAbstract fileAbstract = await _databaseContext.FileAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.FileID == fileId && _.OwnerID == userId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
 
             if (fileAbstract == null || shareEveryone == null)
             {
@@ -169,7 +169,7 @@ namespace DataDrive.Share.Services
             await _databaseContext.SaveChangesAsync();
 
             return !fileAbstract.IsSharedForEveryone &&
-                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.FileID == fileId && _.OwnerID == userId));
+                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.ResourceID == fileId && _.OwnerID == userId));
         }
 
 

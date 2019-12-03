@@ -278,7 +278,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareEveryone shareEveryone = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = userId,
                 Token = "XYZ"
             };
@@ -333,7 +333,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareEveryone shareEveryone = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = userId,
                 Token = "XYZ",
                 DownloadLimit = downloadLimit
@@ -388,7 +388,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareEveryone shareEveryone = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = userId,
                 Token = "XYZ",
                 ExpirationDateTime = DateTime.Now.AddDays(1)
@@ -444,7 +444,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareForUser shareForUser = new ShareForUser
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = ownerId,
                 SharedForUserID = userId
             };
@@ -499,7 +499,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareForUser shareForUser = new ShareForUser
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = ownerId,
                 SharedForUserID = userId,
                 ExpirationDateTime = DateTime.Now.AddDays(1)
@@ -553,7 +553,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareEveryone shareEveryone = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = userId,
                 Token = "XYZ",
                 ExpirationDateTime = DateTime.Now.AddDays(-1)
@@ -605,7 +605,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareEveryone shareEveryone = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = userId,
                 Token = "XYZ",
                 DownloadLimit = 0
@@ -659,7 +659,7 @@ namespace DataDrive.Tests.DataDrive.Notes.Services
             ShareForUser shareForUser = new ShareForUser
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = note.ID,
+                ResourceID = note.ID,
                 OwnerID = ownerId,
                 SharedForUserID = userId,
                 ExpirationDateTime = DateTime.Now.AddDays(-1)

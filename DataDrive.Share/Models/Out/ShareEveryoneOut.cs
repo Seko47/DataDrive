@@ -26,9 +26,9 @@ namespace DataDrive.Share.Models
         public ShareEveryone_to_ShareEveryoneOut()
         {
             CreateMap<ShareEveryone, ShareEveryoneOut>()
-                .ForMember(fout => fout.ResourceName, opt => opt.MapFrom(f => f.File.Name))
+                .ForMember(fout => fout.ResourceName, opt => opt.MapFrom(f => f.Resource.Name))
                 .ForMember(fout => fout.OwnerUsername, opt => opt.MapFrom(f => f.Owner.UserName))
-                .ForMember(fout => fout.ResourceType, opt => opt.MapFrom(f => f.File.ResourceType));
+                .ForMember(fout => fout.ResourceType, opt => opt.MapFrom(f => f.Resource.ResourceType));
         }
     }
 }

@@ -38,7 +38,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             ShareEveryone shareDirectory = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = directory.ID,
+                ResourceID = directory.ID,
                 OwnerID = owner.Id,
                 Token = "dir_token"
             };
@@ -76,7 +76,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             ShareEveryone shareFile = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = file.ID,
+                ResourceID = file.ID,
                 OwnerID = owner.Id,
                 Token = "file_token"
             };
@@ -176,7 +176,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             ShareEveryone shareDirectory = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = directory.ID,
+                ResourceID = directory.ID,
                 OwnerID = owner.Id,
                 Token = "dir_token"
             };
@@ -215,7 +215,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             ShareEveryone shareFile = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = file.ID,
+                ResourceID = file.ID,
                 OwnerID = owner.Id,
                 Token = "file_token"
             };
@@ -421,7 +421,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             ShareEveryone shareFile = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = file.ID,
+                ResourceID = file.ID,
                 OwnerID = owner.Id,
                 Token = "fil_token"
             };
@@ -435,7 +435,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
 
             bool? canceled = await shareService.CancelSharingForEveryone(file.ID, ownerUsername);
             Assert.True(canceled);
-            Assert.False(await databaseContext.ShareEveryones.AnyAsync(_ => _.FileID == file.ID));
+            Assert.False(await databaseContext.ShareEveryones.AnyAsync(_ => _.ResourceID == file.ID));
         }
 
         [Fact]
@@ -464,7 +464,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
             ShareEveryone shareFile = new ShareEveryone
             {
                 CreatedDateTime = DateTime.Now,
-                FileID = file.ID,
+                ResourceID = file.ID,
                 OwnerID = owner.Id,
                 Token = "fil_token"
             };
@@ -478,7 +478,7 @@ namespace DataDrive.Tests.DataDrive.Share.Services
 
             bool canceled = await shareService.CancelSharingForEveryone(file.ID, "user@user.com");
             Assert.False(canceled);
-            Assert.True(await databaseContext.ShareEveryones.AnyAsync(_ => _.FileID == file.ID));
+            Assert.True(await databaseContext.ShareEveryones.AnyAsync(_ => _.ResourceID == file.ID));
         }
 
         [Fact]
