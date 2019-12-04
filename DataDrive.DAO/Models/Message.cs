@@ -15,5 +15,6 @@ namespace DataDrive.DAO.Models
 
         public virtual ApplicationUser SendingUser { get; set; }
         public virtual MessageThread Thread { get; set; }
+        public virtual List<MessageReadState> MessageReadStates { get; set; }
     }
 }
