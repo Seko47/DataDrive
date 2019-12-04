@@ -1,6 +1,7 @@
 using AutoMapper;
 using DataDrive.Extensions;
 using DataDrive.Files.Services;
+using DataDrive.Messages.Services;
 using DataDrive.Notes.Services;
 using DataDrive.Share.Services;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,7 @@ namespace DataDrive
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IShareService, ShareService>();
             services.AddScoped<INotesService, NotesService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();

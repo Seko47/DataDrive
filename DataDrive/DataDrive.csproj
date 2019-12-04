@@ -34,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataDrive.DAO\DataDrive.DAO.csproj" />
     <ProjectReference Include="..\DataDrive.Files\DataDrive.Files.csproj" />
+    <ProjectReference Include="..\DataDrive.Messages\DataDrive.Messages.csproj" />
     <ProjectReference Include="..\DataDrive.Notes\DataDrive.Notes.csproj" />
     <ProjectReference Include="..\DataDrive.Share\DataDrive.Share.csproj" />
   </ItemGroup>
