@@ -12,10 +12,14 @@
         <b>{{ note.title }}</b>
       </h4>
       <mat-icon style="position: absolute; right:5px; top:5px"
-                    *ngIf="note.isShared">people</mat-icon>
+                *ngIf="note.isShared">people</mat-icon>
 
       <p class="text-truncate" *ngIf="note.content">
         {{ note.content }}
+      </p>
+
+      <p class="font-weight-light">
+        {{ (note.lastModifiedDateTime ? (note.createdDateTime > note.lastModifiedDateTime ? note.createdDateTime : note.lastModifiedDateTime) : note.createdDateTime) | date:'dd.MM.yyyy HH:mm:ss' }}
       </p>
     </mat-card>
 

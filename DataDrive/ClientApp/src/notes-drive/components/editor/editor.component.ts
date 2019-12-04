@@ -97,6 +97,7 @@ export class EditorComponent implements OnInit {
     }
 
     public saveNote(): void {
+
         if (!this.newNote.title && !this.newNote.content) {
             alert("Note is empty");
             return;
@@ -117,6 +118,8 @@ export class EditorComponent implements OnInit {
         else {
 
             const patch: Operation[] = compare(this.oldNote, this.newNote);
+
+            this.oldNote = new NotePost();
 
             this.notesService.editNote(this.noteId, patch).subscribe(result => {
 
