@@ -20,6 +20,11 @@ namespace DataDrive.DAO.Context
         DbSet<ShareEveryone> ShareEveryones { get; set; }
         DbSet<ShareForUser> ShareForUsers { get; set; }
 
+        DbSet<MessageThread> MessageThreads { get; set; }
+        DbSet<MessageThreadParticipant> MessageThreadParticipants { get; set; }
+        DbSet<Message> Messages { get; set; }
+        DbSet<MessageReadState> MessageReadStates { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

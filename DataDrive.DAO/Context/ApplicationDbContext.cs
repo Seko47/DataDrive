@@ -26,6 +26,11 @@ namespace DataDrive.DAO.Context
         public DbSet<ShareEveryone> ShareEveryones { get; set; }
         public DbSet<ShareForUser> ShareForUsers { get; set; }
 
+        public DbSet<MessageThread> MessageThreads { get; set; }
+        public DbSet<MessageThreadParticipant> MessageThreadParticipants { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MessageReadState> MessageReadStates { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
