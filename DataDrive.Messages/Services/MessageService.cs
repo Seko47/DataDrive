@@ -71,9 +71,29 @@ namespace DataDrive.Messages.Services
             return new StatusCode<ThreadOut>(StatusCodes.Status200OK, result);
         }
 
-        public Task<StatusCode<List<ThreadOut>>> GetThreadsByUser(string username)
+        public async Task<StatusCode<List<ThreadOut>>> GetThreadsByUser(string username)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))?
+                .Id;
+
+            List<MessageThread> messageThreads = await _databaseContext.MessageThreads
+                .Include(_ => _.Messages)
+                .Include(_ => _.MessageThreadParticipants)
+                .Where(_ => _.MessageThreadParticipants.Any(_ => _.UserID == userId) && _.Messages.Any())
+                .OrderByDescending(_ => _.Messages.Max(_ => _.SentDate))
+                .ToListAsync();
+
+            if (messageThreads == null || !messageThreads.Any())
+            {
+                return new StatusCode<List<ThreadOut>>(StatusCodes.Status404NotFound, $"Threads not found");
+            }
+
+            messageThreads.ForEach(_ => _.Messages = _.Messages.TakeLast(1).ToList());
+
+            List<ThreadOut> result = _mapper.Map<List<ThreadOut>>(messageThreads);
+
+            return new StatusCode<List<ThreadOut>>(StatusCodes.Status200OK, result);
         }
 
         public Task<StatusCode<MessageOut>> SendMessage(MessagePost messagePost, string senderUsername)
