@@ -67,7 +67,14 @@ namespace DataDrive.Messages.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> SendMessage(MessagePost messagePost)
         {
-            throw new NotImplementedException();
+            StatusCode<MessageOut> status = await _messageService.SendMessage(messagePost, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound(status.Message);
+            }
+
+            return Ok(status.Body);
         }
     }
 }

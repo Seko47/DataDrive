@@ -200,6 +200,60 @@ namespace DataDrive.Tests.DataDrive.Messages.Controllers
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
         }
-        //404 when receiver user not exists
+
+        [Fact]
+        public async void Returns_MessageOut_when_MessageSend()
+        {
+            MessageOut messageOut = new MessageOut
+            {
+                ID = Guid.NewGuid(),
+                Content = "Message's content",
+                SendingUserUsername = ADMIN_USERNAME,
+            };
+
+            StatusCode<MessageOut> status = new StatusCode<MessageOut>(StatusCodes.Status200OK, messageOut);
+            Mock<IMessageService> messageService = new Mock<IMessageService>();
+            messageService.Setup(_ => _.SendMessage(It.IsAny<MessagePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(status));
+
+            MessagesController messagesController = new MessagesController(messageService.Object, UserManagerHelper.GetUserManager(ADMIN_USERNAME));
+            messagesController.Authenticate(ADMIN_USERNAME);
+
+            MessagePost messagePost = new MessagePost
+            {
+                ToUserUsername = ADMIN_USERNAME,
+                Content = "Message's content"
+            };
+
+            IActionResult result = await messagesController.SendMessage(messagePost);
+
+            Assert.NotNull(result);
+            OkObjectResult okObjectResult = result as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+            Assert.IsType<MessageOut>(okObjectResult.Value);
+        }
+
+        [Fact]
+        public async void Returns_NotFoundObjectResult404_when_ReceiverUserNotFound()
+        {
+            StatusCode<MessageOut> status = new StatusCode<MessageOut>(StatusCodes.Status404NotFound);
+            Mock<IMessageService> messageService = new Mock<IMessageService>();
+            messageService.Setup(_ => _.SendMessage(It.IsAny<MessagePost>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(status));
+
+            MessagesController messagesController = new MessagesController(messageService.Object, UserManagerHelper.GetUserManager(ADMIN_USERNAME));
+            messagesController.Authenticate(ADMIN_USERNAME);
+
+            MessagePost messagePost = new MessagePost
+            {
+                ToUserUsername = ADMIN_USERNAME,
+                Content = "Message's content"
+            };
+
+            IActionResult result = await messagesController.SendMessage(messagePost);
+
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
     }
 }
