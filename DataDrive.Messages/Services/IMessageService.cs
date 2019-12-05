@@ -11,7 +11,7 @@ namespace DataDrive.Messages.Services
     public interface IMessageService
     {
         Task<StatusCode<List<ThreadOut>>> GetThreadsByUser(string username);
-        Task<StatusCode<ThreadOut>> GetMessagesByThreadAndFilterAndUser(Guid guid, MessageFilter messageFilter, string username);
+        Task<StatusCode<ThreadOut>> GetMessagesByThreadAndFilterAndUser(Guid threadId, MessageFilter messageFilter, string username);
         Task<StatusCode<MessageOut>> SendMessage(MessagePost messagePost, string senderUsername);
     }
 }
