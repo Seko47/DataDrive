@@ -11,7 +11,7 @@ namespace DataDrive.Messages.Models.Out
         public Guid ID { get; set; }
         public DateTime ReadDate { get; set; }
         public Guid MessageID { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public string UserUsername { get; set; }
     }
 

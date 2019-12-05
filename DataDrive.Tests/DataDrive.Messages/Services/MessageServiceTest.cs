@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -43,17 +44,19 @@ namespace DataDrive.Tests.DataDrive.Messages.Services
             string userId = (await databaseContext.Users
                 .FirstOrDefaultAsync(_ => _.UserName == USER_USERNAME))?.Id;
 
-            MessageReadState messageReadState = new MessageReadState
-            {
-                ReadDate = DateTime.Now,
-                UserID = adminId
-            };
-
             Message messageFirst = new Message
             {
                 SendingUserID = adminId,
                 SentDate = DateTime.Now,
-                Content = "First message's content"
+                Content = "First message's content",
+                MessageReadStates = new List<MessageReadState>()
+                {
+                    new MessageReadState
+                    {
+                        ReadDate = DateTime.Now,
+                        UserID = adminId
+                    }
+        }
             };
 
             Message messageLast = new Message
@@ -63,7 +66,11 @@ namespace DataDrive.Tests.DataDrive.Messages.Services
                 Content = "Last message's content",
                 MessageReadStates = new List<MessageReadState>()
                 {
-                    messageReadState
+                    new MessageReadState
+                    {
+                        ReadDate = DateTime.Now,
+                        UserID = userId
+                    }
                 }
             };
 
@@ -108,6 +115,9 @@ namespace DataDrive.Tests.DataDrive.Messages.Services
             Assert.Equal(messageLast.Content, status.Body.Messages[0].Content);
             Assert.NotEmpty(status.Body.MessageThreadParticipants);
             Assert.Equal(2, status.Body.MessageThreadParticipants.Count);
+            Assert.NotNull(status.Body.Messages[0].MessageReadStates);
+            Assert.Contains(status.Body.Messages[0].MessageReadStates, _ => _.UserId == adminId);
+            Assert.Contains(databaseContext.MessageReadStates, _ => _.UserID == adminId && _.MessageID == status.Body.Messages[0].ID);
         }
 
         [Fact]

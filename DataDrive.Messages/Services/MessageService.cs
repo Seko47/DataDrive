@@ -40,6 +40,12 @@ namespace DataDrive.Messages.Services
                 return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread {threadId} not found");
             }
 
+            /*
+            int numberOfUnreadMessages = messageThread.Messages
+                .Where(_ => !_.MessageReadStates.Any(_ => _.UserID == userId))
+                .Count();
+            */
+
             if (messageFilter.NumberOfLastMessage < 1)
             {
                 messageFilter.NumberOfLastMessage = 1;
@@ -49,6 +55,16 @@ namespace DataDrive.Messages.Services
                 .OrderBy(_ => _.SentDate)
                 .TakeLast(messageFilter.NumberOfLastMessage)
                 .ToList();
+
+            messageThread.Messages
+                .Where(_ => !_.MessageReadStates.Any(_ => _.UserID == userId))
+                .ToList().ForEach(_ => _.MessageReadStates.Add(new MessageReadState
+                {
+                    ReadDate = DateTime.Now,
+                    UserID = userId
+                }));
+
+            await _databaseContext.SaveChangesAsync();
 
             ThreadOut result = _mapper.Map<ThreadOut>(messageThread);
 
