@@ -42,6 +42,8 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\app\services\" />
     <Folder Include="ClientApp\src\files-drive\models\" />
+    <Folder Include="ClientApp\src\messages\models\" />
+    <Folder Include="ClientApp\src\messages\services\" />
     <Folder Include="ClientApp\src\notes-drive\services\" />
     <Folder Include="ClientApp\src\share-drive\components\" />
     <Folder Include="ClientApp\src\share-drive\services\" />
