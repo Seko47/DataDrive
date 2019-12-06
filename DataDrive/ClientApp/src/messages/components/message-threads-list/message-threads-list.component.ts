@@ -16,3 +16,5 @@ export class MessageThreadsListComponent implements OnInit {
     }
 
 }
+//Wysyłanie wiadomości, żeby móc zobaczyć listę wątków i listę wiadomości
+//po kliknięciu wątku

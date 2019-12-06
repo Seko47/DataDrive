@@ -1,0 +1,51 @@
+<mat-toolbar>
+
+  <button mat-button
+          (click)="getBackToList();">
+
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'MESSAGES.CHAT.GET_BACK' | translate }}
+  </button>
+</mat-toolbar>
+
+<div class="container">
+  <mat-form-field class="col-12"
+                  *ngIf="mode === 'new'">
+    <input matInput
+           placeholder="{{ 'MESSAGES.CHAT.SEND_TO_USERNAME' | translate }}"
+           autofocus
+           [(ngModel)]="messagePost.toUserUsername">
+  </mat-form-field>
+
+  <mat-form-field class="col-12"
+                  *ngIf="mode === 'read'">
+    <input matInput
+           placeholder="{{ 'MESSAGES.CHAT.SEND_TO_USERNAME' | translate }}"
+           readonly
+           [(ngModel)]="messagePost.toUserUsername">
+  </mat-form-field>
+
+  <hr />
+
+  <div style="height: 40vh;">
+    Lista wiadomości
+  </div>
+
+  <hr />
+  <div class="row">
+    <mat-form-field class="col-10">
+      <mat-label>{{ 'MESSAGES.CHAT.CONTENT' | translate }}</mat-label>
+      <textarea matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5"
+                [(ngModel)]="messagePost.content">
+    </textarea>
+    </mat-form-field>
+    <a mat-icon-button
+       (click)="sendMessage()">
+
+      <mat-icon>send</mat-icon>
+    </a>
+  </div>
+</div>

@@ -28,7 +28,7 @@ namespace DataDrive.Messages.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("/threads")]
+        [HttpGet("threads")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -45,11 +45,11 @@ namespace DataDrive.Messages.Controllers
         }
 
 
-        [HttpGet("/threads/{id}")]
+        [HttpGet("threads/{id}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetMessagesFromThread(Guid id, MessageFilter messageFilter)
+        public async Task<IActionResult> GetMessagesFromThread(Guid id, [FromQuery] MessageFilter messageFilter)
         {
             StatusCode<ThreadOut> status = await _messageService.GetMessagesByThreadAndFilterAndUser(id, messageFilter, _userManager.GetUserName(User));
 
@@ -65,7 +65,7 @@ namespace DataDrive.Messages.Controllers
         [Produces("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> SendMessage(MessagePost messagePost)
+        public async Task<IActionResult> SendMessage([FromBody] MessagePost messagePost)
         {
             StatusCode<MessageOut> status = await _messageService.SendMessage(messagePost, _userManager.GetUserName(User));
 

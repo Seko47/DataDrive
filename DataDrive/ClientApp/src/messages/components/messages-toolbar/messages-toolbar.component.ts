@@ -13,7 +13,7 @@ export class MessagesToolbarComponent implements OnInit {
     ngOnInit() {
     }
 
-    public addNote(): void {
+    public sendMessage(): void {
         this.router.navigate(["/messages/chat"], { queryParams: { mode: "new" } });
     }
 }

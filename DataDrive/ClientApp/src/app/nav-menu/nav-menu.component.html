@@ -1,18 +1,15 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-button (click)="sidenav.toggle()" *ngIf="isAuthenticated | async">
+    <button mat-button (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
       {{ 'APP.NAME' | translate }}
     </button>
-
-    <h1 *ngIf="!(isAuthenticated | async)">{{ 'APP.NAME' | translate }}</h1>
 
     <span class="menu-spacer"></span>
     <div fxHide.xs>
 
       <a mat-button [routerLink]="['/']"> {{ 'NAVBAR.HOME' | translate }} </a>
       <a mat-button
-         *ngIf="isAuthenticated | async"
          [routerLink]="['/drive']">{{ 'NAVBAR.MYDRIVE' | translate }}</a>
 
     </div>
@@ -37,11 +34,9 @@
         {{ 'NAVBAR.HOME' | translate }}
       </a>
 
-      <h3 mat-subheader
-          *ngIf="isAuthenticated | async">{{ 'NAVBAR.MYDRIVE' | translate }}</h3>
+      <h3 mat-subheader>{{ 'NAVBAR.MYDRIVE' | translate }}</h3>
       <a mat-list-item
          (click)="sidenav.close()"
-         *ngIf="isAuthenticated | async"
          [routerLink]="'/drive/files'">
         <mat-icon>folder</mat-icon>
         {{ 'NAVBAR.FILES' | translate }}
@@ -49,7 +44,6 @@
 
       <a mat-list-item
          (click)="sidenav.close()"
-         *ngIf="isAuthenticated | async"
          [routerLink]="'/drive/notes'">
         <mat-icon>notes</mat-icon>
         {{ 'NAVBAR.NOTES' | translate }}
