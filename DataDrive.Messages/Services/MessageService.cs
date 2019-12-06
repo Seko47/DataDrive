@@ -96,9 +96,72 @@ namespace DataDrive.Messages.Services
             return new StatusCode<List<ThreadOut>>(StatusCodes.Status200OK, result);
         }
 
-        public Task<StatusCode<MessageOut>> SendMessage(MessagePost messagePost, string senderUsername)
+        public async Task<StatusCode<MessageOut>> SendMessage(MessagePost messagePost, string senderUsername)
         {
-            throw new NotImplementedException();
+            if (!await _databaseContext.Users.AnyAsync(_ => _.UserName == messagePost.ToUserUsername))
+            {
+                return new StatusCode<MessageOut>(StatusCodes.Status404NotFound, $"{messagePost.ToUserUsername} user not found");
+            }
+
+            string receiverId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == messagePost.ToUserUsername))?
+                .Id;
+
+            string senderId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == senderUsername))?
+                .Id;
+
+            MessageThread messageThread = await _databaseContext.MessageThreads
+                .Include(_ => _.Messages)
+                .Include(_ => _.MessageThreadParticipants)
+                .Where(_ => _.MessageThreadParticipants.Any(_ => _.UserID == senderId))
+                .FirstOrDefaultAsync(_ => _.MessageThreadParticipants.Any(_ => _.UserID == receiverId));
+
+            if (messageThread == null)
+            {
+                messageThread = new MessageThread
+                {
+                    MessageThreadParticipants = new List<MessageThreadParticipant>
+                    {
+                        new MessageThreadParticipant
+                        {
+                            UserID = senderId
+                        },
+                        new MessageThreadParticipant
+                        {
+                            UserID = receiverId
+                        }
+                    }
+                };
+
+                await _databaseContext.MessageThreads
+                    .AddAsync(messageThread);
+            }
+
+            DateTime sentDate = DateTime.Now;
+            Message message = new Message
+            {
+                Content = messagePost.Content,
+                SendingUserID = senderId,
+                ThreadID = messageThread.ID,
+                SentDate = sentDate,
+
+                MessageReadStates = new List<MessageReadState>
+                {
+                    new MessageReadState
+                    {
+                        ReadDate = sentDate,
+                        UserID = senderId
+                    }
+                }
+            };
+
+            await _databaseContext.Messages.AddAsync(message);
+            await _databaseContext.SaveChangesAsync();
+
+            MessageOut result = _mapper.Map<MessageOut>(message);
+
+            return new StatusCode<MessageOut>(StatusCodes.Status200OK, result);
         }
     }
 }

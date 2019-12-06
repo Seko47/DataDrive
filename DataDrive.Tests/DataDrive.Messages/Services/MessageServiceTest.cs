@@ -56,7 +56,7 @@ namespace DataDrive.Tests.DataDrive.Messages.Services
                         ReadDate = DateTime.Now,
                         UserID = adminId
                     }
-        }
+                }
             };
 
             Message messageLast = new Message
@@ -445,6 +445,179 @@ namespace DataDrive.Tests.DataDrive.Messages.Services
             await databaseContext.SaveChangesAsync();
 
             StatusCode<List<ThreadOut>> status = await messageService.GetThreadsByUser(USER_USERNAME);
+
+            Assert.NotNull(status);
+            Assert.Equal(StatusCodes.Status404NotFound, status.Code);
+        }
+    }
+
+    public class MessageServiceTest_SendMessage
+    {
+        private readonly static string ADMIN_USERNAME = "admin@admin.com";
+        private readonly static string USER_USERNAME = "user@user.com";
+
+        [Fact]
+        public async void Returns_StatusCode200AndMessageOut_when_MessageSentAndMessageThreadNotExists()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new MessageReadState_to_MessageReadStateOut());
+                conf.AddProfile(new Message_to_MessageOut());
+            });
+
+            IMapper mapper = mapperConfiguration.CreateMapper();
+            IMessageService messageService = new MessageService(databaseContext, mapper);
+
+            string adminId = (await databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == ADMIN_USERNAME))?.Id;
+
+            await DatabaseTestHelper.AddNewUser(USER_USERNAME, databaseContext);
+
+            string userId = (await databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == USER_USERNAME))?.Id;
+
+            MessagePost messagePost = new MessagePost
+            {
+                Content = "New message's content",
+                ToUserUsername = USER_USERNAME
+            };
+
+            StatusCode<MessageOut> status = await messageService.SendMessage(messagePost, ADMIN_USERNAME);
+
+            Assert.NotNull(status);
+            Assert.Equal(StatusCodes.Status200OK, status.Code);
+            Assert.NotNull(status.Body);
+
+            Message messageFromDatabase = await databaseContext.Messages.FirstOrDefaultAsync(_ => _.ID == status.Body.ID);
+            Assert.NotNull(messageFromDatabase);
+            Assert.True(await databaseContext.MessageThreads
+                .AnyAsync(_ => _.Messages.Contains(messageFromDatabase)));
+
+            List<MessageThreadParticipant> messageThreadParticipants = await databaseContext.MessageThreadParticipants
+                .Where(_ => _.ThreadID == status.Body.ThreadID && (_.UserID == adminId || _.UserID == userId))
+                .ToListAsync();
+            Assert.Equal(2, messageThreadParticipants.Count);
+
+            List<MessageReadState> messageReadStates = await databaseContext.MessageReadStates
+                .Where(_ => _.MessageID == status.Body.ID)
+                .ToListAsync();
+            Assert.Single(messageReadStates);
+            Assert.Contains(messageReadStates, _ => _.UserID == adminId);
+        }
+
+        [Fact]
+        public async void Returns_StatusCode200AndMessageOut_when_MessageSentAndMessageThreadExists()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new MessageReadState_to_MessageReadStateOut());
+                conf.AddProfile(new Message_to_MessageOut());
+            });
+
+            IMapper mapper = mapperConfiguration.CreateMapper();
+            IMessageService messageService = new MessageService(databaseContext, mapper);
+
+            string adminId = (await databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == ADMIN_USERNAME))?.Id;
+
+            await DatabaseTestHelper.AddNewUser(USER_USERNAME, databaseContext);
+
+            string userId = (await databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == USER_USERNAME))?.Id;
+
+            Message messageFirst = new Message
+            {
+                SendingUserID = adminId,
+                SentDate = DateTime.Now,
+                Content = "First message's content",
+                MessageReadStates = new List<MessageReadState>()
+                {
+                    new MessageReadState
+                    {
+                        ReadDate = DateTime.Now,
+                        UserID = adminId
+                    }
+                }
+            };
+
+            MessageThread thread = new MessageThread
+            {
+                Messages = new List<Message>()
+                {
+                    messageFirst
+                },
+                MessageThreadParticipants = new List<MessageThreadParticipant>()
+                {
+                    new MessageThreadParticipant
+                    {
+                        UserID=adminId
+                    },
+                    new MessageThreadParticipant
+                    {
+                        UserID=userId
+                    }
+                }
+            };
+
+            await databaseContext.MessageThreads
+                .AddAsync(thread);
+            await databaseContext.SaveChangesAsync();
+
+            MessagePost messagePost = new MessagePost
+            {
+                Content = "New message's content",
+                ToUserUsername = USER_USERNAME
+            };
+
+            StatusCode<MessageOut> status = await messageService.SendMessage(messagePost, ADMIN_USERNAME);
+
+            Assert.NotNull(status);
+            Assert.Equal(StatusCodes.Status200OK, status.Code);
+            Assert.NotNull(status.Body);
+
+            Message messageFromDatabase = await databaseContext.Messages.FirstOrDefaultAsync(_ => _.ID == status.Body.ID);
+            Assert.NotNull(messageFromDatabase);
+            Assert.True(await databaseContext.MessageThreads
+                .AnyAsync(_ => _.Messages.Contains(messageFromDatabase)));
+
+            List<MessageThreadParticipant> messageThreadParticipants = await databaseContext.MessageThreadParticipants
+                .Where(_ => _.ThreadID == status.Body.ThreadID && (_.UserID == adminId || _.UserID == userId))
+                .ToListAsync();
+            Assert.Equal(2, messageThreadParticipants.Count);
+
+            List<MessageReadState> messageReadStates = await databaseContext.MessageReadStates
+                .Where(_ => _.MessageID == status.Body.ID)
+                .ToListAsync();
+            Assert.Single(messageReadStates);
+            Assert.Contains(messageReadStates, _ => _.UserID == adminId);
+            Assert.Equal(thread.ID, status.Body.ThreadID);
+        }
+
+        [Fact]
+        public async void Returns_StatusCode404_when_UserNotFound()
+        {
+            IDatabaseContext databaseContext = DatabaseTestHelper.GetContext();
+            MapperConfiguration mapperConfiguration = new MapperConfiguration(conf =>
+            {
+                conf.AddProfile(new MessageReadState_to_MessageReadStateOut());
+                conf.AddProfile(new Message_to_MessageOut());
+            });
+
+            IMapper mapper = mapperConfiguration.CreateMapper();
+            IMessageService messageService = new MessageService(databaseContext, mapper);
+
+            string adminId = (await databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == ADMIN_USERNAME))?.Id;
+
+            MessagePost messagePost = new MessagePost
+            {
+                Content = "New message's content",
+                ToUserUsername = USER_USERNAME
+            };
+
+            StatusCode<MessageOut> status = await messageService.SendMessage(messagePost, ADMIN_USERNAME);
 
             Assert.NotNull(status);
             Assert.Equal(StatusCodes.Status404NotFound, status.Code);
