@@ -3,16 +3,18 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
-import { ThreadsComponent } from './components/threads/threads.component';
+import { MessagesComponent } from './components/messages/messages.component';
+import { MessagesToolbarComponent } from './components/messages-toolbar/messages-toolbar.component';
+import { MessageThreadsListComponent } from './components/message-threads-list/message-threads-list.component';
 
 
 @NgModule({
-    declarations: [ThreadsComponent],
+    declarations: [MessagesComponent, MessagesToolbarComponent, MessageThreadsListComponent],
     imports: [
         CommonModule,
         SharedModule,
         RouterModule.forChild([
-            { path: 'threads', component: ThreadsComponent, canActivate: [AuthorizeGuard] }
+            { path: 'messages', component: MessagesComponent, canActivate: [AuthorizeGuard] }
         ])
     ]
 })

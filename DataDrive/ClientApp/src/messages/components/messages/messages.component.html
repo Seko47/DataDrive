@@ -1,0 +1,19 @@
+<app-messages-toolbar></app-messages-toolbar>
+
+<div>
+  <div style="position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000"
+       *ngIf="!threads || threads.length == 0">
+    <p>
+      {{ 'MESSAGES.THREADS_NOT_FOUND' | translate }}
+    </p>
+
+  </div>
+
+  <app-message-threads-list *ngIf="threads && threads.length > 0"
+                            [threads]="threads">
+  </app-message-threads-list>
+</div>

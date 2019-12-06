@@ -72,6 +72,8 @@ export class NotesComponent implements OnInit, OnDestroy {
     }
 
     public loadNotes() {
+        this.notes = [];
+
         this.notesService.getAllNotes().subscribe(result => {
 
             this.notes = result;
@@ -90,7 +92,7 @@ export class NotesComponent implements OnInit, OnDestroy {
             });
         }, (error: HttpErrorResponse) => {
 
-            alert(error.message);
+            console.log(error.error);
         });
     }
 

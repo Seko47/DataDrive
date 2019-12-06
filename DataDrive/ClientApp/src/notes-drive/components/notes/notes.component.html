@@ -1,3 +1,19 @@
 <app-notes-toolbar></app-notes-toolbar>
 
-<app-notes-list [notes]="notes"></app-notes-list>
+<div>
+  <div style="position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000"
+       *ngIf="!notes || notes.length == 0">
+    <p>
+      {{ 'NOTES.NOTES_NOT_FOUND' | translate }}
+    </p>
+
+  </div>
+
+  <app-notes-list *ngIf="notes && notes.length > 0"
+                  [notes]="notes">
+  </app-notes-list>
+</div>

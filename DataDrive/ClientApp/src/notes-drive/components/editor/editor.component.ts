@@ -27,8 +27,8 @@ export class EditorComponent implements OnInit {
         showToolbar: true,
         placeholder: 'Enter text here...',
         defaultParagraphSeparator: '',
-        defaultFontName: '',
-        defaultFontSize: '',
+        defaultFontName: 'times-new-roman',
+        defaultFontSize: '3',
         fonts: [
             { class: 'arial', name: 'Arial' },
             { class: 'times-new-roman', name: 'Times New Roman' },
