@@ -7,10 +7,11 @@ import { MessagesComponent } from './components/messages/messages.component';
 import { MessagesToolbarComponent } from './components/messages-toolbar/messages-toolbar.component';
 import { MessageThreadsListComponent } from './components/message-threads-list/message-threads-list.component';
 import { MessagesChatComponent } from './components/messages-chat/messages-chat.component';
+import { MessagesListComponent } from './components/messages-list/messages-list.component';
 
 
 @NgModule({
-    declarations: [MessagesComponent, MessagesToolbarComponent, MessageThreadsListComponent, MessagesChatComponent],
+    declarations: [MessagesComponent, MessagesToolbarComponent, MessageThreadsListComponent, MessagesChatComponent, MessagesListComponent],
     imports: [
         CommonModule,
         SharedModule,

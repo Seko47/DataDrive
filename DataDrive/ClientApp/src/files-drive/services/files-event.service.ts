@@ -29,5 +29,6 @@ export enum EventCode {
     DOWNLOAD = 2,
     DELETE = 3,
     SHARE = 4,
-    EDIT = 5
+    EDIT = 5,
+    RELOAD = 6
 }

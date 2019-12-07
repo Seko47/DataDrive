@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ThreadOut } from '../../models/thread-out';
 import { MessagesService } from '../../services/messages.service';
@@ -9,20 +9,21 @@ import { AuthorizeService } from '../../../api-authorization/authorize.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MessagePost } from '../../models/message-post';
+import { EventService, EventCode } from '../../../files-drive/services/files-event.service';
 
 @Component({
     selector: 'app-messages-chat',
     templateUrl: './messages-chat.component.html',
     styleUrls: ['./messages-chat.component.css']
 })
-export class MessagesChatComponent implements OnInit {
+export class MessagesChatComponent implements OnInit, OnDestroy {
 
     private mode: string;
     private thread: ThreadOut;
     private messageFilter: MessageFilter;
     private messagePost: MessagePost;
 
-    constructor(private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService) {
+    constructor(private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService, private messageEventService: EventService) {
 
         this.thread = new ThreadOut();
         this.messageFilter = new MessageFilter(10);
@@ -53,6 +54,25 @@ export class MessagesChatComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.messageEventService.asObservable().subscribe((message: [EventCode, string, string?]) => {
+
+            const eventCode = message[0];
+            const value = message[1];
+            if (value == 'to_chat')
+            switch (eventCode) {
+
+                case EventCode.RELOAD: {
+
+                    this.getMessagesFromThread(this.thread.id);
+                    break;
+                }
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.messageEventService.unsubscribe();
     }
 
     public sendMessage() {
@@ -90,6 +110,8 @@ export class MessagesChatComponent implements OnInit {
 
                 this.thread = result;
                 let loggedUser: Observable<string> = this.authorizeService.getUser().pipe(map(u => u && u.name));
+
+                this.messageEventService.emit([EventCode.RELOAD, "from_chat"]);
 
                 loggedUser.subscribe(username => {
 
