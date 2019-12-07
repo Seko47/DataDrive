@@ -205,7 +205,7 @@ namespace DataDrive.Tests.DataDrive.Messages.Services
                 {
                     new MessageThreadParticipant
                     {
-                        UserID=adminId
+                        UserID=Guid.NewGuid().ToString()
                     },
                     new MessageThreadParticipant
                     {

@@ -48,6 +48,11 @@ namespace DataDrive.Messages.Services
                 return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread participants not found");
             }
 
+            if (!messageThreadParticipants.Any(_=>_.UserID == userId))
+            {
+                return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread {threadId} not found");
+            }
+
             List<Message> messages = await _databaseContext.Messages
                 .Include(_ => _.SendingUser)
                 .Where(_ => _.ThreadID == threadId)
