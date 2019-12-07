@@ -31,7 +31,7 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
     private loadMessagesInterval;
 
 
-    constructor(private cdref: ChangeDetectorRef, private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService, private messageEventService: EventService) {
+    constructor(private cdref: ChangeDetectorRef, private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService) {
 
         this.previousDateRow = null;
         this.loggedUsername = this.authorizeService.getUser().pipe(map(u => u.name));
@@ -66,21 +66,6 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        this.messageEventService.asObservable().subscribe((message: [EventCode, string, string?]) => {
-
-            const eventCode = message[0];
-            const value = message[1];
-            if (value == 'to_chat')
-                switch (eventCode) {
-
-                    case EventCode.RELOAD: {
-
-                        this.getMessagesFromThread(this.thread.id);
-                        break;
-                    }
-                }
-        });
-
         this.loadMessagesInterval = setInterval(() => {
 
             this.getMessagesFromThread(this.thread.id);
@@ -88,7 +73,7 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.messageEventService.unsubscribe();
+
         clearInterval(this.loadMessagesInterval);
     }
 
@@ -126,7 +111,8 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
         this.messagesService.getMessagesFromThread(threadId, this.messageFilter)
             .subscribe((result: ThreadOut) => {
 
-                if (this.thread && this.thread.messages && result && result.messages) {
+                if (this.thread && this.thread.messages && result && result.messages
+                    && this.thread.messages[this.thread.messages.length - 1].messageReadStates.length == result.messages[result.messages.length - 1].messageReadStates.length) {
                     if (result.messages.length < 1
                         || (result.messages.length == this.thread.messages.length)
                         && result.messages[result.messages.length - 1].id === this.thread.messages[this.thread.messages.length - 1].id
@@ -148,14 +134,21 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
                     result.messages[i].showDate = this.insertDateRow(result.messages[i].sentDate);
                 }
 
+                for (let i = result.messages.length - 1; i >= 0; --i) {
+
+                    if (result.messages[i].messageReadStates.length > 1) {
+
+                        result.messages[i].showReaded = true;
+                        break;
+                    }
+                }
+
                 this.previousDateRow = null;
 
                 this.thread = result;
                 this.cdref.detectChanges();
 
                 let loggedUser: Observable<string> = this.authorizeService.getUser().pipe(map(u => u && u.name));
-
-                this.messageEventService.emit([EventCode.RELOAD, "from_chat"]);
 
                 loggedUser.subscribe(username => {
 
