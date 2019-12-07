@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ThreadOut } from '../../models/thread-out';
 import { MessagesService } from '../../services/messages.service';
@@ -24,12 +24,13 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
     private messageFilter: MessageFilter;
     private messagePost: MessagePost;
     private loggedUsername: Observable<string>;
+    private isMoore: boolean = true;
 
     @ViewChild("messageListContainer", null) messageListContainer: HTMLDivElement;
     private loadMessagesInterval;
 
 
-    constructor(private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService, private messageEventService: EventService) {
+    constructor(private cdref: ChangeDetectorRef, private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService, private messageEventService: EventService) {
 
         this.loggedUsername = this.authorizeService.getUser().pipe(map(u => u.name));
 
@@ -124,8 +125,6 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
         this.messagesService.getMessagesFromThread(threadId, this.messageFilter)
             .subscribe((result: ThreadOut) => {
 
-                const isScrolledToBottom = (this.messageListContainer.scrollHeight - this.messageListContainer.clientHeight) <= this.messageListContainer.scrollTop + 1
-
                 if (this.thread && this.thread.messages && result && result.messages) {
                     if (result.messages.length < 1
                         || (result.messages.length == this.thread.messages.length)
@@ -136,12 +135,16 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                console.log(isScrolledToBottom);
-                this.thread = result;
-
-                if (isScrolledToBottom) {
-                    this.messageListContainer.scrollTop = this.messageListContainer.scrollHeight - this.messageListContainer.clientHeight;
+                if (result.messages.length < this.messageFilter.numberOfLastMessage) {
+                    this.isMoore = false;
                 }
+                else {
+                    this.isMoore = true;
+                }
+
+                this.thread = result;
+                this.cdref.detectChanges();
+
                 let loggedUser: Observable<string> = this.authorizeService.getUser().pipe(map(u => u && u.name));
 
                 this.messageEventService.emit([EventCode.RELOAD, "from_chat"]);
@@ -160,6 +163,12 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
                     this.getBackToList();
                 }
             });
+    }
+
+    public loadMore() {
+        this.messageFilter.numberOfLastMessage += 10;
+
+        this.getMessagesFromThread(this.thread.id);
     }
 
     public getBackToList() {
