@@ -87,11 +87,9 @@
           {{ (message.sentDate | date:'HH:mm')}}
         </p>
       </div>
-
-      <p *ngIf="message.showReaded"
-         class="col-12 font-weight-light sent-date">
-        {{ 'MESSAGES.CHAT.READED' | translate }}
-      </p>
+      <div class="col-12">
+        <mat-icon *ngIf="message.showReaded">visibility</mat-icon>
+      </div>
     </div>
 
   </div>
