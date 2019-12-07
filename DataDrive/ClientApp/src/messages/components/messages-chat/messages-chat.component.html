@@ -31,7 +31,7 @@
        #messageListContainer
        [scrollTop]="messageListContainer.scrollHeight">
 
-    <div *ngIf="isMoore"
+    <div *ngIf="isMoore && mode !== 'new'"
          class="text-center">
       <button mat-button
               (click)="loadMore();">
@@ -39,7 +39,7 @@
       </button>
     </div>
 
-    <div *ngIf="!isMoore"
+    <div *ngIf="!isMoore && mode !== 'new'"
          class="text-center">
       <p>
         {{ 'MESSAGES.CHAT.NO_MORE_MESSAGES' | translate }}
