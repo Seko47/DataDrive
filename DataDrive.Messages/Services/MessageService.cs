@@ -54,16 +54,6 @@ namespace DataDrive.Messages.Services
                 .Count();
             */
 
-            if (messageFilter.NumberOfLastMessage < 1)
-            {
-                messageFilter.NumberOfLastMessage = 1;
-            }
-
-            messageThread.Messages = messageThread.Messages
-                .OrderBy(_ => _.SentDate)
-                .TakeLast(messageFilter.NumberOfLastMessage)
-                .ToList();
-
             foreach (Message message in messageThread.Messages)
             {
                 if (message.MessageReadStates == null)
@@ -82,6 +72,16 @@ namespace DataDrive.Messages.Services
                 }));
 
             await _databaseContext.SaveChangesAsync();
+
+            if (messageFilter.NumberOfLastMessage < 1)
+            {
+                messageFilter.NumberOfLastMessage = 1;
+            }
+
+            messageThread.Messages = messageThread.Messages
+                .OrderBy(_ => _.SentDate)
+                .TakeLast(messageFilter.NumberOfLastMessage)
+                .ToList();
 
             ThreadOut result = _mapper.Map<ThreadOut>(messageThread);
 

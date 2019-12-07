@@ -27,7 +27,46 @@
 
   <hr />
 
-  <app-messages-list [messages]="thread.messages"></app-messages-list>
+  <div class="col-12 message-list-container"
+       #messageListContainer
+       [scrollTop]="messageListContainer.scrollHeight">
+
+    <div *ngFor="let message of thread.messages"
+         class="row">
+
+      <!--(message.sentDate  | date:'dd.MM.yyyy HH:mm:ss')-->
+      <!--Message from logged user-->
+      <div *ngIf="message.sendingUserUsername === (loggedUsername | async)"
+           class="row logged-user-message-container">
+
+        <p class="col-auto font-weight-light sent-date">
+          {{ (message.sentDate | date:'HH:mm')}}
+        </p>
+
+        <div class="col mt-1 mb-1 logged-user-message">
+          <p class="text-break mt-auto mb-auto p-2 message-content">
+            {{ message.content }}
+          </p>
+        </div>
+      </div>
+
+      <!--Messages from other user-->
+      <div *ngIf="message.sendingUserUsername !== (loggedUsername | async)"
+           class="row other-user-message-container">
+
+        <div class="col mt-1 mb-1 other-user-message">
+          <p class="text-break mt-auto mb-auto p-2 message-content">
+            {{ message.content }}
+          </p>
+        </div>
+
+        <p class="col-auto font-weight-light sent-date">
+          {{ (message.sentDate | date:'HH:mm')}}
+        </p>
+      </div>
+    </div>
+
+  </div>
 
   <hr />
   <div class="row">

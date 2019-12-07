@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ThreadOut } from '../../models/thread-out';
 import { MessagesService } from '../../services/messages.service';
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MessagePost } from '../../models/message-post';
 import { EventService, EventCode } from '../../../files-drive/services/files-event.service';
+import { MessageOut } from '../../models/message-out';
 
 @Component({
     selector: 'app-messages-chat',
@@ -22,8 +23,15 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
     private thread: ThreadOut;
     private messageFilter: MessageFilter;
     private messagePost: MessagePost;
+    private loggedUsername: Observable<string>;
+
+    @ViewChild("messageListContainer", null) messageListContainer: HTMLDivElement;
+    private loadMessagesInterval;
+
 
     constructor(private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService, private messageEventService: EventService) {
+
+        this.loggedUsername = this.authorizeService.getUser().pipe(map(u => u.name));
 
         this.thread = new ThreadOut();
         this.messageFilter = new MessageFilter(10);
@@ -60,19 +68,25 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
             const eventCode = message[0];
             const value = message[1];
             if (value == 'to_chat')
-            switch (eventCode) {
+                switch (eventCode) {
 
-                case EventCode.RELOAD: {
+                    case EventCode.RELOAD: {
 
-                    this.getMessagesFromThread(this.thread.id);
-                    break;
+                        this.getMessagesFromThread(this.thread.id);
+                        break;
+                    }
                 }
-            }
         });
+
+        this.loadMessagesInterval = setInterval(() => {
+
+            this.getMessagesFromThread(this.thread.id);
+        }, 1000);
     }
 
     ngOnDestroy(): void {
         this.messageEventService.unsubscribe();
+        clearInterval(this.loadMessagesInterval);
     }
 
     public sendMessage() {
@@ -97,6 +111,7 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
                 }
 
                 this.getMessagesFromThread(result.threadID);
+
             }, (error: HttpErrorResponse) => {
 
                 alert(error.error);
@@ -105,10 +120,28 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
     public getMessagesFromThread(threadId: string) {
 
+
         this.messagesService.getMessagesFromThread(threadId, this.messageFilter)
             .subscribe((result: ThreadOut) => {
 
+                const isScrolledToBottom = (this.messageListContainer.scrollHeight - this.messageListContainer.clientHeight) <= this.messageListContainer.scrollTop + 1
+
+                if (this.thread && this.thread.messages && result && result.messages) {
+                    if (result.messages.length < 1
+                        || (result.messages.length == this.thread.messages.length)
+                        && result.messages[result.messages.length - 1].id === this.thread.messages[this.thread.messages.length - 1].id
+                        && result.messages[0].id === this.thread.messages[0].id) {
+
+                        return;
+                    }
+                }
+
+                console.log(isScrolledToBottom);
                 this.thread = result;
+
+                if (isScrolledToBottom) {
+                    this.messageListContainer.scrollTop = this.messageListContainer.scrollHeight - this.messageListContainer.clientHeight;
+                }
                 let loggedUser: Observable<string> = this.authorizeService.getUser().pipe(map(u => u && u.name));
 
                 this.messageEventService.emit([EventCode.RELOAD, "from_chat"]);
