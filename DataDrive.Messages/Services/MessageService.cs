@@ -31,20 +31,54 @@ namespace DataDrive.Messages.Services
                 .FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
             MessageThread messageThread = await _databaseContext.MessageThreads
-                .Include(_ => _.Messages)
-                .Include(_ => _.MessageThreadParticipants)
-                .FirstOrDefaultAsync(_ => _.ID == threadId && _.MessageThreadParticipants.Any(_ => _.UserID == userId));
+                .FirstOrDefaultAsync(_ => _.ID == threadId);
 
-            if (messageThread == null || !messageThread.Messages.Any())
+            if (messageThread == null)
             {
                 return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread {threadId} not found");
             }
 
-            foreach (MessageThreadParticipant x in messageThread.MessageThreadParticipants)
+            List<MessageThreadParticipant> messageThreadParticipants = await _databaseContext.MessageThreadParticipants
+                .Include(_ => _.User)
+                .Where(_ => _.ThreadID == threadId)
+                .ToListAsync();
+
+            if (messageThreadParticipants == null)
             {
-                if (x.User == null)
+                return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread participants not found");
+            }
+
+            List<Message> messages = await _databaseContext.Messages
+                .Include(_ => _.SendingUser)
+                .Where(_ => _.ThreadID == threadId)
+                .ToListAsync();
+
+            if (messages == null)
+            {
+                return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread messages not found");
+            }
+
+            for (int i = 0; i < messages.Count; ++i)
+            {
+                messages[i].MessageReadStates = await _databaseContext.MessageReadStates
+                    .Where(_ => _.MessageID == messages[i].ID)
+                    .ToListAsync();
+
+                if (!messages[i].MessageReadStates.Any(_ => _.UserID == userId))
                 {
-                    x.User = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.Id == x.UserID);
+                    MessageReadState messageReadState = new MessageReadState
+                    {
+                        MessageID = messages[i].ID,
+                        ReadDate = DateTime.Now,
+                        UserID = userId
+                    };
+
+                    _databaseContext.MessageReadStates
+                        .Add(messageReadState);
+
+                    messages[i].MessageReadStates.Add(messageReadState);
+
+                    await _databaseContext.SaveChangesAsync();
                 }
             }
 
@@ -53,25 +87,6 @@ namespace DataDrive.Messages.Services
                 .Where(_ => !_.MessageReadStates.Any(_ => _.UserID == userId))
                 .Count();
             */
-
-            foreach (Message message in messageThread.Messages)
-            {
-                if (message.MessageReadStates == null)
-                {
-                    message.MessageReadStates = new List<MessageReadState>();
-                }
-            }
-
-            messageThread.Messages
-                .Where(_ => !_.MessageReadStates.Any(_ => _.UserID == userId))
-                .ToList()
-                .ForEach(_ => _.MessageReadStates.Add(new MessageReadState
-                {
-                    ReadDate = DateTime.Now,
-                    UserID = userId
-                }));
-
-            await _databaseContext.SaveChangesAsync();
 
             if (messageFilter.NumberOfLastMessage < 1)
             {
