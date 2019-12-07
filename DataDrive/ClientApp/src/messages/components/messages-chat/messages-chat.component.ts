@@ -58,8 +58,9 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
                     this.getMessagesFromThread(threadId);
                 }
-            }, error => {
+            }, (error: HttpErrorResponse) => {
 
+                console.log(error.error);
                 this.getBackToList();
             });
     }
@@ -108,62 +109,62 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
     public getMessagesFromThread(threadId: string) {
 
-        this.messagesService.getMessagesFromThread(threadId, this.messageFilter)
-            .subscribe((result: ThreadOut) => {
+        if (this.mode === 'read') {
+            this.messagesService.getMessagesFromThread(threadId, this.messageFilter)
+                .subscribe((result: ThreadOut) => {
 
-                if (this.thread && this.thread.messages && result && result.messages
-                    && this.thread.messages[this.thread.messages.length - 1].messageReadStates.length == result.messages[result.messages.length - 1].messageReadStates.length) {
-                    if (result.messages.length < 1
-                        || (result.messages.length == this.thread.messages.length)
-                        && result.messages[result.messages.length - 1].id === this.thread.messages[this.thread.messages.length - 1].id
-                        && result.messages[0].id === this.thread.messages[0].id) {
+                    if (this.thread && this.thread.messages && result && result.messages
+                        && this.thread.messages[this.thread.messages.length - 1].messageReadStates.length == result.messages[result.messages.length - 1].messageReadStates.length) {
+                        if (result.messages.length < 1
+                            || (result.messages.length == this.thread.messages.length)
+                            && result.messages[result.messages.length - 1].id === this.thread.messages[this.thread.messages.length - 1].id
+                            && result.messages[0].id === this.thread.messages[0].id) {
 
-                        return;
+                            return;
+                        }
                     }
-                }
 
-                if (result.messages.length < this.messageFilter.numberOfLastMessage) {
-                    this.isMoore = false;
-                }
-                else {
-                    this.isMoore = true;
-                }
-
-                for (let i = 0; i < result.messages.length; ++i) {
-
-                    result.messages[i].showDate = this.insertDateRow(result.messages[i].sentDate);
-                }
-
-                for (let i = result.messages.length - 1; i >= 0; --i) {
-
-                    if (result.messages[i].messageReadStates.length > 1) {
-
-                        result.messages[i].showReaded = true;
-                        break;
+                    if (result.messages.length < this.messageFilter.numberOfLastMessage) {
+                        this.isMoore = false;
                     }
-                }
+                    else {
+                        this.isMoore = true;
+                    }
 
-                this.previousDateRow = null;
+                    for (let i = 0; i < result.messages.length; ++i) {
 
-                this.thread = result;
-                this.cdref.detectChanges();
+                        result.messages[i].showDate = this.insertDateRow(result.messages[i].sentDate);
+                    }
 
-                let loggedUser: Observable<string> = this.authorizeService.getUser().pipe(map(u => u && u.name));
+                    for (let i = result.messages.length - 1; i >= 0; --i) {
 
-                loggedUser.subscribe(username => {
+                        if (result.messages[i].messageReadStates.length > 1) {
 
-                    let messageThreadParticipant: MessageThreadParticipantOut = this.thread.messageThreadParticipants
-                        .find(participant => participant.userUsername !== username);
+                            result.messages[i].showReaded = true;
+                            break;
+                        }
+                    }
 
-                    this.messagePost.toUserUsername = messageThreadParticipant.userUsername;
-                });
-            }, (error: HttpErrorResponse) => {
+                    this.previousDateRow = null;
 
-                console.log(error.error);
-                if (error.status === 415) {
+                    this.thread = result;
+                    this.cdref.detectChanges();
+
+                    let loggedUser: Observable<string> = this.authorizeService.getUser().pipe(map(u => u && u.name));
+
+                    loggedUser.subscribe(username => {
+
+                        let messageThreadParticipant: MessageThreadParticipantOut = this.thread.messageThreadParticipants
+                            .find(participant => participant.userUsername !== username);
+
+                        this.messagePost.toUserUsername = messageThreadParticipant.userUsername;
+                    });
+                }, (error: HttpErrorResponse) => {
+
+                    console.log(error.error);
                     this.getBackToList();
-                }
-            });
+                });
+        }
     }
 
     public loadMore() {
