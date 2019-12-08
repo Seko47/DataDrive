@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataDrive.DAO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191111172351_m003")]
-    partial class m003
+    [Migration("20191208204158_m001")]
+    partial class m001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,23 +88,23 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "db897393-2002-4e3c-8608-fbe1e7413466",
+                            Id = "b9ccd7b9-6fce-4652-8b4c-e8c6b0046f83",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "77089553-1cda-4cc1-bb3b-5c7bf7b0bd21",
+                            ConcurrencyStamp = "ce7d11ee-5518-4ae3-a9d5-350c287455de",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEO7fRhI0T+01sTu5t5oniThI01bZvMPTwZoGe3OWlO/uyH2RkEssjazbUkVt9ASOLQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGd7Iy377V6C33JiTQRE/r1abNW8HNC+zbebEZSBLt+NM+P9xRCv1kW+qRQJ5Z5GFg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8390b1ce-30d6-4aad-87ab-1a6b7e4c9adc",
+                            SecurityStamp = "6125a779-984a-4b5c-8bc3-5e6c15e9703d",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
                 });
 
-            modelBuilder.Entity("DataDrive.DAO.Models.Base.FileAbstract", b =>
+            modelBuilder.Entity("DataDrive.DAO.Models.Base.ResourceAbstract", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -117,8 +117,14 @@ namespace DataDrive.DAO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FileType")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsShared")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSharedForEveryone")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSharedForUsers")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
                         .HasColumnType("datetime2");
@@ -132,15 +138,18 @@ namespace DataDrive.DAO.Migrations
                     b.Property<Guid?>("ParentDirectoryID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("ResourceType")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("OwnerID");
 
                     b.HasIndex("ParentDirectoryID");
 
-                    b.ToTable("FileAbstracts");
+                    b.ToTable("ResourceAbstracts");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("FileAbstract");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ResourceAbstract");
                 });
 
             modelBuilder.Entity("DataDrive.DAO.Models.Base.ShareAbstract", b =>
@@ -156,14 +165,14 @@ namespace DataDrive.DAO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("FileID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("LastModifiedDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OwnerID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("ResourceID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -172,6 +181,89 @@ namespace DataDrive.DAO.Migrations
                     b.ToTable("ShareAbstracts");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("ShareAbstract");
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.Message", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendingUserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("SentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ThreadID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("SendingUserID");
+
+                    b.HasIndex("ThreadID");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.MessageReadState", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MessageID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReadDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("MessageID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("MessageReadStates");
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.MessageThread", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("MessageThreads");
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.MessageThreadParticipant", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ThreadID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ThreadID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("MessageThreadParticipants");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -285,8 +377,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cab36395-5d43-401b-a325-db8d8e1c2628",
-                            ConcurrencyStamp = "bb6dfa6c-76b1-42d3-bfce-5055f6437a1b",
+                            Id = "e02ec116-6182-4a2b-95f1-e0be8b1a068c",
+                            ConcurrencyStamp = "fd7d147e-037b-4538-b9e1-30778600abbe",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -381,8 +473,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "db897393-2002-4e3c-8608-fbe1e7413466",
-                            RoleId = "cab36395-5d43-401b-a325-db8d8e1c2628"
+                            UserId = "b9ccd7b9-6fce-4652-8b4c-e8c6b0046f83",
+                            RoleId = "e02ec116-6182-4a2b-95f1-e0be8b1a068c"
                         });
                 });
 
@@ -409,14 +501,14 @@ namespace DataDrive.DAO.Migrations
 
             modelBuilder.Entity("DataDrive.DAO.Models.Directory", b =>
                 {
-                    b.HasBaseType("DataDrive.DAO.Models.Base.FileAbstract");
+                    b.HasBaseType("DataDrive.DAO.Models.Base.ResourceAbstract");
 
                     b.HasDiscriminator().HasValue("Directory");
                 });
 
             modelBuilder.Entity("DataDrive.DAO.Models.File", b =>
                 {
-                    b.HasBaseType("DataDrive.DAO.Models.Base.FileAbstract");
+                    b.HasBaseType("DataDrive.DAO.Models.Base.ResourceAbstract");
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
@@ -426,7 +518,7 @@ namespace DataDrive.DAO.Migrations
 
             modelBuilder.Entity("DataDrive.DAO.Models.Note", b =>
                 {
-                    b.HasBaseType("DataDrive.DAO.Models.Base.FileAbstract");
+                    b.HasBaseType("DataDrive.DAO.Models.Base.ResourceAbstract");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -441,10 +533,10 @@ namespace DataDrive.DAO.Migrations
                 {
                     b.HasBaseType("DataDrive.DAO.Models.Base.ShareAbstract");
 
-                    b.Property<int>("DownloadLimit")
+                    b.Property<int?>("DownloadLimit")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpirationDateTime")
+                    b.Property<DateTime?>("ExpirationDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
@@ -453,7 +545,7 @@ namespace DataDrive.DAO.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("FileID")
+                    b.HasIndex("ResourceID")
                         .IsUnique();
 
                     b.HasDiscriminator().HasValue("ShareEveryone");
@@ -463,22 +555,22 @@ namespace DataDrive.DAO.Migrations
                 {
                     b.HasBaseType("DataDrive.DAO.Models.Base.ShareAbstract");
 
-                    b.Property<DateTime>("ExpirationDateTime")
+                    b.Property<DateTime?>("ExpirationDateTime")
                         .HasColumnName("ShareForUser_ExpirationDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SharedForUserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("FileID")
-                        .HasName("IX_ShareAbstracts_FileID1");
+                    b.HasIndex("ResourceID")
+                        .HasName("IX_ShareAbstracts_ResourceID1");
 
                     b.HasIndex("SharedForUserID");
 
                     b.HasDiscriminator().HasValue("ShareForUser");
                 });
 
-            modelBuilder.Entity("DataDrive.DAO.Models.Base.FileAbstract", b =>
+            modelBuilder.Entity("DataDrive.DAO.Models.Base.ResourceAbstract", b =>
                 {
                     b.HasOne("DataDrive.DAO.Models.ApplicationUser", "Owner")
                         .WithMany("Files")
@@ -494,6 +586,45 @@ namespace DataDrive.DAO.Migrations
                     b.HasOne("DataDrive.DAO.Models.ApplicationUser", "Owner")
                         .WithMany("SharedOwn")
                         .HasForeignKey("OwnerID");
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.Message", b =>
+                {
+                    b.HasOne("DataDrive.DAO.Models.ApplicationUser", "SendingUser")
+                        .WithMany()
+                        .HasForeignKey("SendingUserID");
+
+                    b.HasOne("DataDrive.DAO.Models.MessageThread", "Thread")
+                        .WithMany("Messages")
+                        .HasForeignKey("ThreadID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.MessageReadState", b =>
+                {
+                    b.HasOne("DataDrive.DAO.Models.Message", "Message")
+                        .WithMany("MessageReadStates")
+                        .HasForeignKey("MessageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataDrive.DAO.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("DataDrive.DAO.Models.MessageThreadParticipant", b =>
+                {
+                    b.HasOne("DataDrive.DAO.Models.MessageThread", "Thread")
+                        .WithMany("MessageThreadParticipants")
+                        .HasForeignKey("ThreadID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataDrive.DAO.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -549,19 +680,19 @@ namespace DataDrive.DAO.Migrations
 
             modelBuilder.Entity("DataDrive.DAO.Models.ShareEveryone", b =>
                 {
-                    b.HasOne("DataDrive.DAO.Models.Base.FileAbstract", "File")
+                    b.HasOne("DataDrive.DAO.Models.Base.ResourceAbstract", "Resource")
                         .WithOne("ShareEveryone")
-                        .HasForeignKey("DataDrive.DAO.Models.ShareEveryone", "FileID")
+                        .HasForeignKey("DataDrive.DAO.Models.ShareEveryone", "ResourceID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("DataDrive.DAO.Models.ShareForUser", b =>
                 {
-                    b.HasOne("DataDrive.DAO.Models.Base.FileAbstract", "File")
+                    b.HasOne("DataDrive.DAO.Models.Base.ResourceAbstract", "Resource")
                         .WithMany("ShareForUsers")
-                        .HasForeignKey("FileID")
-                        .HasConstraintName("FK_ShareAbstracts_FileAbstracts_FileID1")
+                        .HasForeignKey("ResourceID")
+                        .HasConstraintName("FK_ShareAbstracts_ResourceAbstracts_ResourceID1")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

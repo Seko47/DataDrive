@@ -86,17 +86,17 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "428fb828-5dfb-4876-8e97-854e55192e55",
+                            Id = "b9ccd7b9-6fce-4652-8b4c-e8c6b0046f83",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2136946b-8376-496f-ab08-f57e25b2c8ae",
+                            ConcurrencyStamp = "ce7d11ee-5518-4ae3-a9d5-350c287455de",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELMrfP1Pxi5T5a0IHHYe49+QnMlVPEDxIE9STHV0VUoMagxUY7Xzp/NTDtgwA07JZg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGd7Iy377V6C33JiTQRE/r1abNW8HNC+zbebEZSBLt+NM+P9xRCv1kW+qRQJ5Z5GFg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9291979f-bd1b-4ebb-a16c-14f94e4f370a",
+                            SecurityStamp = "6125a779-984a-4b5c-8bc3-5e6c15e9703d",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
@@ -375,8 +375,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7981dcf4-d5d5-4e10-b2bc-52bff9ed49b5",
-                            ConcurrencyStamp = "52def8d5-7d74-4044-afdd-11cb320e06e9",
+                            Id = "e02ec116-6182-4a2b-95f1-e0be8b1a068c",
+                            ConcurrencyStamp = "fd7d147e-037b-4538-b9e1-30778600abbe",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -471,8 +471,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "428fb828-5dfb-4876-8e97-854e55192e55",
-                            RoleId = "7981dcf4-d5d5-4e10-b2bc-52bff9ed49b5"
+                            UserId = "b9ccd7b9-6fce-4652-8b4c-e8c6b0046f83",
+                            RoleId = "e02ec116-6182-4a2b-95f1-e0be8b1a068c"
                         });
                 });
 
@@ -593,7 +593,7 @@ namespace DataDrive.DAO.Migrations
                         .HasForeignKey("SendingUserID");
 
                     b.HasOne("DataDrive.DAO.Models.MessageThread", "Thread")
-                        .WithMany()
+                        .WithMany("Messages")
                         .HasForeignKey("ThreadID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -602,7 +602,7 @@ namespace DataDrive.DAO.Migrations
             modelBuilder.Entity("DataDrive.DAO.Models.MessageReadState", b =>
                 {
                     b.HasOne("DataDrive.DAO.Models.Message", "Message")
-                        .WithMany()
+                        .WithMany("MessageReadStates")
                         .HasForeignKey("MessageID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -615,7 +615,7 @@ namespace DataDrive.DAO.Migrations
             modelBuilder.Entity("DataDrive.DAO.Models.MessageThreadParticipant", b =>
                 {
                     b.HasOne("DataDrive.DAO.Models.MessageThread", "Thread")
-                        .WithMany()
+                        .WithMany("MessageThreadParticipants")
                         .HasForeignKey("ThreadID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

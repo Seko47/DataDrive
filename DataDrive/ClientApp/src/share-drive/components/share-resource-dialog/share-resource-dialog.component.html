@@ -71,7 +71,63 @@
   <hr />
   <div mat-dialog-content>
 
-    
+    <div class="col-12">
+      <ul class="list-group">
+
+        <li *ngIf="!shareForUsersOut || shareForUsersOut.length == 0"
+            class="list-group-item d-flex justify-content-between align-items-center">
+          {{ 'FILES.SHARE_FILE_DIALOG.NOT_SHARED_FOR_USERS' | translate }}
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let shareForUser of shareForUsersOut">
+          {{ shareForUser.sharedForUserUsername }}
+
+          <!-- ON CHANGE EVENT   (change)="function"-->
+          <mat-form-field class="col-sm-4 ml-auto mr-auto">
+            <input matInput
+                   [matDatepicker]="myDatepicker3"
+                   [(ngModel)]="shareForUser.expirationDateTime"
+                   placeholder="{{ 'FILES.SHARE_FILE_DIALOG.EXPIRATION_DATE' | translate }}">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker3"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker3></mat-datepicker>
+          </mat-form-field>
+
+          <a mat-icon-button
+             class="badge badge-danger badge-pill"
+             (click)="deleteShareForUser(shareForUser.id)">
+            <mat-icon>delete</mat-icon>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row col-12">
+
+      <mat-form-field class="col-sm-4 ml-auto">
+
+        <input matInput
+               [(ngModel)]="shareForUserIn.username"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.SHARE_TO_USER_USERNAME' | translate }}" />
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-4 ml-auto mr-auto">
+        <input matInput
+               [matDatepicker]="myDatepicker2"
+               [(ngModel)]="shareForUserIn.expirationDateTime"
+               placeholder="{{ 'FILES.SHARE_FILE_DIALOG.EXPIRATION_DATE' | translate }}">
+        <mat-datepicker-toggle matSuffix [for]="myDatepicker2"></mat-datepicker-toggle>
+        <mat-datepicker #myDatepicker2></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-button
+              type="submit"
+              class="mr-auto ml-auto"
+              (click)="shareForUser()">
+        {{ 'DIALOG.SHARE_BUTTON' | translate }}
+      </button>
+
+    </div>
   </div>
 
   <div mat-dialog-actions>

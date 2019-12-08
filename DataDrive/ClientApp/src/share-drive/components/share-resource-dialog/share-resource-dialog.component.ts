@@ -83,14 +83,23 @@ export class ShareResourceDialogComponent {
                 }, err => alert(err.error));
         }
 
-        if (this.isShared && this.isSharedForUsers) {
+        this.getSharesForUser();
+    }
 
+    public getSharesForUser() {
+        if (this.isShared && this.isSharedForUsers) {
+            //coś jest nie tak
             this.sharesService.getShareForUsersInfo(this.resourceId)
                 .subscribe(result => {
-
+                    console.log("Pobrano");
+                    this.shareForUsersOut = [];
                     this.shareForUsersOut = result;
                     this.shareForUserIn.expirationDateTime = this.shareForUsersOut[this.shareForUsersOut.length - 1].expirationDateTime;
-                }, err => alert(err.error));
+                }, err => {
+                        this.shareForUsersOut = [];
+                        this.isSharedForUsers = false;
+                        this.isShared = this.isSharedForEveryone;
+                });
         }
     }
 
@@ -135,6 +144,30 @@ export class ShareResourceDialogComponent {
                 this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
                 //TODO przy zapisie data zapisuje się o dzień mniejsza niż wybrana
                 this.closeDialog();
+            }, err => alert(err.error));
+    }
+
+
+    shareForUser() {
+        this.sharesService.shareForUser(this.shareForUserIn)
+            .subscribe(result => {
+
+                this.shareForUserIn = new ShareForUserIn();
+                this.shareForUserIn.resourceID = this.resourceId;
+                this.isShared = true;
+                this.isSharedForUsers = true;
+
+                this.getSharesForUser();
+
+            }, err => alert(err.error));
+    }
+
+    deleteShareForUser(shareId: string) {
+        this.sharesService.cancelShareForUser(shareId)
+            .subscribe(result => {
+
+                this.getSharesForUser();
+
             }, err => alert(err.error));
     }
 }

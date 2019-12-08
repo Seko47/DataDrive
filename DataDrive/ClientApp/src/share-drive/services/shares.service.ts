@@ -5,6 +5,7 @@ import { ShareEveryoneCredentials } from '../models/share-everyone-credentials';
 import { ShareEveryoneOut } from '../models/share-everyone-out';
 import { ShareForEveryoneIn } from '../models/share-for-everyone-in';
 import { ShareForUserOut } from '../models/share-for-user-out';
+import { ShareForUserIn } from '../models/share-for-user-in';
 
 @Injectable({
     providedIn: 'root'
@@ -48,5 +49,13 @@ export class SharesService {
 
     public getShareForUsersInfo(id: string) {
         return this.httpClient.get<ShareForUserOut[]>(this.baseUrl + 'api/Share/forUser/info/' + id);
+    }
+
+    public shareForUser(shareForUserIn: ShareForUserIn) {
+        return this.httpClient.post<ShareForUserOut>(this.baseUrl + 'api/Share/forUser', shareForUserIn);
+    }
+
+    public cancelShareForUser(id: string) {
+        return this.httpClient.delete<boolean>(this.baseUrl + 'api/Share/forUser/' + id);
     }
 }

@@ -184,6 +184,9 @@ namespace DataDrive.Share.Services
                 .Id;
 
             List<ShareForUser> shareForUsers = await _databaseContext.ShareForUsers
+                .Include(_ => _.Owner)
+                .Include(_ => _.Resource)
+                .Include(_ => _.SharedForUser)
                 .Where(_ => _.ResourceID == resourceId && _.OwnerID == ownerId)
                 .ToListAsync();
 
@@ -220,6 +223,7 @@ namespace DataDrive.Share.Services
 
         public async Task<StatusCode<ShareForUserOut>> ShareForUser(ShareForUserIn shareForUserIn, string ownerUsername)
         {
+            //TODO niepowinno dać się udostępnić zasobu sobie samemu
             if (!await _databaseContext.Users.AnyAsync(_ => _.UserName == shareForUserIn.Username))
             {
                 return new StatusCode<ShareForUserOut>(StatusCodes.Status404NotFound, $"User {shareForUserIn.Username} not found");
@@ -230,6 +234,7 @@ namespace DataDrive.Share.Services
                 .Id;
 
             ResourceAbstract resourceAbstract = await _databaseContext.ResourceAbstracts
+                .Include(_ => _.ShareForUsers)
                 .FirstOrDefaultAsync(_ => _.ID == shareForUserIn.ResourceId && _.OwnerID == ownerId);
 
             if (resourceAbstract == null)
@@ -255,11 +260,9 @@ namespace DataDrive.Share.Services
                     SharedForUserID = userId
                 };
 
-                await _databaseContext.ShareForUsers
-                    .AddAsync(shareForUser);
-
                 resourceAbstract.IsShared = true;
                 resourceAbstract.IsSharedForUsers = true;
+                resourceAbstract.ShareForUsers.Add(shareForUser);
             }
             else
             {
