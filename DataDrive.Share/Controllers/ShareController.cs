@@ -2,6 +2,7 @@
 using DataDrive.DAO.Models;
 using DataDrive.Share.Models;
 using DataDrive.Share.Models.In;
+using DataDrive.Share.Models.Out;
 using DataDrive.Share.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -122,6 +123,12 @@ namespace DataDrive.Share.Controllers
         }
 
 
+
+
+
+
+
+        
         //TODO share controller methods
         //Get all files shared for logged user (ShareForUser.cs)
 

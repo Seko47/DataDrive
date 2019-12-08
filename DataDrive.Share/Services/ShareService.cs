@@ -4,9 +4,13 @@ using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
 using DataDrive.DAO.Models.Base;
 using DataDrive.Share.Models;
+using DataDrive.Share.Models.In;
+using DataDrive.Share.Models.Out;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataDrive.Share.Services
@@ -22,33 +26,33 @@ namespace DataDrive.Share.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> IsShared(Guid fileId)
+        public async Task<bool> IsShared(Guid resourceId)
         {
-            ShareAbstract share = await _databaseContext.ShareAbstracts.FirstOrDefaultAsync(_ => _.ResourceID == fileId);
+            ShareAbstract share = await _databaseContext.ShareAbstracts.FirstOrDefaultAsync(_ => _.ResourceID == resourceId);
 
             return share != null;
         }
 
-        public async Task<bool> IsSharedForEveryone(Guid fileId)
+        public async Task<bool> IsSharedForEveryone(Guid resourceId)
         {
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == resourceId);
 
             return shareEveryone != null;
         }
 
-        public Task<bool> IsSharedForUser(Guid fileId, string username)
+        public Task<bool> IsSharedForUser(Guid resourceId, string username)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByFileIdAndUser(Guid fileId, string username)
+        public async Task<StatusCode<ShareEveryoneOut>> GetShareForEveryoneByFileIdAndUser(Guid resourceId, string username)
         {
             string userId = (await _databaseContext.Users
                 .FirstOrDefaultAsync(_ => _.UserName == username))
                 ?.Id;
 
             ShareEveryone shareEveryone = await _databaseContext.ShareEveryones
-                .FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
+                .FirstOrDefaultAsync(_ => _.ResourceID == resourceId && _.OwnerID == userId);
 
             if (shareEveryone == null)
             {
@@ -104,18 +108,18 @@ namespace DataDrive.Share.Services
             return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, shareEveryoneOut);
         }
 
-        public async Task<StatusCode<ShareEveryoneOut>> ShareForEveryone(Guid fileId, string username, string password, DateTime? expirationDateTime, int? downloadLimit)
+        public async Task<StatusCode<ShareEveryoneOut>> ShareForEveryone(Guid resourceId, string username, string password, DateTime? expirationDateTime, int? downloadLimit)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
+            ResourceAbstract resourceAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == resourceId && _.OwnerID == userId);
 
-            if (fileAbstract == null)
+            if (resourceAbstract == null)
             {
                 return new StatusCode<ShareEveryoneOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
             }
 
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == resourceId && _.OwnerID == userId);
 
             if (shareEveryone == null)
             {
@@ -124,7 +128,7 @@ namespace DataDrive.Share.Services
                     CreatedDateTime = DateTime.Now,
                     DownloadLimit = downloadLimit,
                     ExpirationDateTime = expirationDateTime,
-                    ResourceID = fileId,
+                    ResourceID = resourceId,
                     OwnerID = userId,
                     Password = password,
                     Token = GenerateToken()
@@ -132,8 +136,8 @@ namespace DataDrive.Share.Services
 
                 await _databaseContext.ShareEveryones.AddAsync(shareEveryone);
 
-                fileAbstract.IsShared = true;
-                fileAbstract.IsSharedForEveryone = true;
+                resourceAbstract.IsShared = true;
+                resourceAbstract.IsSharedForEveryone = true;
             }
             else
             {
@@ -150,12 +154,12 @@ namespace DataDrive.Share.Services
             return new StatusCode<ShareEveryoneOut>(StatusCodes.Status200OK, result);
         }
 
-        public async Task<bool> CancelSharingForEveryone(Guid fileId, string username)
+        public async Task<bool> CancelSharingForEveryone(Guid resourceId, string username)
         {
             string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
 
-            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == fileId && _.OwnerID == userId);
-            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == fileId && _.OwnerID == userId);
+            ResourceAbstract fileAbstract = await _databaseContext.ResourceAbstracts.FirstOrDefaultAsync(_ => _.ID == resourceId && _.OwnerID == userId);
+            ShareEveryone shareEveryone = await _databaseContext.ShareEveryones.FirstOrDefaultAsync(_ => _.ResourceID == resourceId && _.OwnerID == userId);
 
             if (fileAbstract == null || shareEveryone == null)
             {
@@ -169,18 +173,132 @@ namespace DataDrive.Share.Services
             await _databaseContext.SaveChangesAsync();
 
             return !fileAbstract.IsSharedForEveryone &&
-                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.ResourceID == fileId && _.OwnerID == userId));
+                   !(await _databaseContext.ShareEveryones.AnyAsync(_ => _.ResourceID == resourceId && _.OwnerID == userId));
         }
 
 
-        public Task<string> ShareForUser(Guid fileId, string ownerUsername, string username)
+        public async Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByResourceIdAndOwner(Guid resourceId, string ownerUsername)
         {
-            throw new NotImplementedException();
+            string ownerId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == ownerUsername))?
+                .Id;
+
+            List<ShareForUser> shareForUsers = await _databaseContext.ShareForUsers
+                .Where(_ => _.ResourceID == resourceId && _.OwnerID == ownerId)
+                .ToListAsync();
+
+            if (shareForUsers == null || !shareForUsers.Any())
+            {
+                return new StatusCode<List<ShareForUserOut>>(StatusCodes.Status404NotFound, $"Share not found");
+            }
+
+            List<ShareForUserOut> result = _mapper.Map<List<ShareForUserOut>>(shareForUsers);
+
+            return new StatusCode<List<ShareForUserOut>>(StatusCodes.Status200OK, result);
         }
 
-        public Task<bool> CancelSharingForUser(Guid noteId, string userId)
+        public async Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByUserAndFilter(string username, ShareFilter shareFilter)
         {
-            throw new NotImplementedException();
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username))?
+                .Id;
+
+            List<ShareForUser> shareForUsers = await _databaseContext.ShareForUsers
+                .Where(_ => _.SharedForUserID == userId && _.Resource.ResourceType == shareFilter.ResourceType
+                        && (_.ExpirationDateTime == null || (_.ExpirationDateTime != null && _.ExpirationDateTime > DateTime.Now)))
+                .ToListAsync();
+
+            if (shareForUsers == null || !shareForUsers.Any())
+            {
+                return new StatusCode<List<ShareForUserOut>>(StatusCodes.Status404NotFound, $"Shared resources not found");
+            }
+
+            List<ShareForUserOut> result = _mapper.Map<List<ShareForUserOut>>(shareForUsers);
+
+            return new StatusCode<List<ShareForUserOut>>(StatusCodes.Status200OK, result);
+        }
+
+        public async Task<StatusCode<ShareForUserOut>> ShareForUser(ShareForUserIn shareForUserIn, string ownerUsername)
+        {
+            if (!await _databaseContext.Users.AnyAsync(_ => _.UserName == shareForUserIn.Username))
+            {
+                return new StatusCode<ShareForUserOut>(StatusCodes.Status404NotFound, $"User {shareForUserIn.Username} not found");
+            }
+
+            string ownerId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == ownerUsername))?
+                .Id;
+
+            ResourceAbstract resourceAbstract = await _databaseContext.ResourceAbstracts
+                .FirstOrDefaultAsync(_ => _.ID == shareForUserIn.ResourceId && _.OwnerID == ownerId);
+
+            if (resourceAbstract == null)
+            {
+                return new StatusCode<ShareForUserOut>(StatusCodes.Status404NotFound, $"Resource {shareForUserIn.ResourceId} not found");
+            }
+
+            string userId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == shareForUserIn.Username))?
+                .Id;
+
+            ShareForUser shareForUser = await _databaseContext.ShareForUsers
+                .FirstOrDefaultAsync(_ => _.OwnerID == ownerId && _.ResourceID == shareForUserIn.ResourceId && _.SharedForUserID == userId);
+
+            if (shareForUser == null)
+            {
+                shareForUser = new ShareForUser
+                {
+                    CreatedDateTime = DateTime.Now,
+                    ExpirationDateTime = shareForUserIn.ExpirationDateTime,
+                    OwnerID = ownerId,
+                    ResourceID = shareForUserIn.ResourceId,
+                    SharedForUserID = userId
+                };
+
+                await _databaseContext.ShareForUsers
+                    .AddAsync(shareForUser);
+
+                resourceAbstract.IsShared = true;
+                resourceAbstract.IsSharedForUsers = true;
+            }
+            else
+            {
+                shareForUser.LastModifiedDateTime = DateTime.Now;
+                shareForUser.ExpirationDateTime = shareForUserIn.ExpirationDateTime;
+            }
+
+            await _databaseContext.SaveChangesAsync();
+
+            ShareForUserOut result = _mapper.Map<ShareForUserOut>(shareForUser);
+
+            return new StatusCode<ShareForUserOut>(StatusCodes.Status200OK, result);
+        }
+
+        public async Task<bool> CancelSharingForUser(Guid shareId, string ownerUsername)
+        {
+            string ownerId = (await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == ownerUsername))?
+                .Id;
+
+            ShareForUser shareForUserToDelete = await _databaseContext.ShareForUsers
+                .Include(_ => _.Resource)
+                .FirstOrDefaultAsync(_ => _.ID == shareId && _.OwnerID == ownerId);
+
+            if (shareForUserToDelete == null)
+            {
+                return false;
+            }
+
+            shareForUserToDelete.Resource.IsSharedForUsers = false;
+            shareForUserToDelete.Resource.IsShared = shareForUserToDelete.Resource.IsSharedForEveryone;
+
+            await _databaseContext.SaveChangesAsync();
+
+            _databaseContext.ShareForUsers.Remove(shareForUserToDelete);
+
+            await _databaseContext.SaveChangesAsync();
+
+            return !await _databaseContext.ShareForUsers.AnyAsync(_ => _.ID == shareId);
         }
 
 
@@ -222,6 +340,5 @@ namespace DataDrive.Share.Services
 
             return token.ToUpper();
         }
-
     }
 }
