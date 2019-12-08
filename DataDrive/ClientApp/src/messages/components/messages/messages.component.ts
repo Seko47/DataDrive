@@ -32,24 +32,25 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        //this.loadthreadsInterval = setInterval(() => {
+        this.loadthreadsInterval = setInterval(() => {
 
-        //    this.loadThreads();
-        //}, 1000);
+            this.loadThreads();
+        }, 1000);
     }
 
     ngOnDestroy(): void {
 
-        //clearInterval(this.loadthreadsInterval);
+        clearInterval(this.loadthreadsInterval);
     }
 
     public loadThreads() {
 
         this.messagesService.getAllThreads().subscribe(result => {
 
-            if (this.threads && this.threads[0]) {
+            if (this.threads && this.threads[0] && this.threads[0].messages && this.threads[0].messages[0]) {
                 if (this.threads.length === result.length
-                    || this.threads[0].id === result[0].id) {
+                    && this.threads[0].id === result[0].id
+                    && this.threads[0].messages[0].id === result[0].messages[0].id) {
 
                     return;
                 }
