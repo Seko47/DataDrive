@@ -48,7 +48,7 @@ namespace DataDrive.Messages.Services
                 return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread participants not found");
             }
 
-            if (!messageThreadParticipants.Any(_=>_.UserID == userId))
+            if (!messageThreadParticipants.Any(_ => _.UserID == userId))
             {
                 return new StatusCode<ThreadOut>(StatusCodes.Status404NotFound, $"Thread {threadId} not found");
             }
@@ -116,10 +116,17 @@ namespace DataDrive.Messages.Services
 
             List<MessageThread> messageThreads = await _databaseContext.MessageThreads
                 .Include(_ => _.Messages)
-                .Include(_ => _.MessageThreadParticipants)
                 .Where(_ => _.MessageThreadParticipants.Any(_ => _.UserID == userId) && _.Messages.Any())
                 .OrderByDescending(_ => _.Messages.Max(_ => _.SentDate))
                 .ToListAsync();
+
+            for (int i = 0; i < messageThreads.Count; ++i)
+            {
+                messageThreads[i].MessageThreadParticipants = await _databaseContext.MessageThreadParticipants
+                    .Include(_ => _.User)
+                    .Where(_ => _.ThreadID == messageThreads[i].ID)
+                    .ToListAsync();
+            }
 
             if (messageThreads == null || !messageThreads.Any())
             {

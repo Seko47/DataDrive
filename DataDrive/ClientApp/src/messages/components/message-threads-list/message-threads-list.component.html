@@ -1,0 +1,24 @@
+<div class="card-deck container ml-auto mr-auto">
+
+  <div *ngFor="let thread of threads"
+       class="col-md-12 mt-2"
+       mat-button
+       (click)="showThread(thread.id);">
+
+    <mat-card>
+      <h4>
+        <b>{{ thread.caller }}</b>
+      </h4>
+
+        <p class="text-truncate"
+           *ngIf="thread.messages && thread.messages[0]">
+          {{ thread.messages[0].content }}
+        </p>
+
+        <p *ngIf="thread.messages && thread.messages[0]"
+           class="font-weight-light">
+          {{ (thread.messages[0].sentDate | date:'dd.MM.yyyy HH:mm') }}
+        </p>
+    </mat-card>
+  </div>
+</div>

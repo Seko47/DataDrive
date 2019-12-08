@@ -27,7 +27,6 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
     private isMoore: boolean = true;
     private previousDateRow: Date;
 
-    @ViewChild("messageListContainer", null) messageListContainer: HTMLDivElement;
     private loadMessagesInterval;
 
 
