@@ -25,6 +25,7 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
     private messagePost: MessagePost;
     private loggedUsername: Observable<string>;
     private isMoore: boolean = true;
+    private previousDateRow: Date;
 
     @ViewChild("messageListContainer", null) messageListContainer: HTMLDivElement;
     private loadMessagesInterval;
@@ -32,6 +33,7 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
     constructor(private cdref: ChangeDetectorRef, private authorizeService: AuthorizeService, private router: Router, private activatedRoute: ActivatedRoute, private messagesService: MessagesService, private messageEventService: EventService) {
 
+        this.previousDateRow = null;
         this.loggedUsername = this.authorizeService.getUser().pipe(map(u => u.name));
 
         this.thread = new ThreadOut();
@@ -121,7 +123,6 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
     public getMessagesFromThread(threadId: string) {
 
-
         this.messagesService.getMessagesFromThread(threadId, this.messageFilter)
             .subscribe((result: ThreadOut) => {
 
@@ -141,6 +142,13 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
                 else {
                     this.isMoore = true;
                 }
+
+                for (let i = 0; i < result.messages.length; ++i) {
+
+                    result.messages[i].showDate = this.insertDateRow(result.messages[i].sentDate);
+                }
+
+                this.previousDateRow = null;
 
                 this.thread = result;
                 this.cdref.detectChanges();
@@ -173,5 +181,25 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
     public getBackToList() {
         this.router.navigateByUrl('/messages');
+    }
+
+    public insertDateRow(sentDate: Date) {
+
+        const date = new Date(sentDate);
+        date.setHours(0, 0, 0, 0);
+
+        if (!this.previousDateRow) {
+            this.previousDateRow = date;
+
+            return true;
+        }
+
+        if (this.previousDateRow.getTime() !== date.getTime()) {
+
+            this.previousDateRow = date;
+            return true;
+        }
+
+        return false;
     }
 }

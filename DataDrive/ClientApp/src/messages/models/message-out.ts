@@ -10,5 +10,7 @@ export class MessageOut {
     public sendingUserUsername: string;
     public threadID: string;
 
+    public showDate: boolean;
+
     public messageReadStates: MessageReadStateOut[];
 }

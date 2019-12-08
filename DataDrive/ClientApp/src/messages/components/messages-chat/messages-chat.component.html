@@ -49,6 +49,14 @@
     <div *ngFor="let message of thread.messages"
          class="row">
 
+      <div *ngIf="message.showDate"
+           class="col-12 text-center">
+        <hr />
+        <p class="font-weight-light">
+          {{ (message.sentDate | date:'dd.MM.yyyy')}}
+        </p>
+      </div>
+
       <!--(message.sentDate  | date:'dd.MM.yyyy HH:mm:ss')-->
       <!--Message from logged user-->
       <div *ngIf="message.sendingUserUsername === (loggedUsername | async)"
