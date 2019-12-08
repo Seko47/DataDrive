@@ -7,6 +7,8 @@ import { FileOut, ResourceType } from '../../../files-drive/models/file-out';
 import { ShareForEveryoneIn } from '../../models/share-for-everyone-in';
 import { ShareEveryoneOut } from '../../models/share-everyone-out';
 import { NoteOut } from '../../../notes-drive/models/note-out';
+import { ShareForUserIn } from '../../models/share-for-user-in';
+import { ShareForUserOut } from '../../models/share-for-user-out';
 
 export interface DialogData {
     file: FileOut;
@@ -24,9 +26,13 @@ export class ShareResourceDialogComponent {
     private resourceId: string;
     private isShared: boolean;
     private isSharedForEveryone: boolean;
+    private isSharedForUsers: boolean;
 
     public shareForEveryoneIn: ShareForEveryoneIn;
     public shareEveryoneOut: ShareEveryoneOut;
+
+    public shareForUserIn: ShareForUserIn;
+    public shareForUsersOut: ShareForUserOut[];
 
     public urlToShareEveryone: string = window.location.origin + "/share/";
 
@@ -43,11 +49,13 @@ export class ShareResourceDialogComponent {
             this.resourceId = this.data.file.id;
             this.isShared = this.data.file.isShared;
             this.isSharedForEveryone = this.data.file.isSharedForEveryone;
+            this.isSharedForUsers = this.data.file.isSharedForUsers;
         } else if (this.data.resourceType == ResourceType.NOTE) {
 
             this.resourceId = this.data.note.id;
             this.isShared = this.data.note.isShared;
             this.isSharedForEveryone = this.data.note.isSharedForEveryone;
+            this.isSharedForUsers = this.data.note.isSharedForUsers;
         }
         else {
             this.closeDialog();
@@ -56,6 +64,10 @@ export class ShareResourceDialogComponent {
 
         this.shareForEveryoneIn = new ShareForEveryoneIn();
         this.shareForEveryoneIn.resourceId = this.resourceId;
+
+        this.shareForUserIn = new ShareForUserIn();
+        this.shareForUserIn.resourceID = this.resourceId;
+
         this.shareEveryoneSliderChecked = this.isSharedForEveryone;
 
         if (this.isShared && this.isSharedForEveryone) {
@@ -68,6 +80,16 @@ export class ShareResourceDialogComponent {
                     this.shareEveryoneOut = result;
                     this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
                     this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
+                }, err => alert(err.error));
+        }
+
+        if (this.isShared && this.isSharedForUsers) {
+
+            this.sharesService.getShareForUsersInfo(this.resourceId)
+                .subscribe(result => {
+
+                    this.shareForUsersOut = result;
+                    this.shareForUserIn.expirationDateTime = this.shareForUsersOut[this.shareForUsersOut.length - 1].expirationDateTime;
                 }, err => alert(err.error));
         }
     }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ShareEveryoneCredentials } from '../models/share-everyone-credentials';
 import { ShareEveryoneOut } from '../models/share-everyone-out';
 import { ShareForEveryoneIn } from '../models/share-for-everyone-in';
+import { ShareForUserOut } from '../models/share-for-user-out';
 
 @Injectable({
     providedIn: 'root'
@@ -39,5 +40,13 @@ export class SharesService {
 
     public shareForEveryone(shareForEveryoneIn: ShareForEveryoneIn) {
         return this.httpClient.post<ShareEveryoneOut>(this.baseUrl + 'api/Share/everyone/share', shareForEveryoneIn);
+    }
+
+
+
+
+
+    public getShareForUsersInfo(id: string) {
+        return this.httpClient.get<ShareForUserOut[]>(this.baseUrl + 'api/Share/forUser/info/' + id);
     }
 }
