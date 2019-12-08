@@ -56,7 +56,7 @@
            [(ngModel)]="newNote.title">
   </mat-form-field>
 
-  <angular-editor [placeholder]="'Note content'"
+  <angular-editor [placeholder]="'NOTES.ADD.CONTENT' | translate"
                   [config]="editorConfig"
                   [(ngModel)]="newNote.content">
   </angular-editor>

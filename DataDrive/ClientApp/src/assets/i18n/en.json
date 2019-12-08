@@ -44,11 +44,25 @@
 		"ENGLISH_SHORT": "en",
 		"POLISH_SHORT": "pl"
 	},
+	"MESSAGES": {
+		"CHAT": {
+			"CONTENT": "Enter a message",
+			"GET_BACK": "Back",
+			"LOAD_MORE": "Load previous messages",
+			"NO_MORE_MESSAGES": "You don't have any more messages",
+			"SEND_TO_USERNAME": "Recipient"
+		},
+		"THREADS_NOT_FOUND": "No messages",
+		"TOOLBAR": {
+			"TITLE": "Messages"
+		}
+	},
 	"NAVBAR": {
 		"CLOSE": "Close",
 		"FILES": "Files",
 		"HELLO_USERNAME": "Hello {{ name }}",
 		"HOME": "Home",
+		"MESSAGES": "Messages",
 		"MYDRIVE": "My Drive",
 		"NOTES": "Notes",
 		"QR_CODE_SCANNER": "Scanner",
@@ -56,6 +70,7 @@
 	},
 	"NOTES": {
 		"ADD": {
+			"CONTENT": "Enter the content of the note",
 			"GET_BACK": "Back",
 			"TITLE": "Note title"
 		},
@@ -64,6 +79,7 @@
 			"EDIT": "Edit",
 			"SHARE": "Sharing"
 		},
+		"NOTES_NOT_FOUND": "No notes available",
 		"NO_NAME": "Unnamed",
 		"TITLE": "Notes"
 	},

@@ -44,11 +44,25 @@
 		"ENGLISH_SHORT": "en",
 		"POLISH_SHORT": "pl"
 	},
+	"MESSAGES": {
+		"CHAT": {
+			"CONTENT": "Wprowadź wiadomość",
+			"GET_BACK": "Powrót",
+			"LOAD_MORE": "Załaduj wcześniejsze wiadomości",
+			"NO_MORE_MESSAGES": "Nie masz więcej wiadomości",
+			"SEND_TO_USERNAME": "Odbiorca"
+		},
+		"THREADS_NOT_FOUND": "Brak wiadomości",
+		"TOOLBAR": {
+			"TITLE": "Wiadomości"
+		}
+	},
 	"NAVBAR": {
 		"CLOSE": "Zamknij",
 		"FILES": "Pliki",
 		"HELLO_USERNAME": "Witaj {{ name }}",
 		"HOME": "Strona główna",
+		"MESSAGES": "Wiadomości",
 		"MYDRIVE": "Mój Dysk",
 		"NOTES": "Notatki",
 		"QR_CODE_SCANNER": "Skaner",
@@ -56,6 +70,7 @@
 	},
 	"NOTES": {
 		"ADD": {
+			"CONTENT": "Wprowadź treść notatki",
 			"GET_BACK": "Powrót",
 			"TITLE": "Tytuł notatki"
 		},
@@ -64,6 +79,7 @@
 			"EDIT": "Edytuj",
 			"SHARE": "Udostępnianie"
 		},
+		"NOTES_NOT_FOUND": "Brak notatek",
 		"NO_NAME": "Bez nazwy",
 		"TITLE": "Notatki"
 	},
