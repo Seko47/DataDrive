@@ -120,17 +120,21 @@ namespace DataDrive.Messages.Services
                 .OrderByDescending(_ => _.Messages.Max(_ => _.SentDate))
                 .ToListAsync();
 
+            if (messageThreads == null || !messageThreads.Any())
+            {
+                return new StatusCode<List<ThreadOut>>(StatusCodes.Status404NotFound, $"Threads not found");
+            }
+
             for (int i = 0; i < messageThreads.Count; ++i)
             {
                 messageThreads[i].MessageThreadParticipants = await _databaseContext.MessageThreadParticipants
                     .Include(_ => _.User)
                     .Where(_ => _.ThreadID == messageThreads[i].ID)
                     .ToListAsync();
-            }
 
-            if (messageThreads == null || !messageThreads.Any())
-            {
-                return new StatusCode<List<ThreadOut>>(StatusCodes.Status404NotFound, $"Threads not found");
+                messageThreads[i].Messages[0].MessageReadStates = await _databaseContext.MessageReadStates
+                    .Where(_ => _.MessageID == messageThreads[i].Messages[0].ID)
+                    .ToListAsync();
             }
 
             messageThreads.ForEach(_ => _.Messages = _.Messages.TakeLast(1).ToList());

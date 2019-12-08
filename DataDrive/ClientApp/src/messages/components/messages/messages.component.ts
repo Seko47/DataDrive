@@ -55,8 +55,19 @@ export class MessagesComponent implements OnInit, OnDestroy {
                     return;
                 }
             }
-
+            alert(JSON.stringify(result[0].messages[0]));
             for (let i = 0; i < result.length; ++i) {
+                console.log("i = " + i)
+                if (result[i].messages[0].messageReadStates.length > 1) {
+
+                    result[i].messages[0].showReaded = true;
+                }
+                else {
+                    result[i].messages[0].showReaded = false;
+                }
+
+                console.log("readed =" + result[i].messages[0].showReaded);
+
 
                 for (let j = 0; j < result[i].messageThreadParticipants.length; ++j) {
 
@@ -64,6 +75,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
                         result[i].caller = result[i].messageThreadParticipants[j].userUsername;
                         console.log(result[i].caller);
+                        console.log("caller =" + result[i].caller);
+
                         break;
                     }
                 }

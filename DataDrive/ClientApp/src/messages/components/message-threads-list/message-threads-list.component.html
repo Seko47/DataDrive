@@ -6,19 +6,23 @@
        (click)="showThread(thread.id);">
 
     <mat-card>
+      <mat-icon *ngIf="!thread.messages[0].showReaded">
+        fiber_new
+      </mat-icon>
+
       <h4>
         <b>{{ thread.caller }}</b>
       </h4>
 
-        <p class="text-truncate"
-           *ngIf="thread.messages && thread.messages[0]">
-          {{ thread.messages[0].content }}
-        </p>
+      <p class="text-truncate"
+         *ngIf="thread.messages && thread.messages[0]">
+        {{ thread.messages[0].content }}
+      </p>
 
-        <p *ngIf="thread.messages && thread.messages[0]"
-           class="font-weight-light">
-          {{ (thread.messages[0].sentDate | date:'dd.MM.yyyy HH:mm') }}
-        </p>
+      <p *ngIf="thread.messages && thread.messages[0]"
+         class="font-weight-light">
+        {{ (thread.messages[0].sentDate | date:'dd.MM.yyyy HH:mm') }}
+      </p>
     </mat-card>
   </div>
 </div>
