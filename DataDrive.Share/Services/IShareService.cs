@@ -22,7 +22,7 @@ namespace DataDrive.Share.Services
         Task<bool> CancelSharingForEveryone(Guid resourceId, string username);
 
         Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByResourceIdAndOwner(Guid resourceId, string ownerUsername);
-        Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByUserAndFilter(string username, ShareFilter shareFilter);
+        Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByUserAndFilter(ShareFilter shareFilter, string username);
         Task<StatusCode<ShareForUserOut>> ShareForUser(ShareForUserIn shareForUserIn, string ownerUsername);
         Task<bool> CancelSharingForUser(Guid shareId, string ownerUsername);
     }

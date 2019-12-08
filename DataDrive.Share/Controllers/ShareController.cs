@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataDrive.Share.Controllers
@@ -128,7 +129,7 @@ namespace DataDrive.Share.Controllers
 
 
 
-        
+
         //TODO share controller methods
         //Get all files shared for logged user (ShareForUser.cs)
 
@@ -136,5 +137,69 @@ namespace DataDrive.Share.Controllers
 
         //Post, share file for specified user by file id and username
 
+        [HttpGet("forUser/info/{resourceId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetShareForUsersInfoByResourceId(Guid resourceId)
+        {
+            StatusCode<List<ShareForUserOut>> status = await _shareService.GetShareForUserByResourceIdAndOwner(resourceId, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound(status.Message);
+            }
+
+            return Ok(status.Body);
+        }
+
+        [HttpGet("forUser")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetShareByUser([FromQuery] ShareFilter shareFilter)
+        {
+            StatusCode<List<ShareForUserOut>> status = await _shareService.GetShareForUserByUserAndFilter(shareFilter, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound(status.Message);
+            }
+
+            return Ok(status.Body);
+        }
+
+        [HttpPost("forUser")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> ShareForUser([FromBody] ShareForUserIn shareForUserIn)
+        {
+            StatusCode<ShareForUserOut> status = await _shareService.ShareForUser(shareForUserIn, _userManager.GetUserName(User));
+
+            if (status.Code == StatusCodes.Status404NotFound)
+            {
+                return NotFound(status.Message);
+            }
+
+            return Ok(status.Body);
+        }
+
+        [HttpDelete("forUser/{shareId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> CancelShareForUser(Guid shareId)
+        {
+            bool result = await _shareService.CancelSharingForUser(shareId, _userManager.GetUserName(User));
+
+            if (!result)
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            return Ok(new { Canceled = result });
+        }
     }
 }

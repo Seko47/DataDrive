@@ -197,7 +197,7 @@ namespace DataDrive.Share.Services
             return new StatusCode<List<ShareForUserOut>>(StatusCodes.Status200OK, result);
         }
 
-        public async Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByUserAndFilter(string username, ShareFilter shareFilter)
+        public async Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByUserAndFilter(ShareFilter shareFilter, string username)
         {
             string userId = (await _databaseContext.Users
                 .FirstOrDefaultAsync(_ => _.UserName == username))?
