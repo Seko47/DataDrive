@@ -11,7 +11,7 @@ export class MessageOut {
     public threadID: string;
 
     public showDate: boolean;
-    public showReaded: boolean;
+    public isReaded: boolean;
 
     public messageReadStates: MessageReadStateOut[];
 }

@@ -47,42 +47,35 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
         this.messagesService.getAllThreads().subscribe(result => {
 
-            if (this.threads && this.threads[0] && this.threads[0].messages && this.threads[0].messages[0]) {
-                if (this.threads.length === result.length
-                    && this.threads[0].id === result[0].id
-                    && this.threads[0].messages[0].id === result[0].messages[0].id) {
-
-                    return;
-                }
-            }
-            alert(JSON.stringify(result[0].messages[0]));
             for (let i = 0; i < result.length; ++i) {
-                console.log("i = " + i)
-                if (result[i].messages[0].messageReadStates.length > 1) {
-
-                    result[i].messages[0].showReaded = true;
-                }
-                else {
-                    result[i].messages[0].showReaded = false;
-                }
-
-                console.log("readed =" + result[i].messages[0].showReaded);
-
 
                 for (let j = 0; j < result[i].messageThreadParticipants.length; ++j) {
 
                     if (result[i].messageThreadParticipants[j].userUsername !== this.loggedUsername) {
 
                         result[i].caller = result[i].messageThreadParticipants[j].userUsername;
-                        console.log(result[i].caller);
-                        console.log("caller =" + result[i].caller);
 
                         break;
                     }
                 }
+
+                result[i].messages[0].isReaded = false;
+
+                for (let j = 0; j < result[i].messages[0].messageReadStates.length; ++j) {
+
+                    if (result[i].messages[0].messageReadStates[j].userUsername === this.loggedUsername) {
+
+                        result[i].messages[0].isReaded = true;
+                        break;
+                    }
+                }
+
             }
 
-            this.threads = result;
+            if (JSON.stringify(this.threads) !== JSON.stringify(result)) {
+
+                this.threads = result;
+            }
 
         }, (error: HttpErrorResponse) => {
 

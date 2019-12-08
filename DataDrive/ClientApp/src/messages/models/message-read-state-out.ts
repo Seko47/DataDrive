@@ -5,5 +5,5 @@ export class MessageReadStateOut {
     public readDate: Date;
     public messageID: string;
     public userID: string;
-    public UserUsername: string;
+    public userUsername: string;
 }

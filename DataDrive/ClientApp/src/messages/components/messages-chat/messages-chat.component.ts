@@ -139,7 +139,7 @@ export class MessagesChatComponent implements OnInit, OnDestroy {
 
                         if (result.messages[i].messageReadStates.length > 1) {
 
-                            result.messages[i].showReaded = true;
+                            result.messages[i].isReaded = true;
                             break;
                         }
                     }

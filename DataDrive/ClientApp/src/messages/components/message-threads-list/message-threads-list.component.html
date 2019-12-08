@@ -6,7 +6,8 @@
        (click)="showThread(thread.id);">
 
     <mat-card>
-      <mat-icon *ngIf="!thread.messages[0].showReaded">
+      <mat-icon *ngIf="!thread.messages[0].isReaded"
+                style="position: absolute; right:5px; top:5px;">
         fiber_new
       </mat-icon>
 

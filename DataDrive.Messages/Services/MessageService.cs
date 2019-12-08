@@ -131,13 +131,17 @@ namespace DataDrive.Messages.Services
                     .Include(_ => _.User)
                     .Where(_ => _.ThreadID == messageThreads[i].ID)
                     .ToListAsync();
-
-                messageThreads[i].Messages[0].MessageReadStates = await _databaseContext.MessageReadStates
-                    .Where(_ => _.MessageID == messageThreads[i].Messages[0].ID)
-                    .ToListAsync();
             }
 
             messageThreads.ForEach(_ => _.Messages = _.Messages.TakeLast(1).ToList());
+
+            for (int i = 0; i < messageThreads.Count; ++i)
+            {
+                messageThreads[i].Messages[0].MessageReadStates = await _databaseContext.MessageReadStates
+                    .Include(_ => _.User)
+                    .Where(_ => _.MessageID == messageThreads[i].Messages[0].ID)
+                    .ToListAsync();
+            }
 
             List<ThreadOut> result = _mapper.Map<List<ThreadOut>>(messageThreads);
 
