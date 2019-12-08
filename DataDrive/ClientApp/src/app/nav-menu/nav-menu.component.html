@@ -51,6 +51,13 @@
 
       <a mat-list-item
          (click)="sidenav.close()"
+         [routerLink]="'/messages'">
+        <mat-icon>message</mat-icon>
+        {{ 'NAVBAR.MESSAGES' | translate }}
+      </a>
+
+      <a mat-list-item
+         (click)="sidenav.close()"
          [routerLink]="'/scan'">
         <mat-icon>camera</mat-icon>
         {{ 'NAVBAR.QR_CODE_SCANNER' | translate }}
