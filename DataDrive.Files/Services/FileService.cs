@@ -173,17 +173,56 @@ namespace DataDrive.Files.Services
                 .Include(_ => _.ShareForUsers)
                 .FirstOrDefaultAsync(_ => _.ID == id && (_.ResourceType == ResourceType.FILE || _.ResourceType == ResourceType.DIRECTORY));
 
-            if (fileAbstract == null
-                || (fileAbstract.OwnerID != userId
-                && (!fileAbstract.IsSharedForUsers || !fileAbstract.ShareForUsers.Any(_ => _.OwnerID == userId))
-                && !fileAbstract.IsSharedForEveryone))
+            if (fileAbstract == null)
             {
-                return new StatusCode<FileOut>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
+                return new StatusCode<FileOut>(StatusCodes.Status404NotFound, $"File {id} not found");
             }
 
-            FileOut fileResult = _mapper.Map<FileOut>(fileAbstract);
+            if (fileAbstract.OwnerID == userId)
+            {
+                return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
+            }
 
-            return new StatusCode<FileOut>(StatusCodes.Status200OK, fileResult);
+            if (fileAbstract.IsShared)
+            {
+                if (fileAbstract.IsSharedForEveryone)
+                {
+                    ShareEveryone share = fileAbstract.ShareEveryone;
+
+                    if (share != null)
+                    {
+                        if ((share.ExpirationDateTime == null
+                                || (share.ExpirationDateTime != null && share.ExpirationDateTime >= DateTime.Now))
+                           && (share.DownloadLimit == null
+                                || (share.DownloadLimit != null && share.DownloadLimit > 0)))
+                        {
+                            if(share.DownloadLimit != null && share.DownloadLimit > 0)
+                            {
+                                --share.DownloadLimit;
+                                await _databaseContext.SaveChangesAsync();
+                                //TODO sprawdź czy działa limit pobierania i dodaj jego obsługę do notatek
+                            }
+
+                            return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
+                        }
+                    }
+                }
+                else if (fileAbstract.IsSharedForUsers)
+                {
+                    ShareForUser share = fileAbstract.ShareForUsers.FirstOrDefault(_ => _.SharedForUserID == userId && _.ResourceID == id);
+
+                    if (share != null)
+                    {
+                        if (share.ExpirationDateTime == null
+                            || (share.ExpirationDateTime != null && share.ExpirationDateTime >= DateTime.Now))
+                        {
+                            return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
+                        }
+                    }
+                }
+            }
+
+            return new StatusCode<FileOut>(StatusCodes.Status404NotFound, $"File {id} not found");
         }
 
         public async Task<StatusCode<DirectoryOut>> GetDirectoryByIdAndUser(Guid? id, string username)
