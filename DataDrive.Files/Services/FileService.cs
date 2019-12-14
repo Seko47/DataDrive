@@ -146,20 +146,69 @@ namespace DataDrive.Files.Services
                 .Include(_ => _.ShareEveryone)
                 .Include(_ => _.ShareForUsers)
                 .FirstOrDefaultAsync(_ => _.ID == id);
-
-            if (fileToDownload == null
-                || (fileToDownload.OwnerID != userId
-                && (!fileToDownload.IsSharedForUsers || !fileToDownload.ShareForUsers.Any(_ => _.OwnerID == userId && _.ResourceID == id))
-                && !fileToDownload.IsSharedForEveryone))
+            
+            if (fileToDownload == null)
             {
-                return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, StatusMessages.FILE_NOT_FOUND);
+                return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, $"File {id} not found");
             }
 
-            byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);
+            if (fileToDownload.OwnerID == userId)
+            {
+                byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);
 
-            DownloadFileInfo downloadFileInfo = new DownloadFileInfo(fileToDownload.Name, fileContent);
+                DownloadFileInfo downloadFileInfo = new DownloadFileInfo(fileToDownload.Name, fileContent);
 
-            return new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, downloadFileInfo);
+                return new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, downloadFileInfo);
+            }
+
+            if (fileToDownload.IsShared)
+            {
+                if (fileToDownload.IsSharedForEveryone)
+                {
+                    ShareEveryone share = fileToDownload.ShareEveryone;
+
+                    if (share != null)
+                    {
+                        if ((share.ExpirationDateTime == null
+                                || (share.ExpirationDateTime != null && share.ExpirationDateTime >= DateTime.Now))
+                           && (share.DownloadLimit == null
+                                || (share.DownloadLimit != null && share.DownloadLimit > 0)))
+                        {
+                            if (share.DownloadLimit != null && share.DownloadLimit > 0)
+                            {
+                                --share.DownloadLimit;
+                                await _databaseContext.SaveChangesAsync();
+                                //TODO sprawdź czy działa limit pobierania i dodaj jego obsługę do notatek
+                            }
+
+                            byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);
+
+                            DownloadFileInfo downloadFileInfo = new DownloadFileInfo(fileToDownload.Name, fileContent);
+
+                            return new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, downloadFileInfo);
+                        }
+                    }
+                }
+                else if (fileToDownload.IsSharedForUsers)
+                {
+                    ShareForUser share = fileToDownload.ShareForUsers.FirstOrDefault(_ => _.SharedForUserID == userId && _.ResourceID == id);
+
+                    if (share != null)
+                    {
+                        if (share.ExpirationDateTime == null
+                            || (share.ExpirationDateTime != null && share.ExpirationDateTime >= DateTime.Now))
+                        {
+                            byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);
+
+                            DownloadFileInfo downloadFileInfo = new DownloadFileInfo(fileToDownload.Name, fileContent);
+
+                            return new StatusCode<DownloadFileInfo>(StatusCodes.Status200OK, downloadFileInfo);
+                        }
+                    }
+                }
+            }
+
+            return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, $"File {id} not found");
         }
 
         public async Task<StatusCode<FileOut>> GetByIdAndUser(Guid id, string username)
@@ -196,13 +245,6 @@ namespace DataDrive.Files.Services
                            && (share.DownloadLimit == null
                                 || (share.DownloadLimit != null && share.DownloadLimit > 0)))
                         {
-                            if(share.DownloadLimit != null && share.DownloadLimit > 0)
-                            {
-                                --share.DownloadLimit;
-                                await _databaseContext.SaveChangesAsync();
-                                //TODO sprawdź czy działa limit pobierania i dodaj jego obsługę do notatek
-                            }
-
                             return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
                         }
                     }
