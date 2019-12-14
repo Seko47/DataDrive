@@ -142,7 +142,7 @@ export class ShareResourceDialogComponent {
                 this.shareEveryoneOut = result;
                 this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
                 this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
-                //TODO przy zapisie data zapisuje się o dzień mniejsza niż wybrana
+
                 this.closeDialog();
             }, err => alert(err.error));
     }

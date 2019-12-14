@@ -147,6 +147,11 @@ namespace DataDrive.Share.Services
                 shareEveryone.LastModifiedDateTime = DateTime.Now;
             }
 
+            if (shareEveryone.ExpirationDateTime.HasValue)
+            {
+                shareEveryone.ExpirationDateTime = shareEveryone.ExpirationDateTime.Value.AddHours(1);
+            }
+
             await _databaseContext.SaveChangesAsync();
 
             ShareEveryoneOut result = _mapper.Map<ShareEveryoneOut>(shareEveryone);

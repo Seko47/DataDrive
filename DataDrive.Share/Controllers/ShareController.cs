@@ -123,20 +123,6 @@ namespace DataDrive.Share.Controllers
             return Ok(new { Canceled = result });
         }
 
-
-
-
-
-
-
-
-        //TODO share controller methods
-        //Get all files shared for logged user (ShareForUser.cs)
-
-        //Post, share file for everyone by file id (generates Token if user not specified)
-
-        //Post, share file for specified user by file id and username
-
         [HttpGet("forUser/info/{resourceId}")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
