@@ -1,0 +1,167 @@
+<mat-toolbar color="secondary">
+  <h1>{{ 'SHARED_FILES.TITLE' | translate }}</h1>
+</mat-toolbar>
+
+<div>
+  <div style="position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000"
+       *ngIf="!shareForUserOuts || shareForUserOuts.length === 0">
+    <p>
+      {{ 'SHARED_FILES.SHARED_FILES_NOT_FOUND' | translate }}
+    </p>
+
+  </div>
+
+  <mat-sidenav-container *ngIf="shareForUserOuts && shareForUserOuts.length > 0">
+
+    <mat-sidenav-content style="height: 76vh;">
+
+      <div class="card-deck container ml-auto mr-auto">
+
+        <div *ngFor="let resource of shareForUserOuts"
+             class="col-md-3"
+             mat-button
+             (click)="clickFile(resource);"
+             [contextMenu]="fileMenu"
+             [contextMenuSubject]="resource">
+
+          <mat-card class="card mt-2 mb-2"
+                    title="{{ resource.resourceName }}">
+
+            <mat-card-content class="mt-2"
+                              style="text-align: center">
+
+              <mat-icon class="main-file-icon"
+                        *ngIf="resource.resourceType == 0">
+                insert_drive_file
+              </mat-icon>
+
+            </mat-card-content>
+
+            <p class="text-truncate"
+               style="text-align: center">
+              {{ resource.resourceName }}
+            </p>
+          </mat-card>
+
+        </div>
+
+        <context-menu #fileMenu>
+
+          <ng-template contextMenuItem
+                       let-item
+                       (execute)="downloadFile($event.item.resourceId)">
+
+            <button mat-button style="width: 100%">
+              <mat-icon>get_app</mat-icon>
+
+              {{ 'FILES.CONTEXT_MENU.DOWNLOAD' | translate }}
+            </button>
+          </ng-template>
+
+        </context-menu>
+      </div>
+
+
+    </mat-sidenav-content>
+
+    <mat-sidenav #fileinfosidenav
+                 position="end">
+
+      <div *ngIf="actualFile">
+        <mat-toolbar style="padding: 0em 1em;">
+
+          <mat-toolbar-row>
+
+            <mat-icon *ngIf="actualFile.resourceType == 0"
+                      class="ml-0 mr-auto">insert_drive_file</mat-icon>
+
+            <h3 class="text-wrap ml-auto mr-auto">
+
+              {{ actualFile.name }}
+            </h3>
+
+          </mat-toolbar-row>
+        </mat-toolbar>
+
+        <div class="row col-12">
+
+          <a mat-icon-button
+             class="ml-auto mr-auto"
+             style="transform: scale(2);"
+             (click)="downloadFile();">
+
+            <mat-icon>get_app</mat-icon>
+          </a>
+
+        </div>
+        <hr />
+
+        <div class="row col-12">
+
+          <div class="col-sm-5 mr-auto ml-1">
+
+            {{ 'FILES.OWNER' | translate }}
+          </div>
+
+          <div class="col-sm-6 ml-auto mr-0"
+               style="text-align: right">
+
+            <b>{{ actualFileShareInfo.ownerUsername }}</b>
+          </div>
+        </div>
+
+        <div class="row col-12">
+
+          <div class="col-sm-5 mr-auto ml-1">
+
+            {{ 'FILES.CREATED' | translate }}
+          </div>
+
+          <div class="col-sm-6 ml-auto mr-0"
+               style="text-align: right">
+
+            <b>{{ (actualFile.createdDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
+          </div>
+        </div>
+
+        <div class="row col-12" *ngIf="actualFile.lastModifiedDateTime">
+
+          <div class="col-sm-5 mr-auto ml-1">
+
+            {{ 'FILES.MODIFIED' | translate }}
+          </div>
+
+          <div class="col-sm-6 ml-auto mr-0"
+               style="text-align: right">
+
+            <b>{{ (actualFile.lastModifiedDateTime | date:'dd.MM.yyyy HH:mm:ss') }}</b>
+          </div>
+        </div>
+        <hr />
+
+        <div>
+
+          <div class="row col-12"
+               *ngIf="actualFileShareInfo.expirationDateTime">
+
+            <div class="col-sm-5 mr-auto ml-1">
+
+              {{ 'SHARES.EXPIRATION_DATE' | translate }}
+            </div>
+
+            <div class="col-sm-6 ml-auto mr-0"
+                 style="text-align: right">
+
+              <b>{{ (actualFileShareInfo.expirationDateTime | date:'dd.MM.yyyy') }}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>

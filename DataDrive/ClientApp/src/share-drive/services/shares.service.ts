@@ -1,17 +1,18 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ShareEveryoneCredentials } from '../models/share-everyone-credentials';
 import { ShareEveryoneOut } from '../models/share-everyone-out';
 import { ShareForEveryoneIn } from '../models/share-for-everyone-in';
 import { ShareForUserOut } from '../models/share-for-user-out';
 import { ShareForUserIn } from '../models/share-for-user-in';
+import { ShareFilter } from '../models/share-filter';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SharesService {
-    
+
     private baseUrl: string;
 
     constructor(private httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string) {
@@ -46,6 +47,15 @@ export class SharesService {
 
 
 
+
+    public getShareForUsersByUser(shareFilter: ShareFilter) {
+        return this.httpClient.get<ShareForUserOut[]>(this.baseUrl + 'api/Share/forUser', {
+            params: new HttpParams()
+                .set('ResourceType',
+                    shareFilter.resourceType
+                        .toString())
+        });
+    }
 
     public getShareForUsersInfo(id: string) {
         return this.httpClient.get<ShareForUserOut[]>(this.baseUrl + 'api/Share/forUser/info/' + id);
