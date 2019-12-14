@@ -223,7 +223,11 @@ namespace DataDrive.Share.Services
 
         public async Task<StatusCode<ShareForUserOut>> ShareForUser(ShareForUserIn shareForUserIn, string ownerUsername)
         {
-            //TODO niepowinno dać się udostępnić zasobu sobie samemu
+            if(shareForUserIn.Username == ownerUsername)
+            {
+                return new StatusCode<ShareForUserOut>(StatusCodes.Status404NotFound, $"You cannot share your own file with yourself");
+            }
+
             if (!await _databaseContext.Users.AnyAsync(_ => _.UserName == shareForUserIn.Username))
             {
                 return new StatusCode<ShareForUserOut>(StatusCodes.Status404NotFound, $"User {shareForUserIn.Username} not found");
