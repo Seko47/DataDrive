@@ -31,9 +31,34 @@
           {{ resource[1].content }}
         </p>
 
-        <p class="font-weight-light">
-          {{ (resource[1].lastModifiedDateTime ? (resource[1].createdDateTime > resource[1].lastModifiedDateTime ? resource[1].createdDateTime : resource[1].lastModifiedDateTime) : resource[1].createdDateTime) | date:'dd.MM.yyyy HH:mm:ss' }}
-        </p>
+        <div class="row">
+          <p class="font-weight-light col-sm-4">
+            {{ (resource[1].lastModifiedDateTime ? (resource[1].createdDateTime > resource[1].lastModifiedDateTime ? resource[1].createdDateTime : resource[1].lastModifiedDateTime) : resource[1].createdDateTime) | date:'dd.MM.yyyy HH:mm:ss' }}
+          </p>
+
+          <div class="col-sm-4 row">
+            <p class="font-weight-light col-auto">
+              {{ 'FILES.OWNER' | translate }}:
+            </p>
+
+            <p class="font-weight-light col-auto">
+              {{ resource[0].ownerUsername }}
+            </p>
+          </div>
+
+          <div *ngIf="resource[0].expirationDateTime"
+               class="col-sm-4 row">
+
+            <p class="font-weight-light col-auto">
+              {{ 'SHARES.EXPIRATION_DATE' | translate }}:
+            </p>
+
+            <p class="font-weight-light  col-auto">
+              {{ resource[0].expirationDateTime | date:'dd.MM.yyyy' }}
+            </p>
+          </div>
+
+        </div>
       </mat-card>
 
     </div>
