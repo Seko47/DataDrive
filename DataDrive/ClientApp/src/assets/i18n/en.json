@@ -68,7 +68,11 @@
 		"MESSAGES": "Messages",
 		"MYDRIVE": "My Drive",
 		"NOTES": "Notes",
+		"OTHER": "Other",
 		"QR_CODE_SCANNER": "Scanner",
+		"SHARED": "Shared",
+		"SHARED_FILES": "Shared files",
+		"SHARED_NOTES": "Shared notes",
 		"SIGN_OUT": "Sign out"
 	},
 	"NOTES": {

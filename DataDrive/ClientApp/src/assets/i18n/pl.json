@@ -68,7 +68,11 @@
 		"MESSAGES": "Wiadomości",
 		"MYDRIVE": "Mój Dysk",
 		"NOTES": "Notatki",
+		"OTHER": "Pozostałe",
 		"QR_CODE_SCANNER": "Skaner",
+		"SHARED": "Udostępnione",
+		"SHARED_FILES": "Udostępnione pliki",
+		"SHARED_NOTES": "Udostępnione notatki",
 		"SIGN_OUT": "Wyloguj"
 	},
 	"NOTES": {
