@@ -11,9 +11,10 @@ import { SharedFilesComponent } from './components/shared-files/shared-files.com
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { SharedNotesComponent } from './components/shared-notes/shared-notes.component';
+import { SharedEditorComponent } from './components/shared-editor/shared-editor.component';
 
 @NgModule({
-    declarations: [ShareEveryoneComponent, PasswordForTokenDialogComponent, ShareResourceDialogComponent, SharedFilesComponent, SharedNotesComponent],
+    declarations: [ShareEveryoneComponent, PasswordForTokenDialogComponent, ShareResourceDialogComponent, SharedFilesComponent, SharedNotesComponent, SharedEditorComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -24,6 +25,7 @@ import { SharedNotesComponent } from './components/shared-notes/shared-notes.com
             { path: 'share/:token', component: ShareEveryoneComponent },
             { path: 'shared/files', component: SharedFilesComponent, canActivate: [AuthorizeGuard] },
             { path: 'shared/notes', component: SharedNotesComponent, canActivate: [AuthorizeGuard] },
+            { path: 'shared/notes/editor', component: SharedEditorComponent, canActivate: [AuthorizeGuard] },
         ])
     ],
     entryComponents: [PasswordForTokenDialogComponent]

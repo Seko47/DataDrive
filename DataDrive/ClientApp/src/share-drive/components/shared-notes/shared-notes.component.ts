@@ -66,6 +66,6 @@ export class SharedNotesComponent implements OnInit {
 
     public showNote(resourceId: string) {
 
-        this.router.navigate(["/shared/notes/editor"], { queryParams: { mode: "read", note: resourceId } });
+        this.router.navigate(["/shared/notes/editor"], { queryParams: { note: resourceId } });
     }
 }
