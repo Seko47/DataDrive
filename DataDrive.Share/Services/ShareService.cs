@@ -212,6 +212,8 @@ namespace DataDrive.Share.Services
                 .Id;
 
             List<ShareForUser> shareForUsers = await _databaseContext.ShareForUsers
+                .Include(_=>_.Owner)
+                .Include(_=>_.Resource)
                 .Where(_ => _.SharedForUserID == userId && _.Resource.ResourceType == shareFilter.ResourceType
                         && (_.ExpirationDateTime == null || (_.ExpirationDateTime != null && _.ExpirationDateTime > DateTime.Now)))
                 .ToListAsync();
