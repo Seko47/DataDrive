@@ -7,7 +7,8 @@
 		"CLOSE_BUTTON": "Zamknij",
 		"CREATE_BUTTON": "Utwórz",
 		"NEXT_BUTTON": "Dalej",
-		"SAVE_BUTTON": "Zapisz"
+		"SAVE_BUTTON": "Zapisz",
+		"SHARE_BUTTON": "Udostępnij"
 	},
 	"DRIVE": {
 		"SELECT_THE_DATA_TO_SHOW": "Wybierz dane do pokazania"
@@ -34,7 +35,9 @@
 		"SHARE_FILE_DIALOG": {
 			"DOWNLOAD_LIMIT": "Limit pobrań",
 			"EXPIRATION_DATE": "Data wygaśnięcia",
+			"NOT_SHARED_FOR_USERS": "Tylko Ty masz dostęp",
 			"PASSWORD": "Hasło",
+			"SHARE_TO_USER_USERNAME": "Nazwa użytkownika",
 			"TITLE": "Udostępnianie",
 			"TOKEN_SHARING_FORM": "Przełącz udostępnianie linku",
 			"URL_TO_SHARE": "Link do udostępniania"

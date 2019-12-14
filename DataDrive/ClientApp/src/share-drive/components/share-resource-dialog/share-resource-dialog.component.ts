@@ -88,10 +88,10 @@ export class ShareResourceDialogComponent {
 
     public getSharesForUser() {
         if (this.isShared && this.isSharedForUsers) {
-            //coś jest nie tak
+
             this.sharesService.getShareForUsersInfo(this.resourceId)
                 .subscribe(result => {
-                    console.log("Pobrano");
+
                     this.shareForUsersOut = [];
                     this.shareForUsersOut = result;
                     this.shareForUserIn.expirationDateTime = this.shareForUsersOut[this.shareForUsersOut.length - 1].expirationDateTime;
@@ -173,7 +173,6 @@ export class ShareResourceDialogComponent {
 
     updateShareForUser(shareForUser: ShareForUserOut) {
 
-        alert(shareForUser.expirationDateTime);
         const shareForUserIn = new ShareForUserIn();
         shareForUserIn.resourceID = shareForUser.resourceID;
         shareForUserIn.expirationDateTime = shareForUser.expirationDateTime;
@@ -181,7 +180,7 @@ export class ShareResourceDialogComponent {
 
         this.sharesService.shareForUser(shareForUserIn)
             .subscribe(result => {
-                alert(JSON.stringify(result));
+
                 this.getSharesForUser();
 
             }, err => alert(err.error));
