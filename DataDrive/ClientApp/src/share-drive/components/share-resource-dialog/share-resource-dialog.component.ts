@@ -142,8 +142,6 @@ export class ShareResourceDialogComponent {
                 this.shareEveryoneOut = result;
                 this.shareForEveryoneIn.downloadLimit = this.shareEveryoneOut.downloadLimit;
                 this.shareForEveryoneIn.expirationDateTime = this.shareEveryoneOut.expirationDateTime;
-
-                this.closeDialog();
             }, err => alert(err.error));
     }
 
