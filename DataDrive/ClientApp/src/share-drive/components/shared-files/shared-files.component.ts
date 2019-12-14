@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FileOut, ResourceType } from '../../../files-drive/models/file-out';
 import { ShareForUserOut } from '../../models/share-for-user-out';
 import { SharesService } from '../../services/shares.service';
 import { ShareFilter } from '../../models/share-filter';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FilesService } from '../../../files-drive/services/files.service';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
     selector: 'app-shared-files',
@@ -12,6 +13,8 @@ import { FilesService } from '../../../files-drive/services/files.service';
     styleUrls: ['./shared-files.component.css']
 })
 export class SharedFilesComponent implements OnInit {
+
+    @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
     public shareForUserOuts: ShareForUserOut[];
     public actualFile: FileOut;
@@ -51,6 +54,7 @@ export class SharedFilesComponent implements OnInit {
             .subscribe(result => {
 
                 this.actualFile = result;
+                this.fileinfosidenav.toggle();
             }, (err: HttpErrorResponse) => alert(err.error));
     }
 
