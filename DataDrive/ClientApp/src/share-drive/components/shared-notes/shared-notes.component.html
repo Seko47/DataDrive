@@ -1,0 +1,42 @@
+<mat-toolbar color="secondary">
+  <h1>{{ 'SHARED_NOTES.TITLE' | translate }}</h1>
+</mat-toolbar>
+
+<div>
+  <div style="position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000"
+       *ngIf="!shareForUserOuts || shareForUserOuts.length == 0">
+    <p>
+      {{ 'SHARED_NOTES.SHARED_NOTES_NOT_FOUND' | translate }}
+    </p>
+
+  </div>
+
+  <div class="card-deck container ml-auto mr-auto">
+
+    <div *ngFor="let resource of shareForUserOuts"
+         class="col-md-12 mt-2"
+         mat-button
+         (click)="showNote(resource[1].id);">
+
+      <mat-card title="{{ resource[1].title || ('NOTES.NO_NAME' | translate) }}">
+        <h4>
+          <b>{{ resource[1].title }}</b>
+        </h4>
+
+        <p class="text-truncate" *ngIf="resource[1].content">
+          {{ resource[1].content }}
+        </p>
+
+        <p class="font-weight-light">
+          {{ (resource[1].lastModifiedDateTime ? (resource[1].createdDateTime > resource[1].lastModifiedDateTime ? resource[1].createdDateTime : resource[1].lastModifiedDateTime) : resource[1].createdDateTime) | date:'dd.MM.yyyy HH:mm:ss' }}
+        </p>
+      </mat-card>
+
+    </div>
+  </div>
+
+</div>

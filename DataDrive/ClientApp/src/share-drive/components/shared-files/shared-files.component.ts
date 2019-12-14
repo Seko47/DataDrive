@@ -25,7 +25,7 @@ export class SharedFilesComponent implements OnInit {
 
         this.loadFiles();
     }
-
+    //TODO refresh when new shared
     ngOnInit() {
     }
 

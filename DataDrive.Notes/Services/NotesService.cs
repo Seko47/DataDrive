@@ -108,7 +108,7 @@ namespace DataDrive.Notes.Services
                 }
                 else if (note.IsSharedForUsers)
                 {
-                    ShareForUser share = note.ShareForUsers.FirstOrDefault(_ => _.SharedForUserID == userId);
+                    ShareForUser share = note.ShareForUsers.FirstOrDefault(_ => _.SharedForUserID == userId && _.ResourceID == noteId);
 
                     if (share != null)
                     {

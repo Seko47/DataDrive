@@ -10,9 +10,10 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { SharedFilesComponent } from './components/shared-files/shared-files.component';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
+import { SharedNotesComponent } from './components/shared-notes/shared-notes.component';
 
 @NgModule({
-    declarations: [ShareEveryoneComponent, PasswordForTokenDialogComponent, ShareResourceDialogComponent, SharedFilesComponent],
+    declarations: [ShareEveryoneComponent, PasswordForTokenDialogComponent, ShareResourceDialogComponent, SharedFilesComponent, SharedNotesComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -22,6 +23,7 @@ import { AuthorizeGuard } from '../api-authorization/authorize.guard';
         RouterModule.forChild([
             { path: 'share/:token', component: ShareEveryoneComponent },
             { path: 'shared/files', component: SharedFilesComponent, canActivate: [AuthorizeGuard] },
+            { path: 'shared/notes', component: SharedNotesComponent, canActivate: [AuthorizeGuard] },
         ])
     ],
     entryComponents: [PasswordForTokenDialogComponent]
