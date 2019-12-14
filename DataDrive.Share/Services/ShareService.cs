@@ -270,6 +270,11 @@ namespace DataDrive.Share.Services
                 shareForUser.ExpirationDateTime = shareForUserIn.ExpirationDateTime;
             }
 
+            if(shareForUser.ExpirationDateTime.HasValue)
+            {
+                shareForUser.ExpirationDateTime = shareForUser.ExpirationDateTime.Value.AddHours(1);
+            }
+
             await _databaseContext.SaveChangesAsync();
 
             ShareForUserOut result = _mapper.Map<ShareForUserOut>(shareForUser);

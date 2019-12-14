@@ -170,4 +170,20 @@ export class ShareResourceDialogComponent {
 
             }, err => alert(err.error));
     }
+
+    updateShareForUser(shareForUser: ShareForUserOut) {
+
+        alert(shareForUser.expirationDateTime);
+        const shareForUserIn = new ShareForUserIn();
+        shareForUserIn.resourceID = shareForUser.resourceID;
+        shareForUserIn.expirationDateTime = shareForUser.expirationDateTime;
+        shareForUserIn.username = shareForUser.sharedForUserUsername;
+
+        this.sharesService.shareForUser(shareForUserIn)
+            .subscribe(result => {
+                alert(JSON.stringify(result));
+                this.getSharesForUser();
+
+            }, err => alert(err.error));
+    }
 }
