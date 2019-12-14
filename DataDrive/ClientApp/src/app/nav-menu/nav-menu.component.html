@@ -49,6 +49,22 @@
         {{ 'NAVBAR.NOTES' | translate }}
       </a>
 
+      <h3 mat-subheader>{{ 'NAVBAR.SHARED' | translate }}</h3>
+      <a mat-list-item
+         (click)="sidenav.close()"
+         [routerLink]="'/shared/files'">
+        <mat-icon>folder</mat-icon>
+        {{ 'NAVBAR.SHARED_FILES' | translate }}
+      </a>
+
+      <a mat-list-item
+         (click)="sidenav.close()"
+         [routerLink]="'/shared/notes'">
+        <mat-icon>notes</mat-icon>
+        {{ 'NAVBAR.SHARED_NOTES' | translate }}
+      </a>
+
+      <h3 mat-subheader>{{ 'NAVBAR.OTHER' | translate }}</h3>
       <a mat-list-item
          (click)="sidenav.close()"
          [routerLink]="'/messages'">
