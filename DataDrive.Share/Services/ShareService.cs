@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DataDrive.Share.Services
@@ -212,8 +213,8 @@ namespace DataDrive.Share.Services
                 .Id;
 
             List<ShareForUser> shareForUsers = await _databaseContext.ShareForUsers
-                .Include(_=>_.Owner)
-                .Include(_=>_.Resource)
+                .Include(_ => _.Owner)
+                .Include(_ => _.Resource)
                 .Where(_ => _.SharedForUserID == userId && _.Resource.ResourceType == shareFilter.ResourceType
                         && (_.ExpirationDateTime == null || (_.ExpirationDateTime != null && _.ExpirationDateTime > DateTime.Now)))
                 .ToListAsync();
@@ -230,7 +231,7 @@ namespace DataDrive.Share.Services
 
         public async Task<StatusCode<ShareForUserOut>> ShareForUser(ShareForUserIn shareForUserIn, string ownerUsername)
         {
-            if(shareForUserIn.Username == ownerUsername)
+            if (shareForUserIn.Username == ownerUsername)
             {
                 return new StatusCode<ShareForUserOut>(StatusCodes.Status404NotFound, $"You cannot share your own file with yourself");
             }
@@ -281,7 +282,7 @@ namespace DataDrive.Share.Services
                 shareForUser.ExpirationDateTime = shareForUserIn.ExpirationDateTime;
             }
 
-            if(shareForUser.ExpirationDateTime.HasValue)
+            if (shareForUser.ExpirationDateTime.HasValue)
             {
                 shareForUser.ExpirationDateTime = shareForUser.ExpirationDateTime.Value.AddHours(1);
             }
@@ -323,25 +324,21 @@ namespace DataDrive.Share.Services
 
         private string GenerateToken()
         {
-            char[] range = new char[] {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+            char[] chars = new char[] {'a', 'b', 'c', 'd', 'e', 'f', 'g',
                                        'h', 'i', 'j', 'k', 'l', 'm', 'n',
                                        'o', 'p', 'q', 'r', 's', 't', 'u',
                                        'v', 'w', 'x', 'y', 'z', '0', '1',
                                        '2', '3', '4', '5', '6', '7', '8',
                                        '9'};
-            int rangeLength = range.Length;
             int tokenLength = 3;
             int numberOfDraws = 0;
             int drawsLimit = 3;
 
             Random random = new Random();
-
             string token;
 
             do
             {
-                token = "";
-
                 if (numberOfDraws >= drawsLimit)
                 {
                     ++tokenLength;
@@ -350,12 +347,11 @@ namespace DataDrive.Share.Services
 
                 ++numberOfDraws;
 
-                for (int i = 0; i < tokenLength; ++i)
-                {
-                    token += range[random.Next(rangeLength)];
-                }
+                token = new string(Enumerable.Repeat(chars, tokenLength)
+                    .Select(c => c[random.Next(chars.Length)])
+                    .ToArray());
 
-            } while (_databaseContext.ShareEveryones.AnyAsync(_ => _.Token == token).Result);
+            } while (_databaseContext.ShareEveryones.Any(_ => _.Token == token));
 
             return token.ToUpper();
         }
