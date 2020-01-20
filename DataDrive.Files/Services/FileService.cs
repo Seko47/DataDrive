@@ -55,7 +55,6 @@ namespace DataDrive.Files.Services
             DirectoryOut result = _mapper.Map<DirectoryOut>(newDirectory);
 
             return new StatusCode<DirectoryOut>(StatusCodes.Status201Created, result);
-
         }
 
         public async Task<StatusCode<DirectoryOut>> DeleteByIdAndUser(Guid id, string username)

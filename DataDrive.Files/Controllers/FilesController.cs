@@ -154,14 +154,11 @@ namespace DataDrive.Files.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
         public async Task<IActionResult> Post([FromForm] FilePost filePost)
         {
             if (filePost.Files == null && Request.HasFormContentType)
             {
-                IFormFileCollection files = Request.Form.Files;
-
-                filePost.Files = files;
+                filePost.Files = Request.Form.Files;
             }
 
             if (filePost.Files == null || filePost.Files.Count < 1)
@@ -169,7 +166,8 @@ namespace DataDrive.Files.Controllers
                 return BadRequest("Something went wrong");
             }
 
-            StatusCode<List<FileUploadResult>> status = await _fileService.PostByUser(filePost, _userManager.GetUserName(User));
+            StatusCode<List<FileUploadResult>> status = await _fileService.PostByUser(filePost, _userManager
+                .GetUserName(User));
 
             if (status.Code == StatusCodes.Status404NotFound)
             {
