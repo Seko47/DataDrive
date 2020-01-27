@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataDrive.DAO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200127181144_m002")]
+    [Migration("20200127181455_m002")]
     partial class m002
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,20 +94,20 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "87a91a48-b1e8-4a70-8eae-32014c490575",
+                            Id = "610eee7c-4fcd-425b-ac69-3fa5436dfad0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb0a4b1e-e96c-4689-bb81-da690c28260a",
+                            ConcurrencyStamp = "3a681e71-a0e8-470f-a8b1-6e74823539a3",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEh4rjbxc9iogngOJlnTGQ0DmVnqHtgmqXe8Ctq1yse5WvGIDACR3KoIn/XnFPLCCQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGAqbhHDAPyoJUlcQZ0Tu/PgmOAEursiwmbPHAckf6te301SZXWk76HrEwOrNOFdDw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6cf776c3-1707-40d8-85b2-d64408b0280e",
-                            TotalDiskSpace = 0,
+                            SecurityStamp = "7ccc195d-0732-4f6a-a94c-c03e6f42f3c7",
+                            TotalDiskSpace = 2147483647,
                             TwoFactorEnabled = false,
-                            UsedDiskSpace = 0,
+                            UsedDiskSpace = -2147483648,
                             UserName = "admin@admin.com"
                         });
                 });
@@ -385,8 +385,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a2720423-3598-49a9-ab7b-d1b4340995ed",
-                            ConcurrencyStamp = "94ce465e-fa39-422e-9f88-06ae3e9f1372",
+                            Id = "d3cba9f8-a524-4324-84d5-12460b031eb0",
+                            ConcurrencyStamp = "2f8aae5c-0066-4112-8568-92331eb6a85e",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -481,8 +481,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "87a91a48-b1e8-4a70-8eae-32014c490575",
-                            RoleId = "a2720423-3598-49a9-ab7b-d1b4340995ed"
+                            UserId = "610eee7c-4fcd-425b-ac69-3fa5436dfad0",
+                            RoleId = "d3cba9f8-a524-4324-84d5-12460b031eb0"
                         });
                 });
 

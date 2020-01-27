@@ -36,17 +36,17 @@ namespace DataDrive.DAO.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a2720423-3598-49a9-ab7b-d1b4340995ed", "94ce465e-fa39-422e-9f88-06ae3e9f1372", "admin", "ADMIN" });
+                values: new object[] { "d3cba9f8-a524-4324-84d5-12460b031eb0", "2f8aae5c-0066-4112-8568-92331eb6a85e", "admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TotalDiskSpace", "TwoFactorEnabled", "UsedDiskSpace", "UserName" },
-                values: new object[] { "87a91a48-b1e8-4a70-8eae-32014c490575", 0, "eb0a4b1e-e96c-4689-bb81-da690c28260a", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEEh4rjbxc9iogngOJlnTGQ0DmVnqHtgmqXe8Ctq1yse5WvGIDACR3KoIn/XnFPLCCQ==", null, false, "6cf776c3-1707-40d8-85b2-d64408b0280e", 0, false, 0, "admin@admin.com" });
+                values: new object[] { "610eee7c-4fcd-425b-ac69-3fa5436dfad0", 0, "3a681e71-a0e8-470f-a8b1-6e74823539a3", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEGAqbhHDAPyoJUlcQZ0Tu/PgmOAEursiwmbPHAckf6te301SZXWk76HrEwOrNOFdDw==", null, false, "7ccc195d-0732-4f6a-a94c-c03e6f42f3c7", 2147483647, false, -2147483648, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[] { "87a91a48-b1e8-4a70-8eae-32014c490575", "a2720423-3598-49a9-ab7b-d1b4340995ed" });
+                values: new object[] { "610eee7c-4fcd-425b-ac69-3fa5436dfad0", "d3cba9f8-a524-4324-84d5-12460b031eb0" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -54,17 +54,17 @@ namespace DataDrive.DAO.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetUserRoles",
                 keyColumns: new[] { "UserId", "RoleId" },
-                keyValues: new object[] { "87a91a48-b1e8-4a70-8eae-32014c490575", "a2720423-3598-49a9-ab7b-d1b4340995ed" });
+                keyValues: new object[] { "610eee7c-4fcd-425b-ac69-3fa5436dfad0", "d3cba9f8-a524-4324-84d5-12460b031eb0" });
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "a2720423-3598-49a9-ab7b-d1b4340995ed");
+                keyValue: "d3cba9f8-a524-4324-84d5-12460b031eb0");
 
             migrationBuilder.DeleteData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
-                keyValue: "87a91a48-b1e8-4a70-8eae-32014c490575");
+                keyValue: "610eee7c-4fcd-425b-ac69-3fa5436dfad0");
 
             migrationBuilder.DropColumn(
                 name: "TotalDiskSpace",

@@ -77,7 +77,9 @@ namespace DataDrive.DAO.Context
                     UserName = "admin@admin.com",
                     NormalizedUserName = "ADMIN@ADMIN.COM",
                     EmailConfirmed = true,
-                    PasswordHash = passwordHasher.HashPassword(null, "zaq1@WSX")
+                    PasswordHash = passwordHasher.HashPassword(null, "zaq1@WSX"),
+                    TotalDiskSpace = int.MaxValue,
+                    UsedDiskSpace = int.MinValue
                 });
 
             builder.Entity<IdentityUserRole<string>>()
