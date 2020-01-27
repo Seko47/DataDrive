@@ -24,6 +24,7 @@ namespace DataDrive.DAO.Context
         DbSet<MessageThreadParticipant> MessageThreadParticipants { get; set; }
         DbSet<Message> Messages { get; set; }
         DbSet<MessageReadState> MessageReadStates { get; set; }
+        DbSet<SystemConfig> SystemConfigs { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
