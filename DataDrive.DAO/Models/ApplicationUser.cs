@@ -6,8 +6,8 @@ namespace DataDrive.DAO.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public int TotalDiskSpace { get; set; }
-        public int UsedDiskSpace { get; set; }
+        public ulong TotalDiskSpace { get; set; }
+        public ulong UsedDiskSpace { get; set; }
         public virtual List<ResourceAbstract> Files { get; set; }
         public virtual List<ShareAbstract> SharedOwn { get; set; }
         public virtual List<ShareForUser> SharedForUser { get; set; }

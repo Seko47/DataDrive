@@ -64,14 +64,14 @@ namespace DataDrive.DAO.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalDiskSpace")
-                        .HasColumnType("int");
+                    b.Property<decimal>("TotalDiskSpace")
+                        .HasColumnType("decimal(20,0)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UsedDiskSpace")
-                        .HasColumnType("int");
+                    b.Property<decimal>("UsedDiskSpace")
+                        .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
@@ -92,20 +92,20 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "610eee7c-4fcd-425b-ac69-3fa5436dfad0",
+                            Id = "102eb830-42ae-45c4-a32c-f6c49bf994da",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3a681e71-a0e8-470f-a8b1-6e74823539a3",
+                            ConcurrencyStamp = "3c8a7d5f-13d5-4ec6-9819-c265d687b20f",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGAqbhHDAPyoJUlcQZ0Tu/PgmOAEursiwmbPHAckf6te301SZXWk76HrEwOrNOFdDw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDsnb0htw8c/7/2fLh3kGsJrgmbp/Xn3dEqIPOmpF+qJHtNy3VKsVsBMUlA8eII4yw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7ccc195d-0732-4f6a-a94c-c03e6f42f3c7",
-                            TotalDiskSpace = 2147483647,
+                            SecurityStamp = "7d08e759-5d5c-45f6-a13c-78e747ec343d",
+                            TotalDiskSpace = 18446744073709551615m,
                             TwoFactorEnabled = false,
-                            UsedDiskSpace = -2147483648,
+                            UsedDiskSpace = 0m,
                             UserName = "admin@admin.com"
                         });
                 });
@@ -272,6 +272,27 @@ namespace DataDrive.DAO.Migrations
                     b.ToTable("MessageThreadParticipants");
                 });
 
+            modelBuilder.Entity("DataDrive.DAO.Models.SystemConfig", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TotalDiskSpaceForNewUser")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SystemConfigs");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("775ff964-9840-4b41-81c6-493921dceeec"),
+                            TotalDiskSpaceForNewUser = 1000000m
+                        });
+                });
+
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
@@ -383,8 +404,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d3cba9f8-a524-4324-84d5-12460b031eb0",
-                            ConcurrencyStamp = "2f8aae5c-0066-4112-8568-92331eb6a85e",
+                            Id = "f43bf214-a574-4d9a-835b-5d50c364b2e4",
+                            ConcurrencyStamp = "9f4440cc-f4b1-44f1-8a12-e68ea53360aa",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -479,8 +500,8 @@ namespace DataDrive.DAO.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "610eee7c-4fcd-425b-ac69-3fa5436dfad0",
-                            RoleId = "d3cba9f8-a524-4324-84d5-12460b031eb0"
+                            UserId = "102eb830-42ae-45c4-a32c-f6c49bf994da",
+                            RoleId = "f43bf214-a574-4d9a-835b-5d50c364b2e4"
                         });
                 });
 

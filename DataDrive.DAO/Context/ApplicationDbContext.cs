@@ -31,6 +31,8 @@ namespace DataDrive.DAO.Context
         public DbSet<Message> Messages { get; set; }
         public DbSet<MessageReadState> MessageReadStates { get; set; }
 
+        public DbSet<SystemConfig> SystemConfigs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -78,8 +80,8 @@ namespace DataDrive.DAO.Context
                     NormalizedUserName = "ADMIN@ADMIN.COM",
                     EmailConfirmed = true,
                     PasswordHash = passwordHasher.HashPassword(null, "zaq1@WSX"),
-                    TotalDiskSpace = int.MaxValue,
-                    UsedDiskSpace = int.MinValue
+                    TotalDiskSpace = ulong.MaxValue,
+                    UsedDiskSpace = ulong.MinValue
                 });
 
             builder.Entity<IdentityUserRole<string>>()
@@ -90,6 +92,14 @@ namespace DataDrive.DAO.Context
                         UserId = adminID
                     }
                 );
+
+            builder.Entity<SystemConfig>()
+                .HasData(
+                new SystemConfig
+                {
+                    ID = Guid.NewGuid(),
+                    TotalDiskSpaceForNewUser = 1000000
+                });
         }
     }
 }

@@ -57,6 +57,12 @@
     <Compile Remove="Migrations\20191208201045_m010.Designer.cs" />
     <Compile Remove="Migrations\20200127181144_m002.cs" />
     <Compile Remove="Migrations\20200127181144_m002.Designer.cs" />
+    <Compile Remove="Migrations\20200127181455_m002.cs" />
+    <Compile Remove="Migrations\20200127181455_m002.Designer.cs" />
+    <Compile Remove="Migrations\20200127181722_m003.cs" />
+    <Compile Remove="Migrations\20200127181722_m003.Designer.cs" />
+    <Compile Remove="Migrations\20200127182610_m003.cs" />
+    <Compile Remove="Migrations\20200127182610_m003.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
