@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,14 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DataDrive.Pages.AdminPanel
+namespace DataDrive.Areas.Identity.Pages.Account.Manage
 {
     [Authorize(Roles = "admin")]
-    public class IndexModel : PageModel
+    public class AdminPanelModel : PageModel
     {
         public void OnGet()
         {
-            
         }
     }
 }
