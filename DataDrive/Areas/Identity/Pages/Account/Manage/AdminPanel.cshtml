@@ -12,7 +12,7 @@
         <p>
             <strong>System settings:</strong>
 
-            Total disk space for new user: @Model.SystemConfig.TotalDiskSpaceForNewUser
+            Total disk space for new user: @Model.SystemConfigOut.GetBytesWithUnit()
         </p>
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -22,7 +22,7 @@
                 <span asp-validation-for="SystemConfigInput.TotalDiskSpaceForNewUser" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for="SystemConfigInput.DiskSpaceUnit" asp-items="Html.GetEnumSelectList<AdminPanelModel.SystemConfigInputModel.Unit>()">
+                <select asp-for="SystemConfigInput.DiskSpaceUnit" asp-items="Html.GetEnumSelectList<AdminPanelModel.Unit>()">
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>

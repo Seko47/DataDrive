@@ -22,7 +22,7 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
             _databaseContext = databaseContext;
         }
 
-        public SystemConfig SystemConfig { get; set; }
+        public SystemConfigOutputModel SystemConfigOut { get; set; }
         public List<ResourceAbstract> ReportedFiles { get; set; }
 
         [BindProperty]
@@ -30,8 +30,13 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
 
         public void OnGet()
         {
-            SystemConfig = _databaseContext.SystemConfigs
+            SystemConfig systemConfig = _databaseContext.SystemConfigs
                 .First();
+
+            SystemConfigOut = new SystemConfigOutputModel
+            {
+                TotalDiskSpaceForNewUser = systemConfig.TotalDiskSpaceForNewUser
+            };
 
             ReportedFiles = _databaseContext.ResourceAbstracts
                 .Where(_ => _.NumberOfReports > 0)
@@ -67,15 +72,62 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
             {
                 return TotalDiskSpaceForNewUser * (ulong)DiskSpaceUnit;
             }
+        }
 
-            public enum Unit : ulong
+        public class SystemConfigOutputModel
+        {
+            private ulong totalDiskSpaceForNewUser;
+
+            public ulong TotalDiskSpaceForNewUser
             {
-                Bytes = 1,
-                kB = 1000,
-                MB = 1000000,
-                GB = 1000000000,
-                TB = 1000000000000
+                get => totalDiskSpaceForNewUser;
+
+                set
+                {
+                    totalDiskSpaceForNewUser = value;
+
+                    if (totalDiskSpaceForNewUser % (ulong)Unit.TB == 0)
+                    {
+                        DiskSpaceUnit = Unit.TB;
+                        totalDiskSpaceForNewUser /= (ulong)Unit.TB;
+                    }
+                    else if (totalDiskSpaceForNewUser % (ulong)Unit.GB == 0)
+                    {
+                        DiskSpaceUnit = Unit.GB;
+                        totalDiskSpaceForNewUser /= (ulong)Unit.GB;
+                    }
+                    else if (totalDiskSpaceForNewUser % (ulong)Unit.MB == 0)
+                    {
+                        DiskSpaceUnit = Unit.MB;
+                        totalDiskSpaceForNewUser /= (ulong)Unit.MB;
+                    }
+                    else if (totalDiskSpaceForNewUser % (ulong)Unit.kB == 0)
+                    {
+                        DiskSpaceUnit = Unit.kB;
+                        totalDiskSpaceForNewUser /= (ulong)Unit.kB;
+                    }
+                    else
+                    {
+                        DiskSpaceUnit = Unit.Bytes;
+                    }
+                }
             }
+
+            public Unit DiskSpaceUnit { get; set; }
+
+            public string GetBytesWithUnit()
+            {
+                return $"{TotalDiskSpaceForNewUser} {DiskSpaceUnit.ToString()}";
+            }
+        }
+
+        public enum Unit : ulong
+        {
+            Bytes = 1,
+            kB = 1000,
+            MB = 1000000,
+            GB = 1000000000,
+            TB = 1000000000000
         }
     }
 }
