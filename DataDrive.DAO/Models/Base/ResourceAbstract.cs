@@ -16,6 +16,8 @@ namespace DataDrive.DAO.Models.Base
 
         public ResourceType ResourceType { get; set; }
 
+        public int NumberOfReports { get; set; }
+
         public bool IsShared { get; set; }
         public bool IsSharedForEveryone { get; set; }
         public bool IsSharedForUsers { get; set; }
