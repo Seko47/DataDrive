@@ -11,5 +11,10 @@ namespace DataDrive.DAO.Models
         public virtual List<ResourceAbstract> Files { get; set; }
         public virtual List<ShareAbstract> SharedOwn { get; set; }
         public virtual List<ShareForUser> SharedForUser { get; set; }
+
+        public ulong FreeDiskSpace
+        {
+            get => TotalDiskSpace - UsedDiskSpace;
+        }
     }
 }

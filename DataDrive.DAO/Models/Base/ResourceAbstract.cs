@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DataDrive.DAO.Models.Base
 {
-    public class ResourceAbstract : IBaseModel
+    public abstract class ResourceAbstract : IBaseModel
     {
         public Guid ID { get; set; }
         public DateTime CreatedDateTime { get; set; }

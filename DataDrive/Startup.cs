@@ -15,6 +15,10 @@ using System;
 
 namespace DataDrive
 {
+    //TODO wgranie pliku zajmuje miejsce, usuniêcie pliku zwalnia miejsce
+    //TODO jeœli nie ma miejsca wyœwietl komunikat
+    //TODO wyœwietl iloœæ wolnego i zajêtego miejsca
+    //TODO system zg³oszeñ dla udostêpnionych zasobów
     public class Startup
     {
         public Startup(IConfiguration configuration)

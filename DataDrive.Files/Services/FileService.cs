@@ -346,9 +346,9 @@ namespace DataDrive.Files.Services
 
         public async Task<StatusCode<List<FileUploadResult>>> PostByUser(FilePost filePost, string username)
         {
-            string userId = (await _databaseContext.Users
-                .FirstOrDefaultAsync(_ => _.UserName == username))?
-                .Id;
+            ApplicationUser user = await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username);
+            string userId = user?.Id;
 
             Directory directory = await _databaseContext.Directories
                 .FirstOrDefaultAsync(_ => _.ID == filePost.ParentDirectoryID && _.OwnerID == userId);
@@ -376,6 +376,12 @@ namespace DataDrive.Files.Services
 
                 foreach (IFormFile file in filePost.Files)
                 {
+                    if(user.FreeDiskSpace < (ulong)file.Length)
+                    {
+                        result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length, Message = "NOT_ENOUGHT_SPACE" });
+                        continue;
+                    }
+
                     DateTime actualTime = DateTime.Now;
                     string fileName = actualTime.Year + actualTime.Month + actualTime.Day + "_" + actualTime.Hour + actualTime.Minute + actualTime.Second + "_" + Guid.NewGuid().ToString();
                     string pathToNewFile = System.IO.Path.Combine(pathToUploadDirectory, fileName);
@@ -394,9 +400,11 @@ namespace DataDrive.Files.Services
                     };
 
                     await _databaseContext.Files.AddAsync(newFile);
+
+                    user.UsedDiskSpace += (ulong)file.Length;
                     await _databaseContext.SaveChangesAsync();
 
-                    result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length });
+                    result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length, Message = "UPLOADED" });
 
                     fileStream.Close();
                 }
