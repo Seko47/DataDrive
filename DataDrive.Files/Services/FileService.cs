@@ -59,7 +59,8 @@ namespace DataDrive.Files.Services
 
         public async Task<StatusCode<DirectoryOut>> DeleteByIdAndUser(Guid id, string username)
         {
-            string userId = (await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username))?.Id;
+            ApplicationUser user = await _databaseContext.Users.FirstOrDefaultAsync(_ => _.UserName == username);
+            string userId = user?.Id;
 
             ResourceAbstract fileAbstractToDelete = await _databaseContext.ResourceAbstracts
                 .FirstOrDefaultAsync(_ => _.ID == id && _.OwnerID == userId);
@@ -86,7 +87,7 @@ namespace DataDrive.Files.Services
                 {
                     return new StatusCode<DirectoryOut>(StatusCodes.Status400BadRequest, StatusMessages.CANNOT_DELETE_FILE);
                 }
-
+                user.UsedDiskSpace -= fileToDelete.FileSizeBytes;
                 _databaseContext.Files.Remove(fileToDelete);
                 await _databaseContext.SaveChangesAsync();
             }
@@ -396,7 +397,8 @@ namespace DataDrive.Files.Services
                         Name = file.FileName,
                         OwnerID = userId,
                         ParentDirectoryID = filePost.ParentDirectoryID,
-                        Path = pathToNewFile
+                        Path = pathToNewFile,
+                        FileSizeBytes = (ulong)file.Length
                     };
 
                     await _databaseContext.Files.AddAsync(newFile);
