@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 import { DirectoryOut } from '../../models/directory-out';
 import { CreateDirectoryPost } from '../../models/create-directory-post';
 import { MatMenu } from '@angular/material/menu';
@@ -21,6 +21,7 @@ export class ToolbarComponent implements OnInit {
     @Output() onGetFileInfo = new EventEmitter<string>();
 
     @ViewChild("createDirectoryMenu", null) createDirectoryMenu: MatMenu;
+    @ViewChild("file", null) fileInputElement: ElementRef;
 
     public newDirectory: CreateDirectoryPost;
     public createDirectoryDialogRef: MatDialogRef<CreateDirectoryDialogComponent>;
@@ -63,6 +64,11 @@ export class ToolbarComponent implements OnInit {
         }
 
         this.onFilesUpload.emit(files);
+    }
+
+    public resetFileInput() {
+
+        this.fileInputElement.nativeElement.value = "";
     }
 
     public createDirectory() {

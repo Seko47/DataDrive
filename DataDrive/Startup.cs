@@ -15,7 +15,6 @@ using System;
 
 namespace DataDrive
 {
-    //TODO przy próbie wgrania 2 razy pod rz¹d tego samego pliku, plik nie zostaje wgrany (problem frontend)
     //TODO jeœli nie ma miejsca wyœwietl komunikat
     //TODO wyœwietl iloœæ wolnego i zajêtego miejsca
     //TODO system zg³oszeñ dla udostêpnionych zasobów
