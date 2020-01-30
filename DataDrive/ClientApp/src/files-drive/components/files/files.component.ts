@@ -13,6 +13,8 @@ import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { filter } from 'rxjs/operators';
 import { ShareResourceDialogComponent } from '../../../share-drive/components/share-resource-dialog/share-resource-dialog.component';
+import { SnackBarService } from '../../../shared/services/services/snack-bar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'drive-files',
@@ -27,10 +29,11 @@ export class FilesComponent implements OnInit, OnDestroy {
     @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
-    public progress: number;
+    public progress: number = -1;
     public message: string;
 
-    constructor(private dialog: MatDialog, private filesService: FilesService, private filesEventService: EventService) {
+    constructor(private snackBarService: SnackBarService, private dialog: MatDialog, private filesService: FilesService, private filesEventService: EventService,
+        private translate: TranslateService) {
 
         this.actualDirectory = new DirectoryOut();
         this.actualDirectory.id = null;
@@ -151,25 +154,44 @@ export class FilesComponent implements OnInit, OnDestroy {
                 formData.append('files[]', files[i], files[i].name);
         }
 
-        let loading = true;
+        this.progress = 0;
 
         this.filesService.uploadFiles(formData).
-            subscribe(result => {
+            subscribe((result: any) => {
                 if (result.type === HttpEventType.UploadProgress) {
                     this.message = "";
                     this.progress = Math.round(100 * result.loaded / result.total);
                 }
                 else {
+                    if (result && result.body) {
 
-                    this.message = "Uploaded";
-                    this.progress = 0;
-                    loading = false;
+                        let index = 0;
+
+                        this.snackBarService.openSnackBar(result.body[index].name + " | " + ((result.body[index].message === "UPLOADED") ? this.translate.instant('FILES.UPLOAD_FILE.UPLOADED') : (result.body[index].message === "NOT_ENOUGHT_SPACE") ? this.translate.instant('FILES.UPLOAD_FILE.NOT_ENOUGHT_SPACE') : this.translate.instant('FILES.UPLOAD_FILE.SOMETHING_WENT_WRONG')), "X", 2000);
+                        const uploadMessageInterval = setInterval(() => {
+
+                            ++index;
+                            if (index < result.body.length) {
+
+                                this.snackBarService.openSnackBar(result.body[index].name + " | " + ((result.body[index].message === "UPLOADED") ? this.translate.instant('FILES.UPLOAD_FILE.UPLOADED') : (result.body[index].message === "NOT_ENOUGHT_SPACE") ? this.translate.instant('FILES.UPLOAD_FILE.NOT_ENOUGHT_SPACE') : this.translate.instant('FILES.UPLOAD_FILE.SOMETHING_WENT_WRONG')), "X", 2000);
+                            }
+                            else {
+
+                                clearInterval(uploadMessageInterval);
+                            }
+                        }, 2500);
+
+                    }
+                    if (this.progress == 100) {
+
+                        this.progress = -1;
+                    }
                     this.getFromDirectory(this.actualDirectory.id);
                 }
             },
                 err => {
                     alert("err: " + err.error);
-                    loading = false;
+                    this.progress = -1;
                 });
     }
 

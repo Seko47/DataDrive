@@ -14,6 +14,7 @@ import { filter } from 'rxjs/operators';
 export class ToolbarComponent implements OnInit {
 
     @Input() actualDirectory: DirectoryOut;
+    @Input() uploadProgress: number;
 
     @Output() onGetParentDirectory = new EventEmitter<string>();
     @Output() onFilesUpload = new EventEmitter<File[]>();

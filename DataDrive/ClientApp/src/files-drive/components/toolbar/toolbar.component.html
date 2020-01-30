@@ -33,7 +33,7 @@
 
         <li>
 
-          <label>
+          <label *ngIf="uploadProgress < 0">
 
             <input #file
                    type="file"
@@ -45,6 +45,16 @@
             <a mat-icon-button>
 
               <mat-icon>cloud_upload</mat-icon>
+            </a>
+
+          </label>
+
+          <label *ngIf="uploadProgress >= 0 && uploadProgress < 100">
+
+            <a mat-icon-button>
+
+              <mat-icon matBadge="{{ uploadProgress }}"
+                        matBadgeColor="accent">cloud_upload</mat-icon>
             </a>
 
           </label>

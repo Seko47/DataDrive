@@ -2,7 +2,8 @@
                      (onGetParentDirectory)="getFromDirectory($event)"
                      (onFilesUpload)="uploadFiles($event)"
                      (onDirectoryCreated)="createDirectory($event)"
-                     (onGetFileInfo)="getFileInfo($event)"></drive-files-toolbar>
+                     (onGetFileInfo)="getFileInfo($event)"
+                     [uploadProgress]="progress"></drive-files-toolbar>
 
 <div>
   <div style="position: absolute;
@@ -16,18 +17,6 @@
     </p>
 
   </div>
-
-  <span style="font-weight:bold;color:green;"
-        *ngIf="progress > 0 && progress < 100">
-
-    {{progress}}%
-  </span>
-
-  <span style="font-weight:bold;color:green;"
-        *ngIf="message">
-
-    {{message}}
-  </span>
 
   <mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
 
