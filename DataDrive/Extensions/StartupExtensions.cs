@@ -3,6 +3,7 @@ using DataDrive.DAO.Models;
 using DataDrive.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -56,6 +57,15 @@ namespace DataDrive.Extensions
                 var xmlPath = ConfigurationPath.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
                 */
+            });
+        }
+
+        public static void ConfigureMultipartBodyLength(this IServiceCollection services)
+        {
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = long.MaxValue;
             });
         }
 
