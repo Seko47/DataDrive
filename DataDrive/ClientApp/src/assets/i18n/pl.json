@@ -42,6 +42,11 @@
 			"TITLE": "Udostępnianie",
 			"TOKEN_SHARING_FORM": "Przełącz udostępnianie linku",
 			"URL_TO_SHARE": "Link do udostępniania"
+		},
+		"UPLOAD_FILE": {
+			"NOT_ENOUGHT_SPACE": "Plik jest za duży. Zwolnij miejsce na dysku.",
+			"SOMETHING_WENT_WRONG": "Coś poszło nie tak. Spróbuj jeszcze raz.",
+			"UPLOADED": "Przesłany"
 		}
 	},
 	"LANGUAGE": {
@@ -99,6 +104,10 @@
 	"SHARED_FILES": {
 		"SHARED_FILES_NOT_FOUND": "Nie ma plików udostępnionych dla Ciebie",
 		"TITLE": "Pliki udostępnione dla Ciebie"
+	},
+	"SHARED_NOTES": {
+		"SHARED_NOTES_NOT_FOUND": "Nie ma notatek udostępnionych dla Ciebie",
+		"TITLE": "Notatki udostępnione dla Ciebie"
 	},
 	"SHARES": {
 		"CREATED": "Udostępniono",

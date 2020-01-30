@@ -42,6 +42,11 @@
 			"TITLE": "Sharing",
 			"TOKEN_SHARING_FORM": "Toggle link sharing",
 			"URL_TO_SHARE": "Link to sharing"
+		},
+		"UPLOAD_FILE": {
+			"NOT_ENOUGHT_SPACE": "The file is too big. Free up disk space.",
+			"SOMETHING_WENT_WRONG": "Something went wrong. Try again.",
+			"UPLOADED": "Uploaded"
 		}
 	},
 	"LANGUAGE": {
@@ -99,6 +104,10 @@
 	"SHARED_FILES": {
 		"SHARED_FILES_NOT_FOUND": "There are no files shared for you",
 		"TITLE": "Files shared with you"
+	},
+	"SHARED_NOTES": {
+		"SHARED_NOTES_NOT_FOUND": "There are no notes shared for you",
+		"TITLE": "Notes shared with you"
 	},
 	"SHARES": {
 		"CREATED": "Made available",
