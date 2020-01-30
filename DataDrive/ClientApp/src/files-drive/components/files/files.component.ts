@@ -8,7 +8,7 @@ import { Operation, compare } from 'fast-json-patch';
 import { FileMove } from '../../models/file-move';
 import { saveAs } from 'file-saver';
 import { EventService, EventCode } from '../../services/files-event.service';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpEventType } from '@angular/common/http';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { filter } from 'rxjs/operators';
@@ -27,7 +27,8 @@ export class FilesComponent implements OnInit, OnDestroy {
     @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
     public changeFileNameDialogRef: MatDialogRef<ChangeFileNameDialogComponent>;
-
+    public progress: number;
+    public message: string;
 
     constructor(private dialog: MatDialog, private filesService: FilesService, private filesEventService: EventService) {
 
@@ -154,8 +155,17 @@ export class FilesComponent implements OnInit, OnDestroy {
 
         this.filesService.uploadFiles(formData).
             subscribe(result => {
-                loading = false;
-                this.getFromDirectory(this.actualDirectory.id);
+                if (result.type === HttpEventType.UploadProgress) {
+                    this.message = "";
+                    this.progress = Math.round(100 * result.loaded / result.total);
+                }
+                else {
+
+                    this.message = "Uploaded";
+                    this.progress = 0;
+                    loading = false;
+                    this.getFromDirectory(this.actualDirectory.id);
+                }
             },
                 err => {
                     alert("err: " + err.error);

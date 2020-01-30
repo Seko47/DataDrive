@@ -17,6 +17,18 @@
 
   </div>
 
+  <span style="font-weight:bold;color:green;"
+        *ngIf="progress > 0 && progress < 100">
+
+    {{progress}}%
+  </span>
+
+  <span style="font-weight:bold;color:green;"
+        *ngIf="message">
+
+    {{message}}
+  </span>
+
   <mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
 
     <mat-sidenav-content style="height: 76vh;">

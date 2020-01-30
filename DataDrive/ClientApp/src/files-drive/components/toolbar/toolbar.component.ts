@@ -26,9 +26,6 @@ export class ToolbarComponent implements OnInit {
     public newDirectory: CreateDirectoryPost;
     public createDirectoryDialogRef: MatDialogRef<CreateDirectoryDialogComponent>;
 
-    public progress: number;
-    public message: string;
-
     constructor(private createDirectoryDialog: MatDialog) {
 
         this.newDirectory = new CreateDirectoryPost();

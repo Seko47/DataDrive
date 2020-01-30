@@ -6,6 +6,7 @@ using DataDrive.Notes.Services;
 using DataDrive.Share.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +42,12 @@ namespace DataDrive
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();
+
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = long.MaxValue;
+            });
 
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
