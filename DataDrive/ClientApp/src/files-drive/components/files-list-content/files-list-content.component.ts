@@ -4,6 +4,7 @@ import { FileOut, ResourceType } from '../../models/file-out';
 import { FileMove } from '../../models/file-move';
 import { Operation, compare } from 'fast-json-patch';
 import { EventService, EventCode } from '../../services/files-event.service';
+import { UserDiskSpace } from '../../models/user-disk-space';
 
 @Component({
     selector: 'drive-files-list-content',
@@ -13,6 +14,7 @@ import { EventService, EventCode } from '../../services/files-event.service';
 export class FilesListContentComponent implements OnInit {
 
     @Input() actualDirectory: DirectoryOut;
+    @Input() userDiskSpace: UserDiskSpace;
 
     @Output() onFileClick = new EventEmitter<FileOut>();
 

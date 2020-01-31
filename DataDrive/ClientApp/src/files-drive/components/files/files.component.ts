@@ -8,13 +8,14 @@ import { Operation, compare } from 'fast-json-patch';
 import { FileMove } from '../../models/file-move';
 import { saveAs } from 'file-saver';
 import { EventService, EventCode } from '../../services/files-event.service';
-import { HttpResponse, HttpEventType } from '@angular/common/http';
+import { HttpResponse, HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ChangeFileNameDialogComponent } from '../change-file-name-dialog/change-file-name-dialog.component';
 import { filter } from 'rxjs/operators';
 import { ShareResourceDialogComponent } from '../../../share-drive/components/share-resource-dialog/share-resource-dialog.component';
 import { SnackBarService } from '../../../shared/services/services/snack-bar.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UserDiskSpace } from '../../models/user-disk-space';
 
 @Component({
     selector: 'drive-files',
@@ -25,6 +26,7 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     public actualDirectory: DirectoryOut;
     public actualFile: FileOut;
+    public userDiskSpace: UserDiskSpace;
 
     @ViewChild('fileinfosidenav', null) fileinfosidenav: MatSidenav;
 
@@ -40,6 +42,8 @@ export class FilesComponent implements OnInit, OnDestroy {
         this.actualDirectory.name = "Root";
 
         this.actualFile = new FileOut();
+
+        this.getUserDiskSpace();
     }
 
     ngOnInit() {
@@ -135,6 +139,8 @@ export class FilesComponent implements OnInit, OnDestroy {
                 if (this.fileinfosidenav) {
                     this.fileinfosidenav.close();
                 }
+
+                this.getUserDiskSpace();
                 this.actualDirectory = result;
             }, err => alert(err.error));
     }
@@ -316,5 +322,18 @@ export class FilesComponent implements OnInit, OnDestroy {
                     this.getFromDirectory(this.actualDirectory.id);
                 }, err => alert(err.error));
         }
+    }
+
+    public getUserDiskSpace() {
+
+        this.filesService.getUserDiskSpace()
+            .subscribe((result: UserDiskSpace) => {
+
+                this.userDiskSpace = result;
+
+            }, (error: HttpErrorResponse) => {
+
+                console.log(error.error);
+            });
     }
 }

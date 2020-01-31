@@ -6,6 +6,7 @@ import { DirectoryOut } from '../models/directory-out';
 import { CreateDirectoryPost } from '../models/create-directory-post';
 import { FileUploadResult } from '../models/file-upload-result';
 import { Operation } from 'fast-json-patch';
+import { UserDiskSpace } from '../models/user-disk-space';
 
 
 @Injectable({
@@ -58,5 +59,10 @@ export class FilesService {
     public downloadFile(id: string) {
         return this.httpClient.get(this.baseUrl + 'api/Files/download/' + id,
             { observe: "response", responseType: 'blob' });
+    }
+
+    public getUserDiskSpace() {
+
+        return this.httpClient.get<UserDiskSpace>(this.baseUrl + 'api/Files/user/disk/space');
     }
 }

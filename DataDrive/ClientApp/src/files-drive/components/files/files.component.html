@@ -19,17 +19,14 @@
   </div>
 
   <mat-sidenav-container *ngIf="actualDirectory && actualDirectory.files">
-
     <mat-sidenav-content style="height: 76vh;">
-
       <drive-files-list-content [actualDirectory]="actualDirectory"
+                                [userDiskSpace]="userDiskSpace"
                                 (onFileClick)="onFileClick($event)"
                                 (onFileMove)="onFileMove($event)"></drive-files-list-content>
     </mat-sidenav-content>
-
     <mat-sidenav #fileinfosidenav
                  position="end">
-
       <drive-files-list-sidenav [actualFile]="actualFile"></drive-files-list-sidenav>
     </mat-sidenav>
   </mat-sidenav-container>

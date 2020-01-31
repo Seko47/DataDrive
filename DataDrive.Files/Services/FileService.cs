@@ -146,7 +146,7 @@ namespace DataDrive.Files.Services
                 .Include(_ => _.ShareEveryone)
                 .Include(_ => _.ShareForUsers)
                 .FirstOrDefaultAsync(_ => _.ID == id);
-            
+
             if (fileToDownload == null)
             {
                 return new StatusCode<DownloadFileInfo>(StatusCodes.Status404NotFound, $"File {id} not found");
@@ -301,7 +301,7 @@ namespace DataDrive.Files.Services
             else
             {
                 List<ResourceAbstract> files = await _databaseContext.ResourceAbstracts
-                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId 
+                    .Where(_ => _.ParentDirectoryID == id && _.OwnerID == userId
                         && (_.ResourceType == ResourceType.DIRECTORY || _.ResourceType == ResourceType.FILE))
                     .ToListAsync();
 
@@ -377,7 +377,7 @@ namespace DataDrive.Files.Services
 
                 foreach (IFormFile file in filePost.Files)
                 {
-                    if(user.FreeDiskSpace < (ulong)file.Length)
+                    if (user.FreeDiskSpace < (ulong)file.Length)
                     {
                         result.Add(new FileUploadResult { Name = file.FileName, Length = file.Length, Message = "NOT_ENOUGHT_SPACE" });
                         continue;
@@ -418,6 +418,26 @@ namespace DataDrive.Files.Services
                 return new StatusCode<List<FileUploadResult>>(StatusCodes.Status500InternalServerError, StatusMessages.FAILED_TO_SAVE_FILES);
             }
 
+        }
+
+        public async Task<StatusCode<UserDiskSpace>> GetUserDiskSpace(string username)
+        {
+            ApplicationUser user = await _databaseContext.Users
+                .FirstOrDefaultAsync(_ => _.UserName == username);
+
+            if (user != null)
+            {
+                UserDiskSpace userDiskSpace = new UserDiskSpace
+                {
+                    Free = user.FreeDiskSpace,
+                    Used = user.UsedDiskSpace,
+                    Total = user.TotalDiskSpace
+                };
+
+                return new StatusCode<UserDiskSpace>(StatusCodes.Status200OK, userDiskSpace);
+            }
+
+            return new StatusCode<UserDiskSpace>(StatusCodes.Status400BadRequest);
         }
     }
 }

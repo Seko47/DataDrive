@@ -9,6 +9,7 @@ using DataDrive.DAO.Models.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using static DataDrive.Files.Models.Out.UserDiskSpace;
 
 namespace DataDrive.Areas.Identity.Pages.Account.Manage
 {
@@ -76,9 +77,9 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
 
         public class SystemConfigOutputModel
         {
-            private ulong totalDiskSpaceForNewUser;
+            private double totalDiskSpaceForNewUser;
 
-            public ulong TotalDiskSpaceForNewUser
+            public double TotalDiskSpaceForNewUser
             {
                 get => totalDiskSpaceForNewUser;
 
@@ -86,29 +87,29 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
                 {
                     totalDiskSpaceForNewUser = value;
 
-                    if (totalDiskSpaceForNewUser % (ulong)Unit.TB == 0)
+                    if (totalDiskSpaceForNewUser >= (ulong)Unit.TB)
                     {
                         DiskSpaceUnit = Unit.TB;
                         totalDiskSpaceForNewUser /= (ulong)Unit.TB;
                     }
-                    else if (totalDiskSpaceForNewUser % (ulong)Unit.GB == 0)
+                    else if (totalDiskSpaceForNewUser >= (ulong)Unit.GB)
                     {
                         DiskSpaceUnit = Unit.GB;
                         totalDiskSpaceForNewUser /= (ulong)Unit.GB;
                     }
-                    else if (totalDiskSpaceForNewUser % (ulong)Unit.MB == 0)
+                    else if (totalDiskSpaceForNewUser >= (ulong)Unit.MB)
                     {
                         DiskSpaceUnit = Unit.MB;
                         totalDiskSpaceForNewUser /= (ulong)Unit.MB;
                     }
-                    else if (totalDiskSpaceForNewUser % (ulong)Unit.kB == 0)
+                    else if (totalDiskSpaceForNewUser >= (ulong)Unit.kB)
                     {
                         DiskSpaceUnit = Unit.kB;
                         totalDiskSpaceForNewUser /= (ulong)Unit.kB;
                     }
                     else
                     {
-                        DiskSpaceUnit = Unit.Bytes;
+                        DiskSpaceUnit = Unit.bytes;
                     }
                 }
             }
@@ -119,15 +120,6 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
             {
                 return $"{TotalDiskSpaceForNewUser} {DiskSpaceUnit.ToString()}";
             }
-        }
-
-        public enum Unit : ulong
-        {
-            Bytes = 1,
-            kB = 1000,
-            MB = 1000000,
-            GB = 1000000000,
-            TB = 1000000000000
         }
     }
 }

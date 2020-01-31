@@ -4,6 +4,7 @@
     ViewData["Title"] = "Admin Panel";
     ViewData["ActivePage"] = ManageNavPages.AdminPanel;
 }
+@using static DataDrive.Files.Models.Out.UserDiskSpace;
 
 <h4>@ViewData["Title"]</h4>
 
@@ -22,7 +23,7 @@
                 <span asp-validation-for="SystemConfigInput.TotalDiskSpaceForNewUser" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for="SystemConfigInput.DiskSpaceUnit" asp-items="Html.GetEnumSelectList<AdminPanelModel.Unit>()">
+                <select asp-for="SystemConfigInput.DiskSpaceUnit" asp-items="Html.GetEnumSelectList<Unit>()">
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>

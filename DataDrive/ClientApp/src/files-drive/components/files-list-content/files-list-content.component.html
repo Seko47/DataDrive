@@ -21,6 +21,15 @@
     </mat-card>
   </div>
 
+  <div class="col-10 ml-auto mr-auto"
+       mat-button
+       style="margin: 0; position: fixed; z-index: 999; left: 0; right: 0">
+
+    <mat-progress-bar mode="determinate" [value]="userDiskSpace.usedPercentage"></mat-progress-bar>
+
+    <p class="text-center">Wolne: {{ userDiskSpace.free }} {{ userDiskSpace.freeUnitString }} z {{ userDiskSpace.total }} {{ userDiskSpace.totalUnitString }}</p>
+  </div>
+
   <div class="col-12 ml-auto mr-auto"
        style="opacity: 0; margin: 0">
 

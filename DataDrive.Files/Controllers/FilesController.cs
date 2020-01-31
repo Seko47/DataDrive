@@ -176,5 +176,21 @@ namespace DataDrive.Files.Controllers
 
             return Ok(status.Body);
         }
+
+        [HttpGet("user/disk/space")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetUserDiskSpace()
+        {
+            StatusCode<UserDiskSpace> status = await _fileService.GetUserDiskSpace(_userManager.GetUserName(User));
+
+            if(status.Code == StatusCodes.Status400BadRequest)
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            return Ok(status.Body);
+        }
     }
 }

@@ -18,5 +18,6 @@ namespace DataDrive.Files.Services
         Task<StatusCode<List<FileUploadResult>>> PostByUser(FilePost filePost, string username);
         Task<StatusCode<DirectoryOut>> GetDirectoryByIdAndUser(Guid? id, string username);
         Task<StatusCode<DirectoryOut>> CreateDirectoryByUser(DirectoryPost directoryPost, string username);
+        Task<StatusCode<UserDiskSpace>> GetUserDiskSpace(string username);
     }
 }
