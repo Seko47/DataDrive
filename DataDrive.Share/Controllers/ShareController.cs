@@ -187,5 +187,21 @@ namespace DataDrive.Share.Controllers
 
             return Ok(new { Canceled = result });
         }
+
+        [HttpGet("report/{resourceId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> ReportResource(Guid resourceId)
+        {
+            bool reported = await _shareService.ReportResource(resourceId);
+
+            if(!reported)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
     }
 }

@@ -25,5 +25,6 @@ namespace DataDrive.Share.Services
         Task<StatusCode<List<ShareForUserOut>>> GetShareForUserByUserAndFilter(ShareFilter shareFilter, string username);
         Task<StatusCode<ShareForUserOut>> ShareForUser(ShareForUserIn shareForUserIn, string ownerUsername);
         Task<bool> CancelSharingForUser(Guid shareId, string ownerUsername);
+        Task<bool> ReportResource(Guid resourceId);
     }
 }

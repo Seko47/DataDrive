@@ -355,5 +355,22 @@ namespace DataDrive.Share.Services
 
             return token.ToUpper();
         }
+
+        public async Task<bool> ReportResource(Guid resourceId)
+        {
+            ResourceAbstract resource = await _databaseContext.ResourceAbstracts
+                .FirstOrDefaultAsync(_ => _.IsShared && _.ID == resourceId);
+
+            if(resource == null)
+            {
+                return false;
+            }
+
+            ++resource.NumberOfReports;
+
+            await _databaseContext.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
