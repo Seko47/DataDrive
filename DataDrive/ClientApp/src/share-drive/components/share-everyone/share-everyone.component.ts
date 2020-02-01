@@ -12,6 +12,9 @@ import { ShareEveryoneOut } from '../../models/share-everyone-out';
 import { NotesService } from '../../../notes-drive/services/notes.service';
 import { NoteOut } from '../../../notes-drive/models/note-out';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { SnackBarService } from '../../../shared/services/services/snack-bar.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ReportService } from '../../../shared/services/services/report.service';
 
 @Component({
     selector: 'app-share-everyone',
@@ -59,7 +62,7 @@ export class ShareEveryoneComponent implements OnInit {
         ]
     };
 
-    constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private notesService: NotesService, private sharesService: SharesService) {
+    constructor(private reportService: ReportService, private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private filesService: FilesService, private notesService: NotesService, private sharesService: SharesService) {
 
         this.token = this.route.snapshot.params.token;
 
@@ -217,6 +220,11 @@ export class ShareEveryoneComponent implements OnInit {
         });
 
         return dialogRef.afterClosed();
+    }
+
+    reportResource(resourceId: string) {
+
+        this.reportService.report(resourceId);
     }
 
 }

@@ -102,6 +102,10 @@
 		"TEXT_IS_NOT_SYSTEM_URL": "Ten kod nie został wygenerowany przez tą aplikację",
 		"YOU_HAVE_TO_GRANT_THE_CAMERA_PRIVILEGES": "Musisz przyznać uprawnienia do kamery"
 	},
+	"REPORT": {
+		"RESOURCE_ALREADY_REPORTED_BY_YOU": "Zasób już został przez Ciebie zgłoszony",
+		"RESOURCE_REPORTED": "Zasób został zgłoszony"
+	},
 	"SHARED_FILES": {
 		"SHARED_FILES_NOT_FOUND": "Nie ma plików udostępnionych dla Ciebie",
 		"TITLE": "Pliki udostępnione dla Ciebie"
