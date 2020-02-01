@@ -15,7 +15,6 @@ using System;
 
 namespace DataDrive
 {
-    //TODO wyœwietl iloœæ wolnego i zajêtego miejsca
     //TODO system zg³oszeñ dla udostêpnionych zasobów
     public class Startup
     {

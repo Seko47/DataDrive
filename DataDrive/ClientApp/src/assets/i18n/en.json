@@ -47,7 +47,8 @@
 			"NOT_ENOUGHT_SPACE": "The file is too big. Free up disk space.",
 			"SOMETHING_WENT_WRONG": "Something went wrong. Try again.",
 			"UPLOADED": "Uploaded"
-		}
+		},
+		"USER_DISK_SPACE": "Free: {{ freeSpace }} {{ freeSpaceUnit }} out of {{ totalSpace }} {{ totalSpaceUnit }}"
 	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",

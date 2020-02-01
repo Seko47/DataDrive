@@ -47,7 +47,8 @@
 			"NOT_ENOUGHT_SPACE": "Plik jest za duży. Zwolnij miejsce na dysku.",
 			"SOMETHING_WENT_WRONG": "Coś poszło nie tak. Spróbuj jeszcze raz.",
 			"UPLOADED": "Przesłany"
-		}
+		},
+		"USER_DISK_SPACE": "Wolne: {{ freeSpace }} {{ freeSpaceUnit }} z {{ totalSpace }} {{ totalSpaceUnit }}"
 	},
 	"LANGUAGE": {
 		"ENGLISH_SHORT": "en",

@@ -25,9 +25,9 @@
        mat-button
        style="margin: 0; position: fixed; z-index: 999; left: 0; right: 0">
 
-    <mat-progress-bar mode="determinate" [value]="userDiskSpace.usedPercentage"></mat-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="(userDiskSpace.used * userDiskSpace.usedUnit * 100) / (userDiskSpace.total * userDiskSpace.totalUnit)"></mat-progress-bar>
 
-    <p class="text-center">Wolne: {{ userDiskSpace.free }} {{ userDiskSpace.freeUnitString }} z {{ userDiskSpace.total }} {{ userDiskSpace.totalUnitString }}</p>
+    <p class="text-center">{{ 'FILES.USER_DISK_SPACE' | translate:{'freeSpace':userDiskSpace.free, 'freeSpaceUnit':userDiskSpace.freeUnitString, 'totalSpace':userDiskSpace.total, 'totalSpaceUnit':userDiskSpace.totalUnitString} }}</p>
   </div>
 
   <div class="col-12 ml-auto mr-auto"

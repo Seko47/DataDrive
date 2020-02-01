@@ -178,7 +178,6 @@ namespace DataDrive.Files.Services
                             {
                                 --share.DownloadLimit;
                                 await _databaseContext.SaveChangesAsync();
-                                //TODO sprawdź czy działa limit pobierania i dodaj jego obsługę do notatek
                             }
 
                             byte[] fileContent = System.IO.File.ReadAllBytes(fileToDownload.Path);

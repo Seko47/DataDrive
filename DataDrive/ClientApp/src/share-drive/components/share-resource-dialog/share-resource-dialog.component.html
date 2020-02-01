@@ -39,7 +39,8 @@
           <mat-datepicker #myDatepicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field class="col-sm-4 ml-auto mr-auto">
+        <mat-form-field *ngIf="data.resourceType === 0"
+                        class="col-sm-4 ml-auto mr-auto">
           <input matInput
                  style="width: 100%;"
                  type="number"
