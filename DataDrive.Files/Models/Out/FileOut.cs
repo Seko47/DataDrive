@@ -16,6 +16,8 @@ namespace DataDrive.Files.Models.Out
         public string Name { get; set; }
         public ResourceType ResourceType { get; set; }
 
+        public ulong FileSizeBytes { get; set; }
+
         public bool IsShared { get; set; }
         public bool IsSharedForEveryone { get; set; }
         public bool IsSharedForUsers { get; set; }

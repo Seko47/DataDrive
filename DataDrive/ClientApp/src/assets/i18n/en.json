@@ -43,6 +43,7 @@
 			"TOKEN_SHARING_FORM": "Toggle link sharing",
 			"URL_TO_SHARE": "Link to sharing"
 		},
+		"SIZE": "Size",
 		"UPLOAD_FILE": {
 			"NOT_ENOUGHT_SPACE": "The file is too big. Free up disk space.",
 			"SOMETHING_WENT_WRONG": "Something went wrong. Try again.",

@@ -244,7 +244,12 @@ namespace DataDrive.Files.Services
                            && (share.DownloadLimit == null
                                 || (share.DownloadLimit != null && share.DownloadLimit > 0)))
                         {
-                            return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
+                            FileOut result = _mapper.Map<FileOut>(fileAbstract);
+                            if(fileAbstract is File)
+                            {
+                                result.FileSizeBytes = (fileAbstract as File).FileSizeBytes;
+                            }
+                            return new StatusCode<FileOut>(StatusCodes.Status200OK, result);
                         }
                     }
                 }
@@ -257,7 +262,12 @@ namespace DataDrive.Files.Services
                         if (share.ExpirationDateTime == null
                             || (share.ExpirationDateTime != null && share.ExpirationDateTime >= DateTime.Now))
                         {
-                            return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
+                            FileOut result = _mapper.Map<FileOut>(fileAbstract);
+                            if (fileAbstract is File)
+                            {
+                                result.FileSizeBytes = (fileAbstract as File).FileSizeBytes;
+                            }
+                            return new StatusCode<FileOut>(StatusCodes.Status200OK, result);
                         }
                     }
                 }

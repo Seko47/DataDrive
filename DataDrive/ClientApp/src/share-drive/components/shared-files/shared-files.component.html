@@ -84,6 +84,12 @@
               {{ actualFile.name }}
             </h3>
 
+            <a mat-icon-button
+               (click)="reportResource(actualFile.id)">
+
+              <mat-icon class="ml-0 mr-auto">report_problem</mat-icon>
+            </a>
+
           </mat-toolbar-row>
         </mat-toolbar>
 
@@ -99,6 +105,20 @@
 
         </div>
         <hr />
+
+        <div class="row col-12">
+
+          <div class="col-sm-5 mr-auto ml-1">
+
+            {{ 'FILES.SIZE' | translate }}
+          </div>
+
+          <div class="col-sm-6 ml-auto mr-0"
+               style="text-align: right">
+
+            <b>{{ actualFile.fileSizeString }}</b>
+          </div>
+        </div>
 
         <div class="row col-12">
 

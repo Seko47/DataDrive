@@ -158,7 +158,9 @@
         {{ actualNote.title }}
       </h3>
 
-      <a>
+      <a mat-icon-button
+         (click)="reportResource(actualNote.id)">
+
         <mat-icon class="ml-0 mr-auto">report_problem</mat-icon>
       </a>
     </mat-toolbar-row>

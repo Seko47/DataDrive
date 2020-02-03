@@ -9,6 +9,8 @@ export class FileOut {
     public isShared: boolean;
     public isSharedForEveryone: boolean;
     public isSharedForUsers: boolean;
+    public fileSizeBytes: number;
+    public fileSizeString: string;
 }
 
 export enum ResourceType {

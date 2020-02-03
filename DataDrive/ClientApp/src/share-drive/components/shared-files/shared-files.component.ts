@@ -7,6 +7,8 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FilesService } from '../../../files-drive/services/files.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { saveAs } from 'file-saver';
+import { ReportService } from '../../../shared/services/services/report.service';
+import { Unit } from '../../../files-drive/models/user-disk-space';
 
 @Component({
     selector: 'app-shared-files',
@@ -21,7 +23,7 @@ export class SharedFilesComponent implements OnInit {
     public actualFile: FileOut;
     public actualFileShareInfo: ShareForUserOut;
 
-    constructor(private sharesService: SharesService, private filesService: FilesService) {
+    constructor(private reportService: ReportService, private sharesService: SharesService, private filesService: FilesService) {
 
         this.loadFiles();
     }
@@ -55,6 +57,7 @@ export class SharedFilesComponent implements OnInit {
             .subscribe(result => {
 
                 this.actualFile = result;
+                this.calcualateSize();
                 this.fileinfosidenav.toggle();
             }, (err: HttpErrorResponse) => alert(err.error));
     }
@@ -86,5 +89,35 @@ export class SharedFilesComponent implements OnInit {
 
                 saveAs(result.body, fileName);
             }, err => console.log(err.error));
+    }
+
+    reportResource(resourceId: string) {
+
+        this.reportService.report(resourceId);
+    }
+
+    calcualateSize() {
+
+        if (this.actualFile) {
+            if (this.actualFile.fileSizeBytes > Unit.TB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.TB) + " TB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.GB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.GB) + " GB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.MB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.MB) + " MB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.kB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.kB) + " kB";
+            }
+            else {
+                this.actualFile.fileSizeString = this.actualFile.fileSizeBytes + " byte";
+            }
+        }
     }
 }
