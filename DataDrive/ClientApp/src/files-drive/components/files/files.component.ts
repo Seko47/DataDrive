@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
 import { ShareResourceDialogComponent } from '../../../share-drive/components/share-resource-dialog/share-resource-dialog.component';
 import { SnackBarService } from '../../../shared/services/services/snack-bar.service';
 import { TranslateService } from '@ngx-translate/core';
-import { UserDiskSpace } from '../../models/user-disk-space';
+import { UserDiskSpace, Unit } from '../../models/user-disk-space';
 
 @Component({
     selector: 'drive-files',
@@ -224,6 +224,7 @@ export class FilesComponent implements OnInit, OnDestroy {
                 .subscribe(result => {
 
                     this.actualFile = result;
+                    this.calculateSize();
                 }, err => {
                     alert(err.error);
                 });
@@ -335,5 +336,30 @@ export class FilesComponent implements OnInit, OnDestroy {
 
                 console.log(error.error);
             });
+    }
+
+    calculateSize() {
+
+        if (this.actualFile) {
+            if (this.actualFile.fileSizeBytes > Unit.TB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.TB) + " TB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.GB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.GB) + " GB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.MB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.MB) + " MB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.kB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.kB) + " kB";
+            }
+            else {
+                this.actualFile.fileSizeString = this.actualFile.fileSizeBytes + " byte";
+            }
+        }
     }
 }

@@ -12,9 +12,8 @@ import { ShareEveryoneOut } from '../../models/share-everyone-out';
 import { NotesService } from '../../../notes-drive/services/notes.service';
 import { NoteOut } from '../../../notes-drive/models/note-out';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { SnackBarService } from '../../../shared/services/services/snack-bar.service';
-import { TranslateService } from '@ngx-translate/core';
 import { ReportService } from '../../../shared/services/services/report.service';
+import { Unit } from '../../../files-drive/models/user-disk-space';
 
 @Component({
     selector: 'app-share-everyone',
@@ -76,6 +75,7 @@ export class ShareEveryoneComponent implements OnInit {
         this.filesService.getFileInfo(fileId)
             .subscribe(result => {
                 this.actualFile = result;
+                this.calculateSize();
             }, (err: HttpErrorResponse) => {
                 switch (err.status) {
                     case 404: {
@@ -227,4 +227,28 @@ export class ShareEveryoneComponent implements OnInit {
         this.reportService.report(resourceId);
     }
 
+    calculateSize() {
+
+        if (this.actualFile) {
+            if (this.actualFile.fileSizeBytes > Unit.TB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.TB) + " TB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.GB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.GB) + " GB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.MB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.MB) + " MB";
+            }
+            else if (this.actualFile.fileSizeBytes > Unit.kB) {
+
+                this.actualFile.fileSizeString = (this.actualFile.fileSizeBytes / Unit.kB) + " kB";
+            }
+            else {
+                this.actualFile.fileSizeString = this.actualFile.fileSizeBytes + " byte";
+            }
+        }
+    }
 }

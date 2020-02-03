@@ -228,7 +228,12 @@ namespace DataDrive.Files.Services
 
             if (fileAbstract.OwnerID == userId)
             {
-                return new StatusCode<FileOut>(StatusCodes.Status200OK, _mapper.Map<FileOut>(fileAbstract));
+                FileOut result = _mapper.Map<FileOut>(fileAbstract);
+                if (fileAbstract is File)
+                {
+                    result.FileSizeBytes = (fileAbstract as File).FileSizeBytes;
+                }
+                return new StatusCode<FileOut>(StatusCodes.Status200OK, result);
             }
 
             if (fileAbstract.IsShared)
