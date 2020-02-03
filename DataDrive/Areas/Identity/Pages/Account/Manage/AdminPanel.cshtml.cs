@@ -9,6 +9,7 @@ using DataDrive.DAO.Models.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using static DataDrive.Files.Models.Out.UserDiskSpace;
 
 namespace DataDrive.Areas.Identity.Pages.Account.Manage
@@ -54,6 +55,38 @@ namespace DataDrive.Areas.Identity.Pages.Account.Manage
                 config.TotalDiskSpaceForNewUser = SystemConfigInput.GetBytes();
                 await _databaseContext.SaveChangesAsync();
             }
+
+            return RedirectToPage("AdminPanel");
+        }
+
+        public async Task<IActionResult> OnPostDelete(Guid id)
+        {
+            List<ShareAbstract> sharesToDelete = await _databaseContext.ShareAbstracts
+                .Where(_ => _.ResourceID == id)
+                .ToListAsync();
+
+            _databaseContext.ShareAbstracts
+                .RemoveRange(sharesToDelete);
+
+            ResourceAbstract resourceToDelete = await _databaseContext.ResourceAbstracts
+                .FirstOrDefaultAsync(_ => _.ID == id);
+
+            _databaseContext.ResourceAbstracts
+                .Remove(resourceToDelete);
+
+            await _databaseContext.SaveChangesAsync();
+
+            return RedirectToPage("AdminPanel");
+        }
+
+        public async Task<IActionResult> OnPostClear(Guid id)
+        {
+            ResourceAbstract resourceToClear = await _databaseContext.ResourceAbstracts
+                .FirstOrDefaultAsync(_ => _.ID == id);
+
+            resourceToClear.NumberOfReports = 0;
+
+            await _databaseContext.SaveChangesAsync();
 
             return RedirectToPage("AdminPanel");
         }

@@ -5,11 +5,12 @@
     ViewData["ActivePage"] = ManageNavPages.AdminPanel;
 }
 @using static DataDrive.Files.Models.Out.UserDiskSpace;
+@using DataDrive.DAO.Models.Base;
 
 <h4>@ViewData["Title"]</h4>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <p>
             <strong>System settings:</strong>
 
@@ -32,5 +33,44 @@
         <p>
             <strong>Reported files:</strong>
         </p>
+        <div class="row col-12">
+            <div class="col-6">
+                <b>Name</b>
+            </div>
+            <div class="col-4">
+                <b>Number of reports</b>
+            </div>
+            <div class="col-2">
+                <b>Action</b>
+            </div>
+        </div>
+
+        @foreach (ResourceAbstract resource in Model.ReportedFiles)
+        {
+            <div class="row col-12">
+                <div class="col-6">
+                    @resource.Name
+                </div>
+                <div class="col-4">
+                    @resource.NumberOfReports
+                </div>
+                <div class="col-1">
+                    <form method="post">
+                        <button class="btn btn-success" type="submit" asp-page-handler="Clear"
+                                asp-route-id="@resource.ID">
+                            V
+                        </button>
+                    </form>
+                </div>
+                <div class="col-1">
+                    <form method="post">
+                        <button class="btn btn-danger" type="submit" asp-page-handler="Delete"
+                                asp-route-id="@resource.ID">
+                            X
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
     </div>
 </div>

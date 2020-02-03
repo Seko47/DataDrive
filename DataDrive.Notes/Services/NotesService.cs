@@ -2,6 +2,7 @@
 using DataDrive.DAO.Context;
 using DataDrive.DAO.Helpers.Communication;
 using DataDrive.DAO.Models;
+using DataDrive.DAO.Models.Base;
 using DataDrive.Notes.Models.In;
 using DataDrive.Notes.Models.Out;
 using DataDrive.Share.Services;
@@ -38,6 +39,12 @@ namespace DataDrive.Notes.Services
             {
                 return new StatusCode<Guid>(StatusCodes.Status404NotFound, $"Note {noteId} not found");
             }
+
+            List<ShareAbstract> sharesToDelete = await _databaseContext.ShareAbstracts
+                .Where(_ => _.ResourceID == noteToDelete.ID)
+                .ToListAsync();
+
+            _databaseContext.ShareAbstracts.RemoveRange(sharesToDelete);
 
             _databaseContext.Notes.Remove(noteToDelete);
             await _databaseContext.SaveChangesAsync();

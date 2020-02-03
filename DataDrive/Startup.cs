@@ -15,8 +15,6 @@ using System;
 
 namespace DataDrive
 {
-    //TODO dodaj ikony zg³aszania we wszsytkich wymaganych miejscach
-    //TODO system zg³oszeñ dla udostêpnionych zasobów
     public class Startup
     {
         public Startup(IConfiguration configuration)

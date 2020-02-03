@@ -28,8 +28,12 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="wwwroot\uploads\files\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="wwwroot\uploads\files\**" />
+    <EmbeddedResource Remove="wwwroot\uploads\files\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="wwwroot\uploads\files\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -49,7 +53,6 @@
     <Folder Include="ClientApp\src\notes-drive\services\" />
     <Folder Include="ClientApp\src\share-drive\components\" />
     <Folder Include="ClientApp\src\share-drive\services\" />
-    <Folder Include="wwwroot\uploads\files\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
