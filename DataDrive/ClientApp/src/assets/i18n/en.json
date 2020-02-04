@@ -1,5 +1,21 @@
 {
 	"APP": {
+		"HOME": {
+			"CARD1": {
+				"TEXT": "Store photos, documents, drawings, recordings, videos and other files.",
+				"TITLE": "Store any files"
+			},
+			"CARD2": {
+				"TEXT": "You can view files from Drive on any smartphone, tablet or computer. Wherever you go, your files will always be at hand.",
+				"TITLE": "Use Drive from anywhere"
+			},
+			"CARD3": {
+				"TEXT": "You can easily allow other users to view or download selected files. You no longer need to send these materials in an e-mail attachment.",
+				"TITLE": "Share files and notes"
+			},
+			"FOOTER": "Use Drive for free",
+			"SUBTITLE": "All files on hand, wherever you are"
+		},
 		"NAME": "DataDrive"
 	},
 	"DIALOG": {

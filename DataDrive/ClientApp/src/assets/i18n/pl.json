@@ -1,5 +1,21 @@
 {
 	"APP": {
+		"HOME": {
+			"CARD1": {
+				"TEXT": "Przechowuj zdjęcia, dokumenty, rysunki, nagrania, filmy i inne pliki.",
+				"TITLE": "Przechowuj dowolne pliki"
+			},
+			"CARD2": {
+				"TEXT": "Pliki z Dysku możesz wyświetlić na dowolnym smartfonie, tablecie czy komputerze. Gdziekolwiek się wybierzesz, pliki zawsze będą pod ręką.",
+				"TITLE": "Korzystaj z Dysku z dowolnego miejsca"
+			},
+			"CARD3": {
+				"TEXT": "W prosty sposób możesz umożliwić innym użytkownikom wyświetlanie lub pobieranie wybranych plików. Nie musisz już wysyłać tych materiałów w załączniku do e-maila.",
+				"TITLE": "Udostępniaj pliki i notatki"
+			},
+			"FOOTER": "Korzystaj z Dysku za darmo",
+			"SUBTITLE": "Wszystkie pliki pod ręką, gdziekolwiek jesteś"
+		},
 		"NAME": "DataDrive"
 	},
 	"DIALOG": {

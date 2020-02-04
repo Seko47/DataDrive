@@ -204,7 +204,7 @@ export class FilesComponent implements OnInit, OnDestroy {
     public createDirectory(newDirectory: CreateDirectoryPost) {
         this.filesService.createDirectory(newDirectory)
             .subscribe(result => {
-                this.getFromDirectory(result);
+                this.getFromDirectory(this.actualDirectory.id);
             }, err => alert(err.error));
     }
 
