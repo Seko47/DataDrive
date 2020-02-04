@@ -45,7 +45,7 @@ namespace DataDrive.DAO.Migrations
             migrationBuilder.InsertData(
                 table: "SystemConfigs",
                 columns: new[] { "ID", "TotalDiskSpaceForNewUser" },
-                values: new object[] { new Guid("c1622fc6-6430-4742-b9ef-3f95618fcd64"), 1000000m });
+                values: new object[] { new Guid("c1622fc6-6430-4742-b9ef-3f95618fcd64"), 30000000000m });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
