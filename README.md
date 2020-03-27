@@ -52,4 +52,5 @@ The administrator can change the amount of free space for newly registered users
 ## Admin account
 
 Login: admin@admin.com
+
 Password: zaq1@WSX
